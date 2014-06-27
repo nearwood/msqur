@@ -1,2 +1,1 @@
-var app = angular.module('MSQApp',[]);
-
+var app = angular.module('TuneShare',[]);
