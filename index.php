@@ -3,7 +3,7 @@
 <head>
     <title>TuneShare</title>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.13/angular.min.js" type="text/javascript"></script>
-	<meta name="description" content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for AngularJS. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
+	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Bootstrap styles -->
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -138,8 +138,8 @@
         </div>
     </div>
 </div>
-<div id='content' ng-controller='MainController'>
-	{{understand}}
+<div id='content'>
+	Bleh
 </div>
 <div class="footer">
 	Apache PHP AngularJS<br/>
