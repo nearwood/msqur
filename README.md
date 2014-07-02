@@ -4,7 +4,8 @@ This README would normally document whatever steps are necessary to get your app
 
 # TODO #
 1. Upload file
-1.  Parse File, show basic info
+1. Store files in DB instead of FS? Store gzipped
+1. Parse File, show basic info
 1. Show Fuel Table
 1. Show Timing Table
 1. Add Ads
@@ -12,7 +13,12 @@ This README would normally document whatever steps are necessary to get your app
 1. Allow download
 1. Allow download of just fuel/spark tables
 1. Sign-in
-2. Versioning
+1. Updating/Versioning/Differential MSQ info
+
+Uploader (user)/Manager (admin)
+Parser
+Displayer
+
 
 ### What is this repository for? ###
 
