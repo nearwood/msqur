@@ -97,6 +97,7 @@
                         <span data-ng-switch-when="true" data-ng-switch data-on="!!file.thumbnailUrl">
                             <a data-ng-switch-when="true" data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" data-gallery>{{file.name}}</a>
                             <a data-ng-switch-default data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}">{{file.name}}</a>
+                            <a data-ng-switch-default data-ng-href="server/php/view.php?tune={{file.name}}" title="{{file.name}}">View</a>
                         </span>
                         <span data-ng-switch-default>{{file.name}}</span>
                     </p>

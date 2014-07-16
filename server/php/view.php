@@ -28,7 +28,21 @@ else
 		
 		//var_dump($msq);
 		echo "Format Version: " . $msq->versionInfo['fileFormat'] . "<br/>";
-		echo "MS Signature: " . $msq->versionInfo['signature'];
+		echo "MS Signature: " . $msq->versionInfo['signature'] . "<br/>";
+		echo "Tuning SW: " . $msq->bibliography['author'] . "<br/>";
+		echo "Date: " . $msq->bibliography['writeDate'] . "<br/>";
+		
+		foreach ($msq->page as $page)
+		foreach ($page->constant as $constant)
+		{
+			//echo "HEHEHE:" . $constant;
+			switch ((string)$constant['name'])
+			{
+				case 'veTable1dozen':
+					echo "VE TABLE:" . $constant;
+					break;
+			}
+		}
 		
 		//foreach ($movies->xpath('//settings/setting') as $setting) {
 		//	echo $setting->name, 'value: ', $setting->value, PHP_EOL;
