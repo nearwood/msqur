@@ -35,14 +35,47 @@ else
 		foreach ($msq->page as $page)
 		foreach ($page->constant as $constant)
 		{
-			//echo "HEHEHE:" . $constant;
 			switch ((string)$constant['name'])
 			{
-				case 'veTable1dozen':
-					echo "VE TABLE:" . $constant;
+				case 'veTable1':
+					$ve_rows = $constant['rows'];
+					$ve_cols = $constant['cols'];
+					$ve = preg_split("/\s+/", $constant); //, $limit);
+					break;
+					
+				case 'frpm_table1':
+					$rpm_rows = $constant['rows'];
+					$rpm_cols = $constant['cols']; //1
+					$rpm = preg_split("/\s+/", $constant); //, $limit);
+					break;
+					
+				case 'fmap_table1':
+					$map_rows = $constant['rows'];
+					$map_cols = $constant['cols']; //1
+					$map = preg_split("/\s+/", $constant); //, $limit);
 					break;
 			}
 		}
+		
+		echo "<br/>VE TABLE:<br/>";
+		echo "<table>";
+		
+		for ($r = 1; $r <= $ve_rows; $r++)
+		{
+			echo "<tr><th>" . $map[$r] . "</th>";
+			for ($c = 1; $c <= $ve_cols; $c++)
+			{
+				echo "<td>" . $ve[$r + $c] . "</td>";
+			}
+			echo "</tr>";
+		}
+		echo "<tr><th></th>";
+		for ($r = 1; $r <= $rpm_rows; $r++)
+		{
+			echo "<th>" . $rpm[$r] . "</th>";
+		}
+		echo "</tr>";
+		echo "</table>";
 		
 		//foreach ($movies->xpath('//settings/setting') as $setting) {
 		//	echo $setting->name, 'value: ', $setting->value, PHP_EOL;
