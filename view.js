@@ -1,4 +1,11 @@
-
+/**
+ * Tables (data, x axis, y axis)
+ * single constants with labels
+ * 
+ * 
+ * 
+ * 
+ */
 
 
 function view(file, targetElement)
@@ -10,8 +17,8 @@ function view(file, targetElement)
 		{
 			case 4:
 				//xhr.responseXML
-				
-				parseMSQ($($.parseXML(xhr.responseText)), targetElement);
+				var xml = $($.parseXML(xhr.responseText));
+				parseMSQ(xml, targetElement);
 				break;
 		}
 		
@@ -21,6 +28,22 @@ function view(file, targetElement)
 
 function parseMSQ(xml, el)
 {
+	el = $(el);
+	el.text("Loading MSQ...");
+	
 	var author = xml.find("bibliography").attr('author');
-	$(el).text(author);
+	el.text(author);
+}
+
+function parseVE(xml, el)
+{
+	
+}
+
+/**
+ * create table el and <tr>s and shit
+ */
+function createTable(xml, data, xaxis, yaxis)
+{
+	
 }
