@@ -4,6 +4,11 @@
 $filename = null;
 $msq = null;
 
+function makeTable($msq, $data, $xaxis, $yaxis)
+{
+	
+}
+
 if (!empty($_GET["tune"]))
 {
 	$filename = htmlspecialchars($_GET["tune"]);
