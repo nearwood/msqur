@@ -140,7 +140,7 @@
     </div>
 </div>
 <div id='content'>
-	Bleh
+	
 </div>
 <div class="footer">
 	Apache PHP AngularJS<br/>
