@@ -14,8 +14,8 @@
 </div>
 <div ng-repeat="table in msq.tables">
 	<table caption="{{table.name}}">
-		<tr ng-repeat="row in table.dataRows track by $index"><th>{{$index}}:{{table.yAxis[$index]}}</th><td ng-repeat="cell in row track by $index">{{cell}}</td></tr>
-		<tr><th></th><th ng-repeat="x in table.xAxis track by $index">{{$index}}:{{x}}</th></tr>
+		<tr ng-repeat="row in table.dataRows track by $index"><th>{{table.yAxis[$index]}}</th><td ng-repeat="cell in row track by $index">{{cell}}</td></tr>
+		<tr><th></th><th ng-repeat="x in table.xAxis track by $index">{{x}}</th></tr>
 	</table>
 </div>
 </body>
