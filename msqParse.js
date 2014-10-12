@@ -85,15 +85,17 @@ function getTable(xml, data, xaxis, yaxis)
 		y = y.text().trim().split(/\s+/);
 		if (xCount == dCols && yCount == dRows)
 		{//data and axis cell counts match
-			for (var r = 1; r <= yCount; r++)
+			for (var r = 0; r < yCount; r++)
 			{
 				var dr = [];
-				for (var c = 1; c <= xCount; c++)
+				for (var c = 0; c < xCount; c++)
 				{
-					if (r == 1)
+					if (r == 0)
+					{
 						tbl.xAxis.push(x[c]);
-						
-					dr.push(d[r * c]);
+						dr.push(d[c]);
+					}
+					else dr.push(d[r * xCount + c]);
 				}
 				
 				tbl.yAxis.push(y[r]);

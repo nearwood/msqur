@@ -7,7 +7,6 @@
  * 
  */
 
-
 function view(file, targetElement)
 {
 	var xhr = new XMLHttpRequest();
@@ -61,6 +60,6 @@ function createTable(xml, data, xaxis, yaxis)
 	return tbl;
 }
 
-msqFormat4 = {constants: [{name: "O2 Sensor Type", id: 'egoType'],
+msqFormat4 = {constants: [{name: "O2 Sensor Type", id: 'egoType'}],
 	tables: [{name: "VE Table", data: 'veTable1', x: 'frpm_table1', y: 'fmap_table1'}]
 };
