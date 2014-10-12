@@ -110,6 +110,11 @@ function getTable(xml, data, xaxis, yaxis)
 	
 }
 
+//Units could be pulled from tables, but not all have it
 msqFormat4 = {constants: [{name: "O2 Sensor Type", id: 'egoType'}],
-	tables: [{name: "VE Table", data: 'veTable1', x: 'frpm_table1', y: 'fmap_table1'}]
+	tables: [
+		{name: "VE Table", data: 'veTable1', units: "%", x: 'frpm_table1', y: 'fmap_table1'},
+		{name: "Timing Advance", data: 'advanceTable1', units: "degrees", x: 'arpm_table1', y: 'amap_table1'},
+		{name: "AFR Targets", data: 'afrTable1', units: "AFR", x: 'arpm_table1', y: 'amap_table1'}
+	]
 };

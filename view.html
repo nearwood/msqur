@@ -1,6 +1,7 @@
 <html ng-app="msqApp">
 <head>
 	<title>MSQ Viewer</title>
+	<link rel="stylesheet" href="view.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
 	<script src="msqParse.js"></script>
@@ -13,9 +14,10 @@
 	{{msq.format}} {{msq.sig}}<br/>
 </div>
 <div ng-repeat="table in msq.tables">
-	<table caption="{{table.name}}">
-		<tr ng-repeat="row in table.dataRows track by $index"><th>{{table.yAxis[$index]}}</th><td ng-repeat="cell in row track by $index">{{cell}}</td></tr>
-		<tr><th></th><th ng-repeat="x in table.xAxis track by $index">{{x}}</th></tr>
+	<table>
+		<caption>{{table.name}}</caption>
+		<tr ng-repeat="row in table.dataRows track by $index"><th scope="row">{{table.yAxis[$index]}}</th><td ng-repeat="cell in row track by $index">{{cell}}</td></tr>
+		<tr><th></th><th scope="col" ng-repeat="x in table.xAxis track by $index">{{x}}</th></tr>
 	</table>
 </div>
 </body>
