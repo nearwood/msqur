@@ -2,6 +2,8 @@
 
 TuneShare
 
+Skip the frontend magic and just use PHP, works easier for colorizing and normalization.
+
 # TODO #
 1. Upload file
 1. Store files in DB instead of FS? Store gzipped
