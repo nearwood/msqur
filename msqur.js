@@ -6,7 +6,7 @@ $(function() {
 		title: "Upload Tune Files",
 		width: "450px",
 		buttons: {
-			Upload: function() {},
+			Upload: upload,
 			Cancel: function() { $(this).dialog('close'); }
 		}
 	});
@@ -47,9 +47,10 @@ $(function() {
 		e.dataTransfer.dropEffect = 'copy';
 	}
 	
-	function upload(files)
+	function upload()
 	{
-		
+		//TODO Check files
+		$('div#upload form').submit();
 	}
 	
 	$('input#fileSelect').change(uploadAdd);
