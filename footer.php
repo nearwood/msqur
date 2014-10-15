@@ -1,5 +1,5 @@
 <div class="footer">
-	Apache PHP AngularJS
+	Apache PHP jQuery
 </div>
 </body>
 </html>

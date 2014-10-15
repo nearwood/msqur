@@ -9,14 +9,33 @@ function connect()
 	}
 	catch(PDOException $e)
 	{
-		echo '<div id="dbError">Error connecting to database.</div>'; //$e->getMessage();
+		echo '<div class="error">Error connecting to database.</div>'; //$e->getMessage();
+		$db = null; //Redundant.
 	}
 	
 	return $db;
 }
 
-function addFile($db, $file)
+function addFiles($files)
 {
+	$db = connect();
+	if ($db == null) return null;
+	
+	foreach ($files as $file)
+	{
+		//echo 'Adding ' . $file['tmp_name'];
+		addFile($file);
+	}
+}
+
+function addFile($file, $db = null)
+{
+	if ($db == null)
+	{
+		$db = connect();
+		if ($db == null) return null;
+	}
+	
 	try
 	{
 		//TODO Compress?
@@ -41,6 +60,9 @@ function addFile($db, $file)
 
 function getMSQ($db, $id)
 {
+	$db = connect();
+	if ($db == null) return null;
+	
 	try
 	{
 		$st = $db->prepare("SELECT msqs.xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id");

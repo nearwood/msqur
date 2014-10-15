@@ -58,15 +58,14 @@ require('header.php');
 <div id='content'>
 <?php
 	if (isset($_GET['msq'])) {
-		$db = connect();
-		$msq = getMSQ($db, $_GET['msq']);
+		$msq = getMSQ($_GET['msq']);
 		parseMSQ($msq);
 	} else if (isset($_POST['upload']) && isset($_FILES)) {
 		//var_dump($_POST);
 		//var_dump($_FILES);
 ?>
 <div class="info">Upload successful</div>
-</div>
+
 <?php
 $files = checkUploads(fixFileArray($_FILES['files']));
 if (count($files) == 0)
@@ -77,15 +76,11 @@ if (count($files) == 0)
 else
 {
 	//parse the files
-	echo count($files) . " files made it";
-	$db = connect();
-	foreach ($files as $file)
-	{
-		//echo 'Adding ' . $file['tmp_name'];
-		addFile($db, $file);
-	}
+	echo '<div class="info">' . count($files) . ' files were uploaded.</div>';
+	addFiles($files);
 }
 
 }
 ?>
+</div>
 <?php require('footer.php'); ?>
