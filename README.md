@@ -3,6 +3,10 @@
 'Masker' for lack of better name.
 MegaSquirt MSQ file sharing and viewing site.
 
+Parses MSQ "XML" and displays it in a familiar format for viewing and comparison.
+
+MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
+
 # TODO #
 1. Upload file
 1. Store files in DB instead of FS? Store gzipped
@@ -23,18 +27,11 @@ Parser
 Displayer
 
 
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
+* AMP Stack
+* Create database user and tables
+* Upload web files
 * How to run tests
 * Deployment instructions
 

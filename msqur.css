@@ -7,3 +7,40 @@
 	font: 20pt bold 'Vollkorn';
 	color: #bbb;
 }
+
+table {
+	border-collapse: collapse;
+	border: 1px solid #CCC;
+}
+
+table caption {
+	caption-side: top;
+	font-size: 2em;
+	font-style: bold;
+	text-align: left;
+	padding: 0.2em;
+}
+
+table td:hover {
+	background-color: yellow;
+}
+
+table th, table td {
+	padding: 0.5em;
+	border: 1px dotted #333;
+}
+
+/* eh, need to switch top/bottom border dep. on where the header is */
+table th[scope=col] {
+	border-top: 2px solid #333;
+	border-right: 2px solid #333;
+}
+
+/* inbetween headers but not ends */
+table th+th[scope=col] {
+	border-right: 1px dotted #666;
+}
+
+table th[scope=row] {
+	border-right: 2px solid #333;
+}
