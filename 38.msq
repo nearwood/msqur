@@ -18,7 +18,7 @@
 <constant digits="1" name="IC2ISR_tmask" units="ms">0.0</constant>
 <constant name="knkDirection">"Low Input"</constant>
 <constant digits="1" name="knk_tadv" units="sec">2.0</constant>
-<constant digits="1" name="egoTemp" units="캟">46.4</constant>
+<constant digits="1" name="egoTemp" units="째F">46.4</constant>
 <constant digits="0" name="RevLimTPSbypassRPM" units="RPM">6000.0</constant>
 <constant name="board_type">"MS2"</constant>
 <constant digits="1" name="knk_dtble_adv" units="deg">3.0</constant>
@@ -181,7 +181,7 @@
 <constant digits="0" name="mapsample_window" units="deg">10.0</constant>
 <constant digits="3" name="injOpen" units="ms">1.0</constant>
 <constant digits="0" name="injPwmPd2" units="us">66.0</constant>
-<constant cols="1" digits="1" name="tempTable" rows="10" units="캟">
+<constant cols="1" digits="1" name="tempTable" rows="10" units="째F">
          -40.0 
          -20.0 
          0.0 
@@ -194,7 +194,7 @@
          160.0 
       </constant>
 <constant digits="0" name="mapThresh" units="kPa/s">1000.0</constant>
-<constant digits="1" name="clt0" units="캟">0.0</constant>
+<constant digits="1" name="clt0" units="째F">0.0</constant>
 <constant digits="0" name="fuelCorr0" units="%">100.0</constant>
 <constant digits="0" name="fuelCorr1" units="%">163.0</constant>
 <constant name="altcrank">"Every event"</constant>
@@ -246,14 +246,14 @@
 <constant digits="0" name="taeColdM" units="%">130.0</constant>
 <constant digits="2" name="triggerOffset" units="deg">0.0</constant>
 <constant digits="0" name="egoRPM" units="RPM">1500.0</constant>
-<constant name="tempUnits">"Coolant/MAT Tables in 캟"</constant>
+<constant name="tempUnits">"Coolant/MAT Tables in 째F"</constant>
 <constant digits="0" name="dwellAcc" units="ms">0.999</constant>
 <constant name="use_prediction">"1st Deriv Prediction"</constant>
 <constant cols="1" digits="0" name="fuelFreq" rows="2" units="Hz">
          50.0 
          150.0 
       </constant>
-<constant digits="1" name="IdleHyst" units="캟">37.0</constant>
+<constant digits="1" name="IdleHyst" units="째F">37.0</constant>
 <constant digits="1" name="taeColdA" units="ms">3.0</constant>
 <constant digits="1" name="Miss_ang" units="deg BTDC">0.0</constant>
 <constant digits="1" name="baro_lower" units="kPa">80.0</constant>
@@ -301,7 +301,7 @@
 <constant digits="0" name="AMCramve_dt" units="sec">20.0</constant>
 <constant name="spk_conf2_ngc">"Off"</constant>
 <constant name="spk_conf2_tfi">"Off"</constant>
-<constant digits="1" name="fastIdleT" units="캟">140.0</constant>
+<constant digits="1" name="fastIdleT" units="째F">140.0</constant>
 <constant name="NoiseFilterOpts">"Off"</constant>
 <constant digits="0" name="remotePWMprescale">128.0</constant>
 <constant digits="1" name="ego0" units="afr">0.0</constant>
@@ -445,7 +445,7 @@
 <constant digits="0" name="RevLimNormal2" units="RPM">6000.0</constant>
 <constant digits="0" name="poll_tablePWM">7.0</constant>
 <constant digits="0" name="IACminstep" units="steps">1.0</constant>
-<constant digits="1" name="IACcoldtmp" units="캟">0.0</constant>
+<constant digits="1" name="IACcoldtmp" units="째F">0.0</constant>
 <constant digits="0" name="AMCT_thresh" units="sec">300.0</constant>
 <constant name="loadStoich">"don't include AFRtarget"</constant>
 <constant name="MAFOption">"Off"</constant>
@@ -454,7 +454,7 @@
 <constant digits="0" name="IACcoldxt" units="sec">40.0</constant>
 <constant digits="0" name="overboostcutx">0.0</constant>
 <constant digits="2" name="MAPOXMin" units="kPa">0.0</constant>
-<constant digits="1" name="mat0" units="캟">0.0</constant>
+<constant digits="1" name="mat0" units="째F">0.0</constant>
 <constant digits="1" name="trigret_ang" units="deg">50.0</constant>
 <constant name="feature4_0maxdwl">"Off"</constant>
 <constant digits="0" name="ae_hirpm" units="rpm">5000.0</constant>
@@ -602,7 +602,7 @@
          0.0 
          0.0 
       </constant>
-<constant cols="1" digits="1" name="pwmidle_crank_clt_temps" rows="4" units="캟">
+<constant cols="1" digits="1" name="pwmidle_crank_clt_temps" rows="4" units="째F">
          0.0 
          0.0 
          0.0 
@@ -669,7 +669,7 @@
 <constant digits="1" name="pwmidle_Kp" units="%">20.0</constant>
 <constant name="tss_remote_port">"Remote Port3 Bit 0"</constant>
 <constant name="boost_ctl_settings_invert">"Normal"</constant>
-<constant cols="1" digits="1" name="matCorrTemps" rows="6" units="캟">
+<constant cols="1" digits="1" name="matCorrTemps" rows="6" units="째F">
          39.9 
          60.1 
          100.0 
@@ -781,7 +781,7 @@
 <constant digits="1" name="tsf_tps" units="%">80.0</constant>
 <constant name="EAElagsource">"TPSdot"</constant>
 <constant digits="0" name="EAElagRPMmax" units="rpm">3000.0</constant>
-<constant cols="1" digits="1" name="pwmidle_clt_temps" rows="8" units="캟">
+<constant cols="1" digits="1" name="pwmidle_clt_temps" rows="8" units="째F">
          70.0 
          80.1 
          90.0 
@@ -806,7 +806,7 @@
          82.0 
       </constant>
 <constant digits="0" name="fc_ego_delay" units="seconds">0.0</constant>
-<constant cols="1" digits="1" name="temp_table_p5" rows="10" units="캟">
+<constant cols="1" digits="1" name="temp_table_p5" rows="10" units="째F">
          -40.0 
          -20.0 
          0.0 
@@ -907,7 +907,7 @@
          5500.0 
          6000.0 
       </constant>
-<constant digits="1" name="fc_clt" units="캟">90.0</constant>
+<constant digits="1" name="fc_clt" units="째F">90.0</constant>
 <constant cols="8" digits="0" name="rmt_psHysteresis" rows="2">
          0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
          0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
@@ -985,7 +985,7 @@
 <constant digits="0" name="fc_rpm" units="rpm">1500.0</constant>
 <constant digits="0" name="pwmidle_dp_adder_steps" units="steps">3.0</constant>
 <constant name="tacho_opt3f">"IGN (JS10)"</constant>
-<constant cols="1" digits="1" name="matTemps" rows="6" units="캟">
+<constant cols="1" digits="1" name="matTemps" rows="6" units="째F">
          160.0 
          180.0 
          199.9 
@@ -1104,7 +1104,7 @@
          7600.0 
       </constant>
 <constant name="launch_opt_pins">"PE0/JS7"</constant>
-<constant digits="1" name="N2OClt" units="캟">149.9</constant>
+<constant digits="1" name="N2OClt" units="째F">149.9</constant>
 <constant cols="1" digits="0" name="staged_loads" rows="6" units="%">
          50.0 
          60.0 
@@ -1285,7 +1285,7 @@
          0.0 0.0 
       </constant>
 <constant name="usevetrim">"Don't use VE Trim Tables"</constant>
-<constant digits="1" name="idleadvance_clt" units="캟">0.0</constant>
+<constant digits="1" name="idleadvance_clt" units="째F">0.0</constant>
 <constant cols="1" digits="0" name="sen_calib_units" rows="2" units="id">
          0.0 
          0.0 
@@ -1543,7 +1543,7 @@
       </constant>
 <constant digits="3" name="injOpen3" units="ms">1.0</constant>
 <constant digits="3" name="injOpen4" units="ms">1.0</constant>
-<constant cols="1" digits="1" name="RevLimLookup" rows="8" units="캟">
+<constant cols="1" digits="1" name="RevLimLookup" rows="8" units="째F">
          32.0 
          68.0 
          100.0 

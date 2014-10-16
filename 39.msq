@@ -81,14 +81,14 @@
 <constant digits="0" name="canpwm_clk" units="MHz">24.0</constant>
 <constant name="tsw_pin_s">"Tableswitch"</constant>
 <constant digits="0" name="mapThresh" units="kPa/s">1000.0</constant>
-<constant digits="1" name="clt0" units="캟">0.0</constant>
+<constant digits="1" name="clt0" units="째F">0.0</constant>
 <constant name="tsw_pin_f">"Tableswitch"</constant>
 <constant digits="0" name="fuelCorr0" units="%">100.0</constant>
 <constant digits="0" name="fuelCorr1" units="%">163.0</constant>
 <constant name="opt142_rtc">"Off"</constant>
 <constant name="log_style_led">"Off"</constant>
 <constant digits="0" name="gear_no">5.0</constant>
-<constant digits="1" name="water_mat" units="캟">60.0</constant>
+<constant digits="1" name="water_mat" units="째F">60.0</constant>
 <constant digits="1" name="water_map" units="kPa">90.0</constant>
 <constant name="egt11port">"CAN ADC19"</constant>
 <constant digits="0" name="IACcrankpos" units="steps">100.0</constant>
@@ -97,7 +97,7 @@
 <constant digits="0" name="IACtstep" units="ms">3.0</constant>
 <constant digits="1" name="injPwmT" units="ms">25.360384</constant>
 <constant digits="1" name="triggerOffset" units="deg">0.0</constant>
-<constant name="tempUnits">"Coolant/MAT Tables in 캟"</constant>
+<constant name="tempUnits">"Coolant/MAT Tables in 째F"</constant>
 <constant name="staged_first_param">"Off"</constant>
 <constant name="knk_pin_out">"Tacho"</constant>
 <constant name="N2Oopt2_prog_time">"RPM-based"</constant>
@@ -161,7 +161,7 @@
 <constant digits="0" name="RevLimNormal1" units="RPM">5500.0</constant>
 <constant digits="0" name="RevLimNormal3" units="RPM">6100.0</constant>
 <constant digits="0" name="RevLimNormal2" units="RPM">6000.0</constant>
-<constant digits="0" name="egtcal_temp0" units="캟">32.0</constant>
+<constant digits="0" name="egtcal_temp0" units="째F">32.0</constant>
 <constant name="loadStoich">"don't include AFRtarget"</constant>
 <constant name="launchlimopt">"Spark Cut"</constant>
 <constant digits="0" name="fc_rpm" units="rpm">1500.0</constant>
@@ -169,7 +169,7 @@
 <constant digits="2" name="N2O2Angle" units="deg">5.0</constant>
 <constant digits="0" name="pwmidle_dp_adder_steps" units="steps">3.0</constant>
 <constant digits="0" name="overboostcutx">0.0</constant>
-<constant digits="1" name="mat0" units="캟">0.0</constant>
+<constant digits="1" name="mat0" units="째F">0.0</constant>
 <constant name="loadCombine">"multiplicitive"</constant>
 <constant name="gear_method">"Off"</constant>
 <constant name="baroCorr">"Initial MAP Reading"</constant>
@@ -276,10 +276,10 @@
 <constant digits="0" name="enginesize" units="cc">2316.0</constant>
 <constant digits="0" name="staged_hyst_2" units="units">0.0</constant>
 <constant digits="0" name="staged_hyst_1" units="units">0.0</constant>
-<constant digits="1" name="fanctl_offtemp" units="캟">180.0</constant>
+<constant digits="1" name="fanctl_offtemp" units="째F">180.0</constant>
 <constant name="egoAlgorithm">"Simple"</constant>
 <constant name="ac_idleup_io_in">"Tableswitch"</constant>
-<constant digits="1" name="fanctl_ontemp" units="캟">200.0</constant>
+<constant digits="1" name="fanctl_ontemp" units="째F">200.0</constant>
 <constant name="staged_extended_opts_use_v3">"Use MS3x (if possible)"</constant>
 <constant name="feature4_0mindwl">"Off"</constant>
 <constant digits="1" name="OverBoostKpa2" units="kPa">100.0</constant>
@@ -313,7 +313,7 @@
 <constant name="canadc_opt6">"Off"</constant>
 <constant name="vss_opt2">"Off"</constant>
 <constant name="vss_opt1">"Off"</constant>
-<constant digits="0" name="egtcal_tempmax" units="캟">2282.0</constant>
+<constant digits="0" name="egtcal_tempmax" units="째F">2282.0</constant>
 <constant digits="1" name="pwmidle_decelload_threshold" units="%">25.0</constant>
 <constant name="log_style_on">"Disabled"</constant>
 <constant digits="1" name="tsf_kpa" units="kPa">100.0</constant>
@@ -390,13 +390,13 @@
 <constant name="spk_mode0">"420A/Neon"</constant>
 <constant name="enable_pollports_digout">"Disable"</constant>
 <constant digits="1" name="tpsThresh" units="%/s">120.0</constant>
-<constant digits="1" name="idleadvance_clt" units="캟">0.0</constant>
+<constant digits="1" name="idleadvance_clt" units="째F">0.0</constant>
 <constant name="pwmidle_cl_opts_initval_clt">"Use MAT"</constant>
 <constant name="log_style2_clg">"Off"</constant>
 <constant digits="2" name="gear1ratio" units=":1">3.32</constant>
 <constant name="spk_conf2_gm">"Off"</constant>
 <constant name="boost_ctl_pins">"Nitrous 1"</constant>
-<constant digits="1" name="idleve_clt" units="캟">140.0</constant>
+<constant digits="1" name="idleve_clt" units="째F">140.0</constant>
 <constant cols="1" digits="0" name="logFieldLength" rows="64">
          2.0 
          2.0 
@@ -519,7 +519,7 @@
 <constant name="tacho_opt80">"Off"</constant>
 <constant name="feature7_aetpswot">"Off"</constant>
 <constant name="N2Oopt2_prog">"On/Off"</constant>
-<constant digits="1" name="IdleHyst" units="캟">37.0</constant>
+<constant digits="1" name="IdleHyst" units="째F">37.0</constant>
 <constant digits="0" name="water_rpm" units="RPM">1500.0</constant>
 <constant digits="0" name="tpsasync_events" units="events">20.0</constant>
 <constant name="water_pins_pump">"Off"</constant>
@@ -591,9 +591,9 @@
 <constant name="feature4_0igntrig">"Off"</constant>
 <constant name="tacho_opt40">"Normal"</constant>
 <constant digits="0" name="poll_tablePWM">7.0</constant>
-<constant digits="1" name="IACcoldtmp" units="캟">0.0</constant>
+<constant digits="1" name="IACcoldtmp" units="째F">0.0</constant>
 <constant digits="1" name="fc_tps" units="%">5.0</constant>
-<constant digits="0" name="egt_warn" units="캟">1620.0</constant>
+<constant digits="0" name="egt_warn" units="째F">1620.0</constant>
 <constant name="fanctl_opt2_engineoff">"No"</constant>
 <constant digits="2" name="gear4v" units="V">3.64</constant>
 <constant digits="0" name="IACcoldxt" units="sec">40.0</constant>
@@ -630,13 +630,13 @@
 <constant digits="0" name="cltmult" units="%">100.0</constant>
 <constant name="knkDirection">"Low Input"</constant>
 <constant digits="1" name="ac_idleup_tps_hyst" units="%">10.0</constant>
-<constant digits="1" name="egoTemp" units="캟">46.4</constant>
+<constant digits="1" name="egoTemp" units="째F">46.4</constant>
 <constant digits="1" name="idleadvance_tps" units="%">0.0</constant>
 <constant digits="0" name="RevLimNormal2_hyst" units="RPM">200.0</constant>
 <constant name="vssout_optunits">"Time"</constant>
 <constant digits="2" name="gear6ratio" units=":1">0.5</constant>
 <constant digits="0" name="tpsLF">50.0</constant>
-<constant digits="1" name="boost_ctl_clt_threshold" units="캟">170.0</constant>
+<constant digits="1" name="boost_ctl_clt_threshold" units="째F">170.0</constant>
 <constant digits="1" name="vss2_can_scale" units="%">1000.0</constant>
 <constant digits="0" name="staged_sec_size" units="cc">0.0</constant>
 <constant digits="2" name="fdratio1" units=":1">4.11</constant>
@@ -744,7 +744,7 @@
 <constant name="egt1port">"CAN ADC09"</constant>
 <constant digits="1" name="crank_timing" units="degrees">10.0</constant>
 <constant digits="0" name="dwellduty" units="%">49.92</constant>
-<constant digits="1" name="N2OClt" units="캟">149.9</constant>
+<constant digits="1" name="N2OClt" units="째F">149.9</constant>
 <constant digits="3" name="staged_secondary_enrichment" units="ms">0.0</constant>
 <constant digits="0" name="trig_init">1.0</constant>
 <constant name="OvrRunC">"Off"</constant>
@@ -781,7 +781,7 @@
 <constant digits="1" name="fan_idleup_tps_offpoint" units="%">70.0</constant>
 <constant digits="2" name="gear2ratio" units=":1">2.09</constant>
 <constant name="vssout_opt">"Off"</constant>
-<constant digits="1" name="fastIdleT" units="캟">140.0</constant>
+<constant digits="1" name="fastIdleT" units="째F">140.0</constant>
 <constant digits="1" name="fc_kpa" units="kPa">40.0</constant>
 <constant digits="0" name="pwmidle_targ_ramptime" units="sec">0.0</constant>
 <constant name="RevLimOption_retard">"Off"</constant>
@@ -828,7 +828,7 @@
 <constant name="feature3_dwell">"Off"</constant>
 <constant name="mapport">"Mainboard"</constant>
 <constant digits="0" name="MapThreshXTD" units="-kpa/sec">40.0</constant>
-<constant digits="1" name="fc_clt" units="캟">90.0</constant>
+<constant digits="1" name="fc_clt" units="째F">90.0</constant>
 <constant digits="0" name="egoLF">60.0</constant>
 <constant digits="0" name="tdePct">90.0</constant>
 <constant name="smallpw_opt1">"Curve 1"</constant>
@@ -840,7 +840,7 @@
       </constant>
 <constant name="smallpw_opt5">"Curve 1"</constant>
 <constant name="log_style_ledspd">"Normal"</constant>
-<constant digits="0" name="egt_max" units="캟">1710.0</constant>
+<constant digits="0" name="egt_max" units="째F">1710.0</constant>
 <constant name="smallpw_opt4">"Curve 1"</constant>
 <constant name="smallpw_opt7">"Curve 1"</constant>
 <constant name="smallpw_opt6">"Curve 1"</constant>
@@ -925,7 +925,7 @@
 <constant name="opentime2_optb_own">"Off"</constant>
 <constant digits="1" name="sensor07_max">102.3</constant>
 <constant digits="1" name="sensor15_max">102.3</constant>
-<constant digits="1" name="egt_minvalid" units="캟">-40.0</constant>
+<constant digits="1" name="egt_minvalid" units="째F">-40.0</constant>
 <constant name="sensor15_source">"Off"</constant>
 <constant digits="0" name="batt_var_upper">15.0</constant>
 <constant digits="0" name="accel_mapdot_threshold" units="kpa/sec">100.0</constant>
@@ -1165,8 +1165,8 @@
 <constant digits="0" name="shift_cut_rpm56" units="RPM">10000.0</constant>
 <constant digits="0" name="mat_minadc">5.0</constant>
 <constant name="sensor16_trans">"Raw"</constant>
-<constant digits="1" name="ff_temp0" units="캟">-40.0</constant>
-<constant digits="1" name="ff_temp1" units="캟">257.0</constant>
+<constant digits="1" name="ff_temp0" units="째F">-40.0</constant>
+<constant digits="1" name="ff_temp1" units="째F">257.0</constant>
 <constant digits="1" name="sensor01_val0">0.0</constant>
 <constant name="egomap1t">"1"</constant>
 <constant digits="0" name="sensor08LF">100.0</constant>
@@ -1192,7 +1192,7 @@
 <constant digits="0" name="boost_ctl_Kd2" units="%">0.0</constant>
 <constant name="egomap10t">"1"</constant>
 <constant digits="0" name="inj2PwmP2" units="%">75.0</constant>
-<constant digits="1" name="egt_maxvalid" units="캟">2700.0</constant>
+<constant digits="1" name="egt_maxvalid" units="째F">2700.0</constant>
 <constant digits="1" name="sensor13_val0">0.0</constant>
 <constant name="sensor10_trans">"Raw"</constant>
 <constant digits="0" name="inj2PwmPd" units="us">66.0</constant>
@@ -1236,7 +1236,7 @@
 <constant digits="1" name="can_bcast_int" units="ms">249.984</constant>
 <constant digits="2" name="shift_cut_add45" units="s">0.0</constant>
 <constant digits="1" name="inj2PwmT" units="ms">1.040384</constant>
-<constant digits="1" name="cel_mat_default" units="캟">100.0</constant>
+<constant digits="1" name="cel_mat_default" units="째F">100.0</constant>
 <constant digits="0" name="inj2PwmP" units="%">75.0</constant>
 <constant digits="2" name="shift_cut_add56" units="s">0.0</constant>
 <constant digits="0" name="iachometest" units="steps">0.0</constant>
@@ -1321,7 +1321,7 @@
          -1.176 
       </constant>
 <constant name="sensor04_trans">"Raw"</constant>
-<constant digits="1" name="cel_clt_warm" units="캟">212.0</constant>
+<constant digits="1" name="cel_clt_warm" units="째F">212.0</constant>
 <constant digits="1" name="sensor04_max">102.3</constant>
 <constant digits="0" name="cel_boost_duty2" units="%">0.0</constant>
 <constant name="boost_ctl_sensor2">"Sensor 1"</constant>
@@ -1377,7 +1377,7 @@
 <constant name="tc_opt_n2o">"On/Off"</constant>
 <constant digits="0" name="clt_var_upper">1000.0</constant>
 <constant digits="0" name="ITB_load_idletpsthresh" units="%">1.0</constant>
-<constant digits="1" name="cel_clt_cold" units="캟">-40.0</constant>
+<constant digits="1" name="cel_clt_cold" units="째F">-40.0</constant>
 <constant digits="0" name="tps_minadc">0.0</constant>
 <constant name="sensor08_source">"Off"</constant>
 <constant name="tc_opt_slipcurve">"Fixed value"</constant>
@@ -1524,7 +1524,7 @@
          530000.0 
          650000.0 
       </constant>
-<constant cols="1" digits="1" name="RevLimLookup" rows="8" units="캟">
+<constant cols="1" digits="1" name="RevLimLookup" rows="8" units="째F">
          32.0 
          68.0 
          100.0 
@@ -1592,7 +1592,7 @@
          0.0 
          0.0 
       </constant>
-<constant cols="1" digits="1" name="matCorrTemps2" rows="9" units="캟">
+<constant cols="1" digits="1" name="matCorrTemps2" rows="9" units="째F">
          -40.0 
          -4.0 
          32.0 
@@ -1653,7 +1653,7 @@
          5.8 
          6.0 
       </constant>
-<constant cols="1" digits="1" name="matTemps" rows="6" units="캟">
+<constant cols="1" digits="1" name="matTemps" rows="6" units="째F">
          160.0 
          180.0 
          199.9 
@@ -1685,7 +1685,7 @@
          77.0 
          82.0 
       </constant>
-<constant cols="1" digits="1" name="pwmidle_crank_clt_temps" rows="4" units="캟">
+<constant cols="1" digits="1" name="pwmidle_crank_clt_temps" rows="4" units="째F">
          0.0 
          0.0 
          0.0 
@@ -1728,7 +1728,7 @@
          80.7 
          74.6 
       </constant>
-<constant cols="1" digits="1" name="pwmidle_clt_temps" rows="8" units="캟">
+<constant cols="1" digits="1" name="pwmidle_clt_temps" rows="8" units="째F">
          70.0 
          80.1 
          90.0 
@@ -1762,7 +1762,7 @@
          90.0 
          100.0 
       </constant>
-<constant cols="1" digits="1" name="temp_table_p5" rows="10" units="캟">
+<constant cols="1" digits="1" name="temp_table_p5" rows="10" units="째F">
          -40.0 
          -20.0 
          0.0 
@@ -2240,7 +2240,7 @@
          102.0 
          88.0 
       </constant>
-<constant cols="1" digits="1" name="tempTable" rows="10" units="캟">
+<constant cols="1" digits="1" name="tempTable" rows="10" units="째F">
          -40.0 
          -20.0 
          0.0 
@@ -2590,7 +2590,7 @@
          0.0 
          0.0 
       </constant>
-<constant cols="1" digits="1" name="TauClt_temps" rows="10" units="캟">
+<constant cols="1" digits="1" name="TauClt_temps" rows="10" units="째F">
          -40.0 
          -20.0 
          0.0 
@@ -2682,7 +2682,7 @@
          6286.0 
          7000.0 
       </constant>
-<constant cols="1" digits="1" name="XClt_temps" rows="10" units="캟">
+<constant cols="1" digits="1" name="XClt_temps" rows="10" units="째F">
          -40.0 
          -20.0 
          0.0 
@@ -3470,7 +3470,7 @@
          7000.0 
          7500.0 
       </constant>
-<constant cols="1" digits="1" name="knock_clts" rows="4" units="캟">
+<constant cols="1" digits="1" name="knock_clts" rows="4" units="째F">
          40.0 
          80.0 
          120.0 
@@ -3642,7 +3642,7 @@
          0.0 0.0 0.0 0.0 0.0 
          0.0 0.0 0.0 0.0 0.0 
       </constant>
-<constant cols="1" digits="0" name="pwmidle_cl_initialvalue_matorclt" rows="5" units="캟">
+<constant cols="1" digits="0" name="pwmidle_cl_initialvalue_matorclt" rows="5" units="째F">
          20.0 
          50.0 
          80.0 
@@ -3827,7 +3827,7 @@
          350.0 
          400.0 
       </constant>
-<constant cols="1" digits="1" name="temp_table_p21" rows="10" units="캟">
+<constant cols="1" digits="1" name="temp_table_p21" rows="10" units="째F">
          10.0 
          30.0 
          50.0 
@@ -3883,7 +3883,7 @@
          28.0 
          25.0 
       </constant>
-<constant cols="1" digits="1" name="dualfuel_temp" rows="10" units="캟">
+<constant cols="1" digits="1" name="dualfuel_temp" rows="10" units="째F">
          10.0 
          30.0 
          50.0 
@@ -4429,7 +4429,7 @@
 <constant name="vvt_opt5_vvt2">"Intake"</constant>
 <constant name="vvt_opt5_vvt3">"Intake"</constant>
 <constant digits="0" name="vvt_ctl_Ki_exh" units="%">50.0</constant>
-<constant digits="1" name="als_maxmat" units="캟">170.0</constant>
+<constant digits="1" name="als_maxmat" units="째F">170.0</constant>
 <constant name="als_opt_sc">"Off"</constant>
 <constant digits="1" name="als_maxtime" units="s">4.0</constant>
 <constant name="als_opt_ri">"Off"</constant>
@@ -4452,7 +4452,7 @@
       </constant>
 <constant digits="1" name="vvt_hold_duty" units="%">19.7</constant>
 <constant name="vvt_opt1_int">"Synced to cam"</constant>
-<constant digits="1" name="als_maxclt" units="캟">230.0</constant>
+<constant digits="1" name="als_maxclt" units="째F">230.0</constant>
 <constant name="vvt_opt2_cam2pol">"Falling Edge"</constant>
 <constant digits="0" name="als_iac_steps" units="steps">150.0</constant>
 <constant name="als_opt_fc">"Off"</constant>
@@ -4469,7 +4469,7 @@
 <constant name="vvt_opt1_tst">"Off"</constant>
 <constant digits="1" name="tclu_mapmin" units="%">30.0</constant>
 <constant digits="1" name="tclu_tpsmin" units="%">5.0</constant>
-<constant digits="1" name="als_minclt" units="캟">122.0</constant>
+<constant digits="1" name="als_minclt" units="째F">122.0</constant>
 <constant digits="0" name="vvt_ctl_Kd_exh" units="%">50.0</constant>
 <constant digits="0" name="als_maxrpm" units="rpm">3000.0</constant>
 <constant name="vvt_out3_dir">"Advance"</constant>
@@ -4818,7 +4818,7 @@
          88.0 
          100.0 
       </constant>
-<constant cols="1" digits="1" name="matCorrTemps" rows="6" units="캟">
+<constant cols="1" digits="1" name="matCorrTemps" rows="6" units="째F">
          39.9 
          60.1 
          100.0 
