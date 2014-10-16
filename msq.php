@@ -1,36 +1,38 @@
 <?php
 
-//This should be json and stored somewhere else
-$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
-	'veTable1' => array('VE Table 1', 'frpm_table1', 'fmap_table1'),
-	'frpm_table1' => 'RPM',
-	'fmap_table1' => 'MAP'
-);
-
-function msqLookup($xmlName)
+function msqAxis($el)
 {
-	
+	return preg_split("/\s+/", trim($el), PREG_SPLIT_NO_EMPTY);
 }
 
-function msqTable($rows, $cols, $data, $name)
+function msqTable($name, $x, $y, $data)
 {
-	echo '<table class="ve">'; //TODO Some kind of CSS to indicate color shading?
-	echo "<caption>$msqMap[$name][0]</caption>";
+	$rows = count($y);
+	$cols = count($x);
 	
-	for ($r = 1; $r <= $ve_rows; $r++)
+	if ($rows * $cols != count($data))
 	{
-		echo "<tr><th>" . $map[$r] . "</th>";
-		for ($c = 1; $c <= $ve_cols; $c++)
+		echo '<div class="error">' . $name . ' column/row count mismatched with data count.</div>';
+		return;
+	}
+	
+	echo '<table>'; //TODO Some kind of CSS to indicate color shading?
+	echo "<caption>$name</caption>";
+	
+	for ($r = 1; $r <= $rows; $r++)
+	{
+		echo "<tr><th>" . $y[$r] . "</th>";
+		for ($c = 1; $c <= $cols; $c++)
 		{
-			if ($r == 1) echo "<td>" . $ve[$c] . "</td>";
-			else echo "<td>" . $ve[($r - 1) * $ve_rows + $c] . "</td>";
+			if ($r == 1) echo "<td>" . $data[$c] . "</td>";
+			else echo "<td>" . $data[($r - 1) * $rows + $c] . "</td>";
 		}
 		echo "</tr>";
 	}
 	echo "<tr><th></th>";
-	for ($r = 1; $r <= $rpm_rows; $r++)
+	for ($c = 1; $c <= $cols; $c++)
 	{
-		echo "<th>" . $rpm[$r] . "</th>";
+		echo "<th>" . $y[$c] . "</th>";
 	}
 	echo "</tr>";
 	echo "</table>";
@@ -38,6 +40,18 @@ function msqTable($rows, $cols, $data, $name)
 
 function parseMSQ($xml)
 {
+	//This should be json and stored somewhere else
+	$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
+		'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%'),
+		'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'units' => 'degrees'),
+		'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1'),
+		'egoType' => array('name' => 'O2 Sensor Type')
+	);
+	
+	//Strip out invalid xmlns
+	//TODO This should really happen on upload...
+	$xml = preg_replace('/xmlns=".*?"/', '', $xml);
+	
 	$msq = simplexml_load_string($xml);
 	
 	if ($msq)
@@ -59,37 +73,30 @@ function parseMSQ($xml)
 		//still need lookup table of axis
 		//wtf is digits?
 		
-		foreach ($msq->page as $page)
-		foreach ($page->constant as $constant)
+		//foreach ($msq->page as $page)
+		//foreach ($page->constant as $constant)
+		// //constant[@name="veTable1"]
+		foreach ($msqMap as $key => $value)
 		{
-			if ($constant['cols'] >= 1)
+			$constant = $msq->xpath('//constant[@name="' . $key . '"]')[0];
+			if (isset($constant['cols'])) //and >= 1?
 			{//We have a table
-				$numCols = $constant['cols'];
-				$numRows = $constant['rows'];
-				$tableData = preg_split("/\s+/", $constant); //, $limit);
-				msqTable($numRows, $numCols, $tableData, (string)$constant['name']);
+				//See if this is one we know how to handle
+				if (isset($value['x'])) //and y hopefully
+				{
+					$numCols = (int)$constant['cols'];
+					$numRows = (int)$constant['rows'];
+					$x = msqAxis($msq->xpath('//constant[@name="' . $value['x'] . '"]')[0]);
+					$y = msqAxis($msq->xpath('//constant[@name="' . $value['y'] . '"]')[0]);
+					var_dump($x);
+					echo count($x) . ',' . count($y) . ' vs ' . "$numCols,$numRows";
+					if ((count($x) == $numCols) && (count($y) == $numRows))
+					{
+						$tableData = preg_split("/\s+/", $constant, PREG_SPLIT_NO_EMPTY); //, $limit);
+						msqTable($value['name'], $tableData, $x, $y);
+					}
+				}
 			}
-			
-			// switch ((string)$constant['name'])
-			// {
-				// case 'veTable1':
-					// $ve_rows = $constant['rows'];
-					// $ve_cols = $constant['cols'];
-					// $ve = preg_split("/\s+/", $constant); //, $limit);
-					// break;
-					
-				// case 'frpm_table1':
-					// $rpm_rows = $constant['rows'];
-					// $rpm_cols = $constant['cols']; //1
-					// $rpm = preg_split("/\s+/", $constant); //, $limit);
-					// break;
-					
-				// case 'fmap_table1':
-					// $map_rows = $constant['rows'];
-					// $map_cols = $constant['cols']; //1
-					// $map = preg_split("/\s+/", $constant); //, $limit);
-					// break;
-			// }
 		}
 		
 		//foreach ($movies->xpath('//settings/setting') as $setting) {

@@ -58,7 +58,7 @@ function addFile($file, $db = null)
 	return $id;
 }
 
-function getMSQ($db, $id)
+function getMSQ($id)
 {
 	$db = connect();
 	if ($db == null) return null;
