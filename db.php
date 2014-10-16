@@ -4,7 +4,7 @@ function connect()
 	$db = null;
 	try
 	{
-		$db = new PDO("mysql:dbname=msqur;host=localhost", "msqur", "LwEYrxvUpjhnCdTc" );
+		$db = new PDO("mysql:dbname=msqur;host=localhost", "msqur", "LwEYrxvUpjhnCdTc");
 		//echo "Connected";
 	}
 	catch(PDOException $e)

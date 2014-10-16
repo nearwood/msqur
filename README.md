@@ -9,7 +9,8 @@ MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 
 # TODO #
 1. Upload file
-1. Store files in DB instead of FS? Store gzipped
+1. Store files in DB instead of FS? Store gzipped?
+1. Re-encode as UTF-8 or degrees symbol breaks things.
 1. Strip whitespace as well
 1. Parse File, show basic info
 1. Show Fuel Table

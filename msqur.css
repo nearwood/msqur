@@ -53,6 +53,7 @@ div.footer {
 table {
 	border-collapse: collapse;
 	border: 1px solid #CCC;
+	/*width: 100%;*/
 }
 
 table caption {
@@ -68,8 +69,10 @@ table td:hover {
 }
 
 table th, table td {
-	padding: 0.5em;
+	padding: 4px;
 	border: 1px dotted #333;
+	font-size: smaller;
+	text-align: center;
 }
 
 /* eh, need to switch top/bottom border dep. on where the header is */

@@ -1,14 +1,87 @@
 <?php
 
+//TODO Find better name
+define("LARGE_HOT", 0x1);
+//define("LARGE_COLD", 0x1);
+
 function msqAxis($el)
 {
-	return preg_split("/\s+/", trim($el), PREG_SPLIT_NO_EMPTY);
+	//Why the fuck does this flag bork here on not on the table data?
+	//And why don't I have to trim the table data either?
+	return preg_split("/\s+/", trim($el));//, PREG_SPLIT_NO_EMPTY);
 }
 
-function msqTable($name, $x, $y, $data)
+function msqTableColor($data, $rows, $cols, $flags = LARGE_HOT)
+{
+	$colorTable = array();
+	//TODO Use float.min/max equiv.
+	$min = 99999;
+	$max = -99999;
+	
+	if ($flags & LARGE_HOT)
+	{
+	}
+	
+	//Find min and max
+	foreach ($data as $v)
+	{
+		if ($v < $min) $min = $v;
+		else if ($v > $max) $max = $v;
+	}
+	
+	$range = ($max - $min);
+	$r = 0; $g = 0; $b = 0; $percent = 0; $intensity = 0.6;
+	
+	foreach ($data as $k => $v)
+	{
+		$percent = ($v - $min) / $range;
+		
+		if ($percent < 0.33)
+		{
+			$r = 1.0;
+			$g = min(1.0, ($percent * 3));
+			$b = 0.0;
+		}
+		else if ($percent < 0.66)
+		{
+			$r = min(1.0, ((0.66 - $percent) * 3));
+			$g = 1.0;
+			$b = 0.0;
+		}
+		else
+		{
+			$r = 0.0;
+			$g = min(1.0, ((1.0 - $percent) * 3));
+			$b = 1.0 - $g;
+		}
+		
+		$r  = $r * $intensity + (1.0 - $intensity);
+		$g  = $g * $intensity + (1.0 - $intensity);
+		$b  = $b * $intensity + (1.0 - $intensity);
+		
+		$colorTable[$k] = array('r' => $r, 'g' => $g, 'b' => $b);
+	}
+	
+	return $colorTable;
+	
+	//for ($r = 0; $r < $rows; $r++)
+	//{
+		//for ($c = 0; $c < $cols; $c++)
+		//{
+			//$v = $data[($r) * $rows + $c];
+			//if ($v < $min) $min = $v;
+			//else if ($v > $max) $max = $v;
+		//}
+	//}
+}
+
+function msqTable($name, $data, $x, $y)
 {
 	$rows = count($y);
 	$cols = count($x);
+	
+	//echo "ROWS: $rows, $cols";
+	//var_dump($x, "YYYYYYYYY", $y);
 	
 	if ($rows * $cols != count($data))
 	{
@@ -19,20 +92,27 @@ function msqTable($name, $x, $y, $data)
 	echo '<table>'; //TODO Some kind of CSS to indicate color shading?
 	echo "<caption>$name</caption>";
 	
-	for ($r = 1; $r <= $rows; $r++)
+	//$colorTable = msqTableColor($data, $rows, $cols);
+	
+	for ($r = 0; $r < $rows; $r++)
 	{
 		echo "<tr><th>" . $y[$r] . "</th>";
-		for ($c = 1; $c <= $cols; $c++)
+		for ($c = 0; $c < $cols; $c++)
 		{
-			if ($r == 1) echo "<td>" . $data[$c] . "</td>";
-			else echo "<td>" . $data[($r - 1) * $rows + $c] . "</td>";
+			//if ($r == 0) echo "<td>" . $data[$c] . "</td>";
+			//else
+			$r = 0; //$colorTable[$r * $rows + $c]['r'];
+			$g = 1; //$colorTable[$r * $rows + $c]['g'];
+			$b = 0; //firefo$colorTable[$r * $rows + $c]['b'];
+			//echo "<td style=\"background:rgb($r,$g,$b)\">" . $data[$r * $rows + $c] . "</td>";
+			echo "<td>" . $data[$r * $rows + $c] . "</td>";
 		}
 		echo "</tr>";
 	}
 	echo "<tr><th></th>";
-	for ($c = 1; $c <= $cols; $c++)
+	for ($c = 0; $c < $cols; $c++)
 	{
-		echo "<th>" . $y[$c] . "</th>";
+		echo "<th>" . $x[$c] . "</th>";
 	}
 	echo "</tr>";
 	echo "</table>";
@@ -51,7 +131,6 @@ function parseMSQ($xml)
 	//Strip out invalid xmlns
 	//TODO This should really happen on upload...
 	$xml = preg_replace('/xmlns=".*?"/', '', $xml);
-	
 	$msq = simplexml_load_string($xml);
 	
 	if ($msq)
@@ -88,11 +167,10 @@ function parseMSQ($xml)
 					$numRows = (int)$constant['rows'];
 					$x = msqAxis($msq->xpath('//constant[@name="' . $value['x'] . '"]')[0]);
 					$y = msqAxis($msq->xpath('//constant[@name="' . $value['y'] . '"]')[0]);
-					var_dump($x);
-					echo count($x) . ',' . count($y) . ' vs ' . "$numCols,$numRows";
+					
 					if ((count($x) == $numCols) && (count($y) == $numRows))
 					{
-						$tableData = preg_split("/\s+/", $constant, PREG_SPLIT_NO_EMPTY); //, $limit);
+						$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
 						msqTable($value['name'], $tableData, $x, $y);
 					}
 				}
