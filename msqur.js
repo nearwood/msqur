@@ -11,7 +11,6 @@ $(function() {
 		}
 	});
 	
-	
 	$('#btnUpload').click(function(e) {
 		if (window.File && window.FileReader && window.FileList && window.Blob)
 		{
@@ -20,6 +19,10 @@ $(function() {
 			alert('The File APIs are not fully supported in this browser.');
 			//TODO no ajax file upload
 		}
+	});
+	
+	$('#settingsIcon').click(function(e) {
+		$('#settingsPanel').toggle();
 	});
 	
 	function colorTable(table, reverseColor)
@@ -32,7 +35,7 @@ $(function() {
 		
 		//Find min and max
 		table.find('td').each(function(i) {
-			var v = parseFloat(this.innerText);
+			var v = parseFloat(this.textContent);
 			if (v < min) min = v;
 			else if (v > max) max = v;
 		});
@@ -42,7 +45,7 @@ $(function() {
 		var r = 0, g = 0, b = 0, percent = 0, intensity = 0.6;
 		
 		table.find('td').each(function(i) {
-			var v = parseFloat(this.innerText);
+			var v = parseFloat(this.textContent);
 			percent = (v - min) / range;
 			
 			if (reverseColor)
@@ -77,6 +80,9 @@ $(function() {
 		
 		return colors;
 	}
+	
+	$('table').tablesorter({sortList: [[0, 1]]});
+	//TODO Disable sorting on all other columns
 	
 	$('table').each(function(i) { colorTable($(this)); });
 	

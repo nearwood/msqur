@@ -46,3 +46,10 @@ Displayer
 
 * Repo owner or admin
 * Other community or team contact
+
+### Credits ###
+Apache, PHP, MySQL
+jQuery, jQuery UI
+jquery.tablesorter http://tablesorter.com/docs/
+Tango Icon Theme
+Geany/Notepad++

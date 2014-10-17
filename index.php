@@ -75,9 +75,17 @@ if (count($files) == 0)
 }
 else
 {
-	//parse the files
-	echo '<div class="info">' . count($files) . ' files were uploaded.</div>';
-	addFiles($files);
+	if (count($files) > 1)
+		echo '<div class="info">' . count($files) . ' files were uploaded:</div>';
+	else
+		echo '<div class="info">' . count($files) . ' file was uploaded:</div>';
+	$fileList = addFiles($files);
+	echo '<div class="info"><ul id="fileList">';
+	foreach ($fileList as $f)
+	{
+		echo '<li><a href="' . $_SERVER['REQUEST_URI'] . '?msq=' . $f . '">' . $f . '</a></li>';
+	}
+	echo '</div></ul>';
 }
 
 }

@@ -40,6 +40,12 @@ div.footer {
 	z-index: -999
 }
 
+div#settings {
+	position: absolute;
+	margin-top: 4px;
+	right: 8px;
+}
+
 #fileDropZone {
 	width: 320px;
 	border: 2px dashed #bbb;

@@ -21,11 +21,15 @@ function addFiles($files)
 	$db = connect();
 	if ($db == null) return null;
 	
+	$fileList = array();
+	
 	foreach ($files as $file)
 	{
 		//echo 'Adding ' . $file['tmp_name'];
-		addFile($file);
+		$fileList[] = addFile($file);
 	}
+	
+	return $fileList;
 }
 
 function addFile($file, $db = null)
@@ -40,8 +44,12 @@ function addFile($file, $db = null)
 	{
 		//TODO Compress?
 		$st = $db->prepare("INSERT INTO msqs (xml) VALUES (:xml)");
-		$f = file_get_contents($file['tmp_name']);
-		$st->bindParam(":xml", $f);
+		$xml = file_get_contents($file['tmp_name']);
+		//Convert encoding to UTF-8
+		$xml = mb_convert_encoding($xml, "UTF-8");
+		//Strip out invalid xmlns
+		$xml = preg_replace('/xmlns=".*?"/', '', $xml);
+		$st->bindParam(":xml", $xml);
 		$st->execute();
 		$id = $db->lastInsertId();
 		$st = $db->prepare("INSERT INTO metadata (url,msq,fileFormat,signature) VALUES (:url, :id, '4.0', 'unknown')");

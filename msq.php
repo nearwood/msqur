@@ -25,7 +25,7 @@ function msqTable($name, $data, $x, $y)
 		return;
 	}
 	
-	echo '<table>'; //TODO Some kind of CSS to indicate color shading?
+	echo '<table class="tablesorter">';
 	echo "<caption>$name</caption>";
 	
 	for ($r = 0; $r < $rows; $r++)
@@ -39,11 +39,15 @@ function msqTable($name, $data, $x, $y)
 			//echo "</tr>($c, $r) ";
 		}
 	}
-	echo "<tr><th></th>";
+	
+	//TODO Should really be tfoot here, thead at top
+	echo "<thead><tr><th></th>";
 	for ($c = 0; $c < $cols; $c++)
 	{
 		echo "<th>" . $x[$c] . "</th>";
 	}
+	echo "</tr></thead>";
+	
 	echo "</tr>";
 	echo "</table>";
 }
@@ -58,9 +62,6 @@ function parseMSQ($xml)
 		'egoType' => array('name' => 'O2 Sensor Type')
 	);
 	
-	//Strip out invalid xmlns
-	//TODO This should really happen on upload...
-	$xml = preg_replace('/xmlns=".*?"/', '', $xml);
 	$msq = simplexml_load_string($xml);
 	
 	if ($msq)
