@@ -22,6 +22,64 @@ $(function() {
 		}
 	});
 	
+	function colorTable(table, reverseColor)
+	{
+		var colors = new Array();
+		
+		//TODO Use float.min/max equiv.
+		var min = 99999;
+		var max = -99999;
+		
+		//Find min and max
+		table.find('td').each(function(i) {
+			var v = parseFloat(this.innerText);
+			if (v < min) min = v;
+			else if (v > max) max = v;
+		});
+		
+		var range = (max - min);
+		console.debug("Range: " + range);
+		var r = 0, g = 0, b = 0, percent = 0, intensity = 0.6;
+		
+		table.find('td').each(function(i) {
+			var v = parseFloat(this.innerText);
+			percent = (v - min) / range;
+			
+			if (reverseColor)
+				percent = 1.0 - percent;
+			
+			if (percent < 0.33)
+			{
+				r = 1.0;
+				g = Math.min(1.0, (percent * 3));
+				b = 0.0;
+			}
+			else if (percent < 0.66)
+			{
+				r = Math.min(1.0, ((0.66 - percent) * 3));
+				g = 1.0;
+				b = 0.0;
+			}
+			else
+			{
+				r = 0.0;
+				g = Math.min(1.0, ((1.0 - percent) * 3));
+				b = 1.0 - g;
+			}
+			
+			r = Math.round((r * intensity + (1.0 - intensity)) * 255);
+			g = Math.round((g * intensity + (1.0 - intensity)) * 255);
+			b = Math.round((b * intensity + (1.0 - intensity)) * 255);
+			
+			//this.css('background-color', 'rgb(' + r + ',' + g + ',' + b + ')');
+			this.style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+		});
+		
+		return colors;
+	}
+	
+	$('table').each(function(i) { colorTable($(this)); });
+	
 	function uploadAdd(e)
 	{
 		e.stopPropagation();

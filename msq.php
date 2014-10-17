@@ -11,69 +11,6 @@ function msqAxis($el)
 	return preg_split("/\s+/", trim($el));//, PREG_SPLIT_NO_EMPTY);
 }
 
-function msqTableColor($data, $rows, $cols, $flags = LARGE_HOT)
-{
-	$colorTable = array();
-	//TODO Use float.min/max equiv.
-	$min = 99999;
-	$max = -99999;
-	
-	//Find min and max
-	foreach ($data as $v)
-	{
-		if ($v < $min) $min = $v;
-		else if ($v > $max) $max = $v;
-	}
-	
-	$range = ($max - $min);
-	$r = 0; $g = 0; $b = 0; $percent = 0; $intensity = 0.6;
-	
-	foreach ($data as $k => $v)
-	{
-		$percent = ($v - $min) / $range;
-		
-		if ($flags & LARGE_COLD)
-			$percent = 1.0 - $percent;
-		
-		if ($percent < 0.33)
-		{
-			$r = 1.0;
-			$g = min(1.0, ($percent * 3));
-			$b = 0.0;
-		}
-		else if ($percent < 0.66)
-		{
-			$r = min(1.0, ((0.66 - $percent) * 3));
-			$g = 1.0;
-			$b = 0.0;
-		}
-		else
-		{
-			$r = 0.0;
-			$g = min(1.0, ((1.0 - $percent) * 3));
-			$b = 1.0 - $g;
-		}
-		
-		$r = round(($r * $intensity + (1.0 - $intensity)) * 255);
-		$g = round(($g * $intensity + (1.0 - $intensity)) * 255);
-		$b = round(($b * $intensity + (1.0 - $intensity)) * 255);
-		
-		$colorTable[$k] = array('r' => $r, 'g' => $g, 'b' => $b);
-	}
-	
-	return $colorTable;
-	
-	//for ($r = 0; $r < $rows; $r++)
-	//{
-		//for ($c = 0; $c < $cols; $c++)
-		//{
-			//$v = $data[($r) * $rows + $c];
-			//if ($v < $min) $min = $v;
-			//else if ($v > $max) $max = $v;
-		//}
-	//}
-}
-
 function msqTable($name, $data, $x, $y)
 {
 	$rows = count($y);
@@ -91,8 +28,6 @@ function msqTable($name, $data, $x, $y)
 	echo '<table>'; //TODO Some kind of CSS to indicate color shading?
 	echo "<caption>$name</caption>";
 	
-	$colorTable = msqTableColor($data, $rows, $cols);//, LARGE_COLD);
-	
 	for ($r = 0; $r < $rows; $r++)
 	{
 		echo "<tr><th>" . $y[$r] . "</th>";
@@ -100,11 +35,7 @@ function msqTable($name, $data, $x, $y)
 		{
 			//if ($r == 0) echo "<td>" . $data[$c] . "</td>";
 			//else
-			$red = $colorTable[$r * $rows + $c]['r'];
-			$green = $colorTable[$r * $rows + $c]['g'];
-			$blue = $colorTable[$r * $rows + $c]['b'];
-			echo "<td style=\"background:rgb($red,$green,$blue)\">" . $data[$r * $rows + $c] . "</td>";
-			//echo "<td>" . $data[$r * $rows + $c] . "</td>";
+			echo "<td>" . $data[$r * $rows + $c] . "</td>";
 			//echo "</tr>($c, $r) ";
 		}
 	}
@@ -122,7 +53,7 @@ function parseMSQ($xml)
 	//This should be json and stored somewhere else
 	$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
 		'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%'),
-		'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'units' => 'degrees'),
+		'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => 'degrees'),
 		'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1'),
 		'egoType' => array('name' => 'O2 Sensor Type')
 	);
@@ -171,6 +102,11 @@ function parseMSQ($xml)
 					{
 						$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
 						msqTable($value['name'], $tableData, $x, $y);
+					}
+					else
+					{
+						echo '<div class="error">' . $value['name'] . ' axis count mismatched with data count.</div>';
+						echo '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
 					}
 				}
 			}
