@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>TuneShare</title>
-	<meta name="description" content="">
+	<title>MSQur</title>
+	<meta name="description" content="Megasquirt tune file sharing site">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="msqur.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+	<script src="lib/tablesorter/jquery.tablesorter.min.js"></script>
 	<script src="msqur.js"></script>
 </head>
 <body>
@@ -20,4 +21,11 @@
 		<output id="fileList"></output>
 		<input type="hidden" name="upload" value="upload" style="display:none;">
 	</form>
+</div>
+<div id="settings">
+	<img id="settingsIcon" src="img/settings3.png"/>
+	<div id="settingsPanel" style="display:none;">
+		<label><input type="checkbox" checked />Normalize</label>
+		<label><input type="checkbox" checked />Colorize</label>
+	</div>
 </div>
