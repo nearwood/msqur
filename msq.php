@@ -2,7 +2,7 @@
 
 //TODO Find better name
 define("LARGE_HOT", 0x1);
-//define("LARGE_COLD", 0x1);
+define("LARGE_COLD", 0x2);
 
 function msqAxis($el)
 {
@@ -18,10 +18,6 @@ function msqTableColor($data, $rows, $cols, $flags = LARGE_HOT)
 	$min = 99999;
 	$max = -99999;
 	
-	if ($flags & LARGE_HOT)
-	{
-	}
-	
 	//Find min and max
 	foreach ($data as $v)
 	{
@@ -35,6 +31,9 @@ function msqTableColor($data, $rows, $cols, $flags = LARGE_HOT)
 	foreach ($data as $k => $v)
 	{
 		$percent = ($v - $min) / $range;
+		
+		if ($flags & LARGE_COLD)
+			$percent = 1.0 - $percent;
 		
 		if ($percent < 0.33)
 		{
@@ -55,9 +54,9 @@ function msqTableColor($data, $rows, $cols, $flags = LARGE_HOT)
 			$b = 1.0 - $g;
 		}
 		
-		$r  = $r * $intensity + (1.0 - $intensity);
-		$g  = $g * $intensity + (1.0 - $intensity);
-		$b  = $b * $intensity + (1.0 - $intensity);
+		$r = round(($r * $intensity + (1.0 - $intensity)) * 255);
+		$g = round(($g * $intensity + (1.0 - $intensity)) * 255);
+		$b = round(($b * $intensity + (1.0 - $intensity)) * 255);
 		
 		$colorTable[$k] = array('r' => $r, 'g' => $g, 'b' => $b);
 	}
@@ -92,7 +91,7 @@ function msqTable($name, $data, $x, $y)
 	echo '<table>'; //TODO Some kind of CSS to indicate color shading?
 	echo "<caption>$name</caption>";
 	
-	//$colorTable = msqTableColor($data, $rows, $cols);
+	$colorTable = msqTableColor($data, $rows, $cols);//, LARGE_COLD);
 	
 	for ($r = 0; $r < $rows; $r++)
 	{
@@ -101,13 +100,13 @@ function msqTable($name, $data, $x, $y)
 		{
 			//if ($r == 0) echo "<td>" . $data[$c] . "</td>";
 			//else
-			$r = 0; //$colorTable[$r * $rows + $c]['r'];
-			$g = 1; //$colorTable[$r * $rows + $c]['g'];
-			$b = 0; //firefo$colorTable[$r * $rows + $c]['b'];
-			//echo "<td style=\"background:rgb($r,$g,$b)\">" . $data[$r * $rows + $c] . "</td>";
-			echo "<td>" . $data[$r * $rows + $c] . "</td>";
+			$red = $colorTable[$r * $rows + $c]['r'];
+			$green = $colorTable[$r * $rows + $c]['g'];
+			$blue = $colorTable[$r * $rows + $c]['b'];
+			echo "<td style=\"background:rgb($red,$green,$blue)\">" . $data[$r * $rows + $c] . "</td>";
+			//echo "<td>" . $data[$r * $rows + $c] . "</td>";
+			//echo "</tr>($c, $r) ";
 		}
-		echo "</tr>";
 	}
 	echo "<tr><th></th>";
 	for ($c = 0; $c < $cols; $c++)
