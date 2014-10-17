@@ -65,7 +65,7 @@ table caption {
 }
 
 table td:hover {
-	background-color: yellow;
+	background-color: magenta !important;
 }
 
 table th, table td {
