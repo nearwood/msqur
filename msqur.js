@@ -26,12 +26,11 @@ $(function() {
 	});
 	
 	function colorTable(table, reverseColor)
-	{
+	{//reverseColor could be an override, value passed in is currently ignored
 		var colors = new Array();
 		
-		//TODO Use float.min/max equiv.
-		var min = 99999;
-		var max = -99999;
+		var min = Number.MAX_SAFE_INTEGER;
+		var max = Number.MIN_SAFE_INTEGER;
 		
 		//Find min and max
 		table.find('td').each(function(i) {
@@ -39,6 +38,11 @@ $(function() {
 			if (v < min) min = v;
 			else if (v > max) max = v;
 		});
+		
+		if (table.attr('hot') == 'ascending')
+			reverseColor = true;
+		if (table.attr('hot') == 'descending')
+			reverseColor = false;
 		
 		var range = (max - min);
 		console.debug("Range: " + range);
@@ -81,8 +85,15 @@ $(function() {
 		return colors;
 	}
 	
-	$('table').tablesorter({sortList: [[0, 1]]});
-	//TODO Disable sorting on all other columns
+	//FIXME Hack for tablesorter bug
+	var hdrObj = {};
+	for (var i = 1; i < 32; ++i)
+		hdrObj[i] = {sorter: false};
+		
+	$('table').tablesorter({
+		headers: hdrObj,
+		sortList: [[0, 1]]
+	});
 	
 	$('table').each(function(i) { colorTable($(this)); });
 	

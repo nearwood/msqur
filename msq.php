@@ -11,7 +11,7 @@ function msqAxis($el)
 	return preg_split("/\s+/", trim($el));//, PREG_SPLIT_NO_EMPTY);
 }
 
-function msqTable($name, $data, $x, $y)
+function msqTable($name, $data, $x, $y, $hot)
 {
 	$rows = count($y);
 	$cols = count($x);
@@ -25,8 +25,16 @@ function msqTable($name, $data, $x, $y)
 		return;
 	}
 	
-	echo '<table class="tablesorter">';
+	echo '<table class="tablesorter" hot="' . $hot . '">';
 	echo "<caption>$name</caption>";
+	
+	echo "<thead><tr><th></th>";
+	for ($c = 0; $c < $cols; $c++)
+	{
+		//TODO: This is not triggering tablesorter
+		echo '<th class="{sorter: false}">' . $x[$c] . "</th>";
+	}
+	echo "</tr></thead>";
 	
 	for ($r = 0; $r < $rows; $r++)
 	{
@@ -40,14 +48,6 @@ function msqTable($name, $data, $x, $y)
 		}
 	}
 	
-	//TODO Should really be tfoot here, thead at top
-	echo "<thead><tr><th></th>";
-	for ($c = 0; $c < $cols; $c++)
-	{
-		echo "<th>" . $x[$c] . "</th>";
-	}
-	echo "</tr></thead>";
-	
 	echo "</tr>";
 	echo "</table>";
 }
@@ -56,9 +56,9 @@ function parseMSQ($xml)
 {
 	//This should be json and stored somewhere else
 	$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
-		'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%'),
-		'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => 'degrees'),
-		'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1'),
+		'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
+		'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
+		'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
 		'egoType' => array('name' => 'O2 Sensor Type')
 	);
 	
@@ -102,7 +102,7 @@ function parseMSQ($xml)
 					if ((count($x) == $numCols) && (count($y) == $numRows))
 					{
 						$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-						msqTable($value['name'], $tableData, $x, $y);
+						msqTable($value['name'], $tableData, $x, $y, $value['hot']);
 					}
 					else
 					{
