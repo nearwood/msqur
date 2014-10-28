@@ -72,10 +72,12 @@ function parseMSQ($xml)
 		 */
 		
 		//var_dump($msq);
-		echo "Format Version: " . $msq->versionInfo['fileFormat'] . "<br/>";
-		echo "MS Signature: " . $msq->versionInfo['signature'] . "<br/>";
-		echo "Tuning SW: " . $msq->bibliography['author'] . "<br/>";
-		echo "Date: " . $msq->bibliography['writeDate'] . "<br/>";
+		echo '<div class="msqInfo">';
+		echo "<span>Format Version: " . $msq->versionInfo['fileFormat'] . "</span>";
+		echo "<span>MS Signature: " . $msq->versionInfo['signature'] . "</span>";
+		echo "<span>Tuning SW: " . $msq->bibliography['author'] . "</span>";
+		echo "<span>Date: " . $msq->bibliography['writeDate'] . "</span>";
+		echo '</div>';
 		
 		//if cols and rows exist it's a table (maybe 1xR)
 		//otherwise it's a single value
