@@ -8,13 +8,8 @@ Parses MSQ "XML" and displays it in a familiar format for viewing and comparison
 MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 
 # TODO #
-1. Upload file
-1. Store files in DB instead of FS? Store gzipped?
-1. Re-encode as UTF-8 or degrees symbol breaks things.
-1. Strip whitespace as well
-1. Parse File, show basic info
-1. Show Fuel Table
-1. Show Timing Table
+1. Strip whitespace
+1. Store gzipped?
 1. Add Ads
 1. Show extended info (warmup, etc.)
 1. Searching MSQ comments?
@@ -23,10 +18,17 @@ MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 1. Sign-in?
 1. Updating/Versioning/Differential MSQ info
 
+# Done #
+1. -Upload file-
+1. -Store files in DB instead of FS-
+1. -Re-encode as UTF-8 or degrees symbol breaks things.-
+1. -Parse File, show basic info-
+1. -Show Fuel Table-
+1. -Show Timing Table-
+
 Uploader (user)/Manager (admin)
 Parser
 Displayer
-
 
 ### How do I get set up? ###
 
