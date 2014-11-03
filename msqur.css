@@ -7,7 +7,7 @@ div.error {
 }
 
 div.warning {
-	color: yellow;
+	color: orange;
 }
 
 div.info {
@@ -25,9 +25,21 @@ div#navigation {
 }
 
 div#navigation span {
-	
 	font-weight: bold;
 	padding: 0px 8px 0px 8px;
+}
+
+div#navigation a:link {
+	color: green;
+}
+div#navigation a:hover {
+	color: white;
+}
+div#navigation a:active {
+	color: white;
+}
+div#navigation a:visited {
+	color: red;
 }
 
 div.footer {
