@@ -23,7 +23,7 @@ echo '<div class="info">' . $numResults . ' results.</div>';
 echo '<ul>';
 for ($c = 0; $c < $numResults; $c++)
 {
-	echo '<li>' . $results[$c]['id'] . '</li>';
+	echo '<li>' . $results[$c]['id'] . ' - ' . $results[$c]['id'] . '</li>';
 }
 echo '</ul>';
 ?>
