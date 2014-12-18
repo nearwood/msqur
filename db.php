@@ -80,10 +80,32 @@ function getMSQ($id)
 	}
 	catch(PDOException $e)
 	{
-		echo '<div class="error">Error adding to the database.</div>'; echo $e->getMessage();
+		echo '<div class="error">Error executing database query.</div>'; echo $e->getMessage();
 	}
 	
 	if (!$result) return null;
 	else return $result['xml'];
 }
+
+//TODO Rename?
+function getAll()
+{
+	$db = connect();
+	if ($db == null) return null;
+	
+	try
+	{
+		$st = $db->prepare("SELECT * FROM metadata");
+		$st->execute();
+		$result = $st->fetchAll(PDO::FETCH_ASSOC);
+	}
+	catch(PDOException $e)
+	{
+		echo '<div class="error">Error executing database query: </div>'; echo $e->getMessage();
+	}
+	
+	if (!$result) return null;
+	else return $result;
+}
+
 ?>
