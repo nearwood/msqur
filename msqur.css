@@ -15,6 +15,7 @@ div.info {
 }
 
 div.debug {
+	font-family: monospace !important;
 	color: dark-gray;
 }
 
@@ -81,7 +82,7 @@ table caption {
 	padding: 0.2em;
 }
 
-table td:hover {
+table.msq td:hover {
 	background-color: magenta !important;
 }
 
@@ -107,6 +108,11 @@ table th[scope=row] {
 	border-right: 2px solid #333;
 }
 
+/* Hidden features */
 span#literMargin input{
+	display: none;
+}
+
+form#filter {
 	display: none;
 }

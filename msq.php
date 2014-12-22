@@ -25,7 +25,7 @@ function msqTable($name, $data, $x, $y, $hot)
 		return;
 	}
 	
-	echo '<table class="tablesorter" hot="' . $hot . '">';
+	echo '<table class="msq tablesorter" hot="' . $hot . '">';
 	echo "<caption>$name</caption>";
 	
 	echo "<thead><tr><th></th>";
