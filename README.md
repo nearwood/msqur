@@ -19,6 +19,7 @@ MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 1. Updating/Versioning/Differential MSQ info
 
 # Done #
+1. -Basic browse-
 1. -Upload file-
 1. -Store files in DB instead of FS-
 1. -Re-encode as UTF-8 or degrees symbol breaks things.-
@@ -36,7 +37,11 @@ Displayer
 * Create database user and tables
 * Upload web files
 * How to run tests
-* Deployment instructions
+
+### Deployment instructions ###
+* Export tables (not entire DB)
+* Pull updates on host (don't overwrite DB config)
+* Import DB
 
 ### Contribution guidelines ###
 
