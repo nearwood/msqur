@@ -11,7 +11,7 @@ function connect()
 	}
 	catch(PDOException $e)
 	{
-		echo '<div class="error">Error connecting to database.</div>'; echo $e->getMessage();
+		echo '<div class="error">Error connecting to database.</div>';// echo $e->getMessage();
 		$db = null; //Redundant.
 	}
 	
