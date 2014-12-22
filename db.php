@@ -1,15 +1,17 @@
 <?php
+require "config.php";
+
 function connect()
 {
 	$db = null;
 	try
 	{
-		$db = new PDO("mysql:dbname=msqur;host=localhost", "msqur", "LwEYrxvUpjhnCdTc");
-		//echo "Connected";
-	}//WDnRB7pRHmLH7LNu
+		//echo "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . "," . DB_PASSWORD;
+		$db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD);
+	}
 	catch(PDOException $e)
 	{
-		echo '<div class="error">Error connecting to database.</div>'; //$e->getMessage();
+		echo '<div class="error">Error connecting to database.</div>'; echo $e->getMessage();
 		$db = null; //Redundant.
 	}
 	
