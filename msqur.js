@@ -102,7 +102,7 @@ $(function() {
 		sortList: [[0, 1]]
 	});
 	
-	$('table').each(function(i) { colorTable($(this)); });
+	$('table.msq').each(function(i) { colorTable($(this)); });
 	
 	function uploadAdd(e)
 	{
