@@ -1,12 +1,15 @@
 <?php
-//trim/concentrate/whatever engines (remove dupes)
-//remove all msqs/metadata/engines (fresh slate)
+//total msqs
+//total something
+//total views
+//most popular
+//most viewed
 
-//find metada and engines (browse)
-SELECT * FROM `metadata` JOIN `engines` ON engines.id = metadata.engine 
+require('db.php');
+require('header.php');
 
-//DELETE ALL DATA
-TRUNCATE metadata
-TRUNCATE engines
-TRUNCATE msqs
 ?>
+<div id='content'>
+	<div class="info">Coming soon...</div>
+</div>
+<?php require('footer.php'); ?>

@@ -116,3 +116,7 @@ span#literMargin input{
 form#filter {
 	display: none;
 }
+
+form#search {
+	display: none;
+}
