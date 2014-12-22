@@ -6,7 +6,7 @@ function connect()
 	{
 		$db = new PDO("mysql:dbname=msqur;host=localhost", "msqur", "LwEYrxvUpjhnCdTc");
 		//echo "Connected";
-	}
+	}//WDnRB7pRHmLH7LNu
 	catch(PDOException $e)
 	{
 		echo '<div class="error">Error connecting to database.</div>'; //$e->getMessage();
