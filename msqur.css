@@ -59,7 +59,6 @@ div#settings {
 }
 
 #fileDropZone {
-	width: 320px;
 	border: 2px dashed #bbb;
 	border-radius: 5px;
 	padding: 25px;
@@ -106,4 +105,8 @@ table th+th[scope=col] {
 
 table th[scope=row] {
 	border-right: 2px solid #333;
+}
+
+span#literMargin input{
+	display: none;
 }

@@ -19,6 +19,20 @@
 			<input type="file" id="fileSelect" name="files[]" multiple />
 		</div>
 		<output id="fileList"></output>
+		<div id="engineForm">
+			<fieldset>
+			<legend>Engine Information</legend>
+			<div>Cylinders: <input name="cylinders" type="number" min="0" value="6" max="99" style="width:3em;"/></div>
+			<div>Displacement (liters): <input name="displacement" type="number" min="0" step="0.01" value="3.0" style="width:4em;"/></div>
+			<div>Compression (X:1) <input name="compression" type="number" min="0" step="0.1" value="9.0" style="width:4em;"/></div>
+			<div>Aspiration: 
+				<select name="aspiration">
+					<option value="na" title="AKA: Slow">Naturally Aspirated</option>
+					<option value="fi" title="The way God intended">Forced Induction</option>
+				</select>
+			</div>
+			</fieldset>
+		</div>
 		<input type="hidden" name="upload" value="upload" style="display:none;">
 	</form>
 </div>

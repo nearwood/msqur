@@ -67,27 +67,28 @@ require('header.php');
 <div class="info">Upload successful</div>
 
 <?php
-$files = checkUploads(fixFileArray($_FILES['files']));
-if (count($files) == 0)
-{
-	//No files made it past the check
-	echo '<div class="warning">Your files has asploded.</div>';
-}
-else
-{
-	if (count($files) > 1)
-		echo '<div class="info">' . count($files) . ' files were uploaded:</div>';
-	else
-		echo '<div class="info">' . count($files) . ' file was uploaded:</div>';
-	$fileList = addFiles($files);
-	echo '<div class="info"><ul id="fileList">';
-	foreach ($fileList as $f)
+	$files = checkUploads(fixFileArray($_FILES['files']));
+	if (count($files) == 0)
 	{
-		echo '<li><a href="' . $_SERVER['REQUEST_URI'] . '?msq=' . $f . '">' . $f . '</a></li>';
+		//No files made it past the check
+		echo '<div class="error">Your files have asploded.</div>';
 	}
-	echo '</div></ul>';
-}
-
+	else
+	{
+		if (count($files) == 1)
+			echo '<div class="info">' . count($files) . ' file was uploaded:</div>';
+		else
+			echo '<div class="info">' . count($files) . ' files were uploaded:</div>';
+		//$motor = $validate($_POST['cylinders'])
+		$engineid = addEngine($_POST['displacement'], $_POST['cylinders'], $_POST['compression'], $_POST['aspiration']);
+		$fileList = addFiles($files, $engineid);
+		echo '<div class="info"><ul id="fileList">';
+		foreach ($fileList as $f)
+		{
+			echo '<li><a href="' . $_SERVER['REQUEST_URI'] . '?msq=' . $f . '">' . $f . '</a></li>';
+		}
+		echo '</div></ul>';
+	}
 }
 ?>
 </div>
