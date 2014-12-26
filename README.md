@@ -8,6 +8,7 @@ Parses MSQ "XML" and displays it in a familiar format for viewing and comparison
 MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 
 # TODO #
+1. Parse XML once! Save to DB. Allow re-ingest and stuff though.
 1. Strip whitespace
 1. Store gzipped?
 1. Add Ads
