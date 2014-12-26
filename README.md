@@ -20,13 +20,13 @@ MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 1. Updating/Versioning/Differential MSQ info
 
 # Done #
-1. ~Basic browse~
-1. -Upload file-
-1. -Store files in DB instead of FS-
-1. -Re-encode as UTF-8 or degrees symbol breaks things.-
-1. -Parse File, show basic info-
-1. -Show Fuel Table-
-1. -Show Timing Table-
+1. Basic browse
+1. Upload file
+1. Store files in DB instead of FS
+1. Re-encode as UTF-8 or degrees symbol breaks things
+1. Parse File, show basic info
+1. Show Fuel Table
+1. Show Timing Table
 
 Uploader (user)/Manager (admin)
 Parser
