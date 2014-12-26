@@ -4,6 +4,48 @@
 define("LARGE_HOT", 0x1);
 define("LARGE_COLD", 0x2);
 
+function parseSchema($test)
+{
+	//Since we don't know official schema, we use some simple heuristics.
+	
+	if (strpos($test, '2.0.6') !== FALSE ||
+	 strpos($test, '1.13') !== FALSE)
+	{
+		echo '<div class="debug">Using 2.0.6 Schema</div>';
+		//This should be json and stored somewhere else
+		//2.0.6?
+		$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
+			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
+			'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
+			'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
+			'egoType' => array('name' => 'O2 Sensor Type')
+		);
+	}
+	else if (strpos($test, '2.6.05') !== FALSE)
+	{
+		//2.6.05+?
+		echo '<div class="debug">Using 2.6.05 Schema</div>';
+		$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
+			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table', 'y' => 'fmap_table', 'units' => '%', 'hot' => 'descending'),
+			'advanceTable' => array('name' => 'Timing Advance', 'x' => 'srpm_table', 'y' => 'smap_table', 'units' => 'degrees', 'hot' => 'ascending'),
+			'afrTable1' => array('name' => 'AFR Targets', 'x' => 'frpm_table', 'y' => 'fmap_table', 'hot' => 'ascending'),
+			'egoType' => array('name' => 'O2 Sensor Type')
+		);
+	}
+	else
+	{
+		echo '<div class="debug">Using default (1.3) Schema</div>';
+		$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
+			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
+			'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
+			'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
+			'egoType' => array('name' => 'O2 Sensor Type')
+		);
+	}
+	
+	return $msqMap;
+}
+
 function msqAxis($el)
 {
 	//Why the fuck does this flag bork here on not on the table data?
@@ -11,7 +53,7 @@ function msqAxis($el)
 	return preg_split("/\s+/", trim($el));//, PREG_SPLIT_NO_EMPTY);
 }
 
-function msqTable($name, $data, $x, $y, $hot)
+function msqTable(&$output, $name, $data, $x, $y, $hot)
 {
 	$rows = count($y);
 	$cols = count($x);
@@ -21,46 +63,40 @@ function msqTable($name, $data, $x, $y, $hot)
 	
 	if ($rows * $cols != count($data))
 	{
-		echo '<div class="error">' . $name . ' column/row count mismatched with data count.</div>';
+		$output .= '<div class="error">' . $name . ' column/row count mismatched with data count.</div>';
 		return;
 	}
 	
-	echo '<table class="msq tablesorter" hot="' . $hot . '">';
-	echo "<caption>$name</caption>";
+	$output .= '<table class="msq tablesorter" hot="' . $hot . '">';
+	$output .= "<caption>$name</caption>";
 	
-	echo "<thead><tr><th></th>";
+	$output .= "<thead><tr><th></th>";
 	for ($c = 0; $c < $cols; $c++)
 	{
 		//TODO: This is not triggering tablesorter
-		echo '<th class="{sorter: false}">' . $x[$c] . "</th>";
+		$output .= '<th class="{sorter: false}">' . $x[$c] . "</th>";
 	}
-	echo "</tr></thead>";
+	$output .= "</tr></thead>";
 	
 	for ($r = 0; $r < $rows; $r++)
 	{
-		echo "<tr><th>" . $y[$r] . "</th>";
+		$output .= "<tr><th>" . $y[$r] . "</th>";
 		for ($c = 0; $c < $cols; $c++)
 		{
-			//if ($r == 0) echo "<td>" . $data[$c] . "</td>";
+			//if ($r == 0) $output .= "<td>" . $data[$c] . "</td>";
 			//else
-			echo "<td>" . $data[$r * $rows + $c] . "</td>";
-			//echo "</tr>($c, $r) ";
+			$output .= "<td>" . $data[$r * $rows + $c] . "</td>";
+			//$output .= "</tr>($c, $r) ";
 		}
 	}
 	
-	echo "</tr>";
-	echo "</table>";
+	$output .= "</tr>";
+	$output .= "</table>";
 }
 
-function parseMSQ($xml)
+function parseMSQ($xml, &$output)
 {
-	//This should be json and stored somewhere else
-	$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
-		'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
-		'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
-		'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
-		'egoType' => array('name' => 'O2 Sensor Type')
-	);
+	$errorCount = 0; //Keep track of how many things go wrong.
 	
 	$msq = simplexml_load_string($xml);
 	
@@ -72,12 +108,14 @@ function parseMSQ($xml)
 		 */
 		
 		//var_dump($msq);
-		echo '<div class="msqInfo">';
-		echo "<span>Format Version: " . $msq->versionInfo['fileFormat'] . "</span>";
-		echo "<span>MS Signature: " . $msq->versionInfo['signature'] . "</span>";
-		echo "<span>Tuning SW: " . $msq->bibliography['author'] . "</span>";
-		echo "<span>Date: " . $msq->bibliography['writeDate'] . "</span>";
-		echo '</div>';
+		$output .= '<div class="info">';
+		$output .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
+		$output .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
+		$output .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
+		$output .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
+		$output .= '</div>';
+		
+		$msqMap = parseSchema($msq->bibliography['author']);
 		
 		//if cols and rows exist it's a table (maybe 1xR)
 		//otherwise it's a single value
@@ -104,25 +142,28 @@ function parseMSQ($xml)
 					if ((count($x) == $numCols) && (count($y) == $numRows))
 					{
 						$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-						msqTable($value['name'], $tableData, $x, $y, $value['hot']);
+						msqTable($output, $value['name'], $tableData, $x, $y, $value['hot']);
 					}
 					else
 					{
-						echo '<div class="error">' . $value['name'] . ' axis count mismatched with data count.</div>';
-						echo '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+						$output .= '<div class="error">' . $value['name'] . ' axis count mismatched with data count.</div>';
+						$output .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+						$errorCount += 1;
 					}
 				}
 			}
 		}
 		
 		//foreach ($movies->xpath('//settings/setting') as $setting) {
-		//	echo $setting->name, 'value: ', $setting->value, PHP_EOL;
+		//	$output .= $setting->name, 'value: ', $setting->value, PHP_EOL;
 		//}
 	}
 	else
 	{
-		echo '<div class="error">No such tune dude.</div>';
+		$output .= '<div class="error">Unable to load tune.</div>';
 	}
+	
+	return $errorCount;
 }
 
 ?>

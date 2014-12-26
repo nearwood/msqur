@@ -57,12 +57,14 @@ require('header.php');
 ?>
 <div id='content'>
 <?php
-	if (isset($_GET['msq'])) {
-		$msq = getMSQ($_GET['msq']);
-		parseMSQ($msq);
-	} else if (isset($_POST['upload']) && isset($_FILES)) {
-		//var_dump($_POST);
-		//var_dump($_FILES);
+if (isset($_GET['msq'])) {
+	$msq = getMSQ($_GET['msq']);
+	$output = "";
+	parseMSQ($msq, $output);
+	echo $output;
+} else if (isset($_POST['upload']) && isset($_FILES)) {
+	//var_dump($_POST);
+	//var_dump($_FILES);
 ?>
 <div class="info">Upload successful</div>
 
@@ -71,7 +73,7 @@ require('header.php');
 	if (count($files) == 0)
 	{
 		//No files made it past the check
-		echo '<div class="error">Your files have asploded.</div>';
+		echo '<div class="error">Your file(s) have asploded.</div>';
 	}
 	else
 	{
@@ -89,6 +91,11 @@ require('header.php');
 		}
 		echo '</div></ul>';
 	}
+}
+else
+{
+	echo '<div class="info">Upload your .msq files to view and share them.</div>';
+	echo '<div class="warn">This website is in beta; only files from TunerStudio MS v1.13, 2.0.6, and 2.6.0 are known as working.</div>';
 }
 ?>
 </div>

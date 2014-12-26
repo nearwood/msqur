@@ -104,7 +104,7 @@ function addFile($file, $engineid, $db = null)
 	}
 	catch(PDOException $e)
 	{
-		echo '<div class="error">Error adding to the database.</div>'; echo $e->getMessage();
+		dbError($e);
 	}
 	
 	return $id;
@@ -124,7 +124,7 @@ function getMSQ($id)
 	}
 	catch(PDOException $e)
 	{
-		echo '<div class="error">Error executing database query.</div>'; echo $e->getMessage();
+		dbError($e);
 	}
 	
 	if (!$result) return null;
@@ -146,11 +146,18 @@ function getAll()
 	}
 	catch(PDOException $e)
 	{
-		echo '<div class="error">Error executing database query: </div>'; echo $e->getMessage();
+		dbError($e);
 	}
 	
 	if (!$result) return null;
 	else return $result;
+}
+
+function dbError($e)
+{
+	echo '<div class="error">Error executing database query.';
+	echo $e->getMessage();
+	echo '</div>';
 }
 
 ?>
