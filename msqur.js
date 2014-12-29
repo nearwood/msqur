@@ -40,21 +40,14 @@ $(function() {
 			else if (v > max) max = v;
 		});
 		
-		var range = (max - min);
-		console.debug("min/max: " + min + "/" + max);
-		console.debug("Range: " + range);
-		
-		console.debug("min'/max': " + nmin + "/" + nmax);
-		console.debug("Range: " + (nmax - nmin));
-		
+		//Precalculate some stuff
 		var a = (nmax - nmin) / range;
-		var b = max - (a * max);
+		var b = nmin - (a * min);
 		
 		//apply normalization
 		table.find('td').each(function(i) {
 			var v = parseFloat(this.textContent);
-			//var r = Math.round(a * v + b);
-			var r = Math.round(((v - min) / range) * (nmax - nmin) + nmin);
+			var r = Math.round(a * v + b);
 			this.textContent = "" + r;
 		});
 	}
