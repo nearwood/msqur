@@ -41,7 +41,7 @@ $(function() {
 		});
 		
 		//Precalculate some stuff
-		var a = (nmax - nmin) / range;
+		var a = (nmax - nmin) / (max - min);
 		var b = nmin - (a * min);
 		
 		//apply normalization
