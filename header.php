@@ -39,8 +39,8 @@
 <div id="settings">
 	<img id="settingsIcon" src="img/settings3.png"/>
 	<div id="settingsPanel" style="display:none;">
-		<label><input type="checkbox" checked />Colorize</label>
-		<label><input type="checkbox" checked />Normalize Axis</label>
-		<label><input type="checkbox" disabled />Normalize Data</label>
+		<label><input id="colorizeData" type="checkbox" />Colorize</label>
+		<label><input id="normalizeData" type="checkbox" />Normalize Data</label>
+		<label><input id="normalizeAxis" type="checkbox" disabled />Normalize Axis</label>
 	</div>
 </div>
