@@ -1,3 +1,5 @@
+"use strict";
+
 $(function() {
 	$('div#upload').dialog({
 		modal: true,
@@ -24,10 +26,53 @@ $(function() {
 		$('#settingsPanel').toggle();
 	});
 	
+	function normalizeTable(table)
+	{
+		var min = Number.MAX_SAFE_INTEGER;
+		var max = Number.MIN_SAFE_INTEGER;
+		var nmin = 5;
+		var nmax = 250;
+		
+		//Find min and max
+		table.find('td').each(function(i) {
+			var v = parseFloat(this.textContent);
+			if (v < min) min = v;
+			else if (v > max) max = v;
+		});
+		
+		var range = (max - min);
+		console.debug("min/max: " + min + "/" + max);
+		console.debug("Range: " + range);
+		
+		console.debug("min'/max': " + nmin + "/" + nmax);
+		console.debug("Range: " + (nmax - nmin));
+		
+		var a = (nmax - nmin) / range;
+		var b = max - (a * max);
+		
+		//apply normalization
+		table.find('td').each(function(i) {
+			var v = parseFloat(this.textContent);
+			//var r = Math.round(a * v + b);
+			var r = Math.round(((v - min) / range) * (nmax - nmin) + nmin);
+			this.textContent = "" + r;
+		});
+	}
+	
+	function resetTable(table)
+	{
+		//TODO Need to store old value (and new one if I care about client end)
+	}
+	
+	function clearTableColor(table)
+	{
+		table.find('td').each(function(i) {
+			this.style.backgroundColor = '';
+		});
+	}
+	
 	function colorTable(table, reverseColor)
 	{//reverseColor could be an override, value passed in is currently ignored
-		var colors = new Array();
-		
 		var min = Number.MAX_SAFE_INTEGER;
 		var max = Number.MIN_SAFE_INTEGER;
 		
@@ -44,7 +89,7 @@ $(function() {
 			reverseColor = false;
 		
 		var range = (max - min);
-		console.debug("Range: " + range);
+		//console.debug("Range: " + range);
 		var r = 0, g = 0, b = 0, percent = 0, intensity = 0.6;
 		
 		table.find('td').each(function(i) {
@@ -77,11 +122,8 @@ $(function() {
 			g = Math.round((g * intensity + (1.0 - intensity)) * 255);
 			b = Math.round((b * intensity + (1.0 - intensity)) * 255);
 			
-			//this.css('background-color', 'rgb(' + r + ',' + g + ',' + b + ')');
 			this.style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
 		});
-		
-		return colors;
 	}
 	
 	//FIXME Hack for tablesorter bug
@@ -94,7 +136,23 @@ $(function() {
 		sortList: [[0, 1]]
 	});
 	
+	$('input#colorizeData').change(function () {
+		if (this.checked)
+			$('table.msq').each(function(i) { colorTable($(this)); });
+		else
+			$('table.msq').each(function(i) { clearTableColor($(this)); });
+	});
+	
+	//default
+	$('input#colorizeData').prop('checked', true);
 	$('table.msq').each(function(i) { colorTable($(this)); });
+	
+	$('input#normalizeData').change(function () {
+		if (this.checked)
+			$('table.msq.ve').each(function(i) { normalizeTable($(this)); });
+		else
+			$('table.msq.ve').each(function(i) { resetTable($(this)); });
+	});
 	
 	function uploadAdd(e)
 	{

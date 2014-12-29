@@ -67,7 +67,16 @@ function msqTable(&$output, $name, $data, $x, $y, $hot)
 		return;
 	}
 	
-	$output .= '<table class="msq tablesorter" hot="' . $hot . '">';
+	//TODO Probably there's a better way to do this (like on the front end)
+	if (stripos($name, "VE") === FALSE)
+	{
+		$output .= '<table class="msq tablesorter" hot="' . $hot . '">';
+	}
+	else
+	{
+		$output .= '<table class="msq tablesorter ve" hot="' . $hot . '">';
+	}
+	
 	$output .= "<caption>$name</caption>";
 	
 	$output .= "<thead><tr><th></th>";
