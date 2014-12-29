@@ -1,7 +1,9 @@
 <?php
-define('CONFIG_VERSION', "1");
+define('CONFIG_VERSION', "2");
 define('DB_HOST', "localhost");
 define('DB_USERNAME', "msqur");
-define('DB_PASSWORD', "msqur123");
+define('DB_PASSWORD', "");
 define('DB_NAME', "msqur");
+
+define('DEBUG', FALSE);
 ?>
