@@ -110,26 +110,7 @@ function addFile($file, $engineid, $db = null)
 	return $id;
 }
 
-function getMSQ($id)
-{
-	$db = connect();
-	if ($db == null) return null;
-	
-	try
-	{
-		$st = $db->prepare("SELECT msqs.xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id");
-		$st->bindParam(":id", $id);
-		$st->execute();
-		$result = $st->fetch(PDO::FETCH_ASSOC);
-	}
-	catch(PDOException $e)
-	{
-		dbError($e);
-	}
-	
-	if (!$result) return null;
-	else return $result['xml'];
-}
+
 
 //TODO Rename?
 //TODO Pagination
@@ -155,7 +136,7 @@ function getAll()
 
 function dbError($e)
 {
-	echo '<div class="error">Error executing database query.';
+	echo '<div class="error">Error executing database query. ';
 	echo $e->getMessage();
 	echo '</div>';
 }

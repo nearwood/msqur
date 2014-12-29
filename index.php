@@ -58,10 +58,7 @@ require('header.php');
 <div id='content'>
 <?php
 if (isset($_GET['msq'])) {
-	$msq = getMSQ($_GET['msq']);
-	$output = "";
-	parseMSQ($msq, $output);
-	echo $output;
+	echo getMSQ($_GET['msq']);
 } else if (isset($_POST['upload']) && isset($_FILES)) {
 	//var_dump($_POST);
 	//var_dump($_FILES);

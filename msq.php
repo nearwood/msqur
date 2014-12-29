@@ -94,8 +94,62 @@ function msqTable(&$output, $name, $data, $x, $y, $hot)
 	$output .= "</table>";
 }
 
+function getMSQ($id)
+{
+	if (DEBUG) echo '<div class="debug">getMSQ()</div>';
+	$db = connect();
+	if ($db == null) return null;
+	
+	$html = null;
+	
+	try
+	{
+		$st = $db->prepare("SELECT html FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
+		$st->bindParam(":id", $id);
+		$st->execute();
+		if ($st->rowCount() > 0)
+		{
+			$result = $st->fetch(PDO::FETCH_ASSOC);
+			$html = $result['html'];
+			if ($html === NULL)
+			{//MSQ not parsed yet.
+				if (DEBUG) echo '<div class="debug">no html, get xml</div>';
+				$st = $db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
+				$st->bindParam(":id", $id);
+				$st->execute();
+				$result = $st->fetch(PDO::FETCH_ASSOC);
+				$html = "";
+				parseMSQ($result['xml'], $html);
+				
+				if (DEBUG) echo '<div class="debug">put html in db</div>';
+				$st = $db->prepare("UPDATE msqs ms, metadata m SET ms.html=:html WHERE m.msq = ms.id AND m.id = :id");
+				//$xml = mb_convert_encoding($html, "UTF-8");
+				$st->bindParam(":id", $id);
+				$st->bindParam(":html", $html);
+				$st->execute();
+			}
+			else
+			{
+				if (DEBUG) echo '<div class="debug">Found html</div>';
+			}
+		}
+		else
+		{
+			if (DEBUG) echo '<div class="debug">0 rows for $id</div>';
+			echo '<div class="error">Invalid MSQ</div>';
+		}
+	}
+	catch(PDOException $e)
+	{
+		dbError($e);
+	}
+	
+	return $html;
+}
+
 function parseMSQ($xml, &$output)
 {
+	if (DEBUG) echo '<div class="debug">parseXML()</div>';
 	$errorCount = 0; //Keep track of how many things go wrong.
 	
 	$msq = simplexml_load_string($xml);
@@ -160,10 +214,17 @@ function parseMSQ($xml, &$output)
 	}
 	else
 	{
-		$output .= '<div class="error">Unable to load tune.</div>';
+		$output .= '<div class="error">Unable to parse tune.</div>';
 	}
 	
 	return $errorCount;
+}
+
+function msqError($e)
+{
+	echo '<div class="error">Error parsing MSQ. ';
+	echo $e->getMessage();
+	echo '</div>';
 }
 
 ?>
