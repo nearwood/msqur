@@ -92,7 +92,7 @@ if (isset($_GET['msq'])) {
 else
 {
 	echo '<div class="info">Upload your .msq files to view and share them.</div>';
-	echo '<div class="warn">This website is in beta; only files from TunerStudio MS v1.13, 2.0.6, and 2.6.0 are known as working.</div>';
+	echo '<div class="warn">This website is in beta. It only officially supports TunerStudio tune files, and currently is known working with MS2 and MS2-Extra firmware.</div>';
 }
 ?>
 </div>

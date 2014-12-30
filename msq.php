@@ -11,7 +11,7 @@ function parseSchema($test)
 	if (strpos($test, '2.0.6') !== FALSE ||
 	 strpos($test, '1.13') !== FALSE)
 	{
-		echo '<div class="debug">Using 2.0.6 Schema</div>';
+		if (DEBUG) echo '<div class="debug">Using 2.0.6 Schema</div>';
 		//This should be json and stored somewhere else
 		//2.0.6?
 		$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
@@ -24,7 +24,7 @@ function parseSchema($test)
 	else if (strpos($test, '2.6.05') !== FALSE)
 	{
 		//2.6.05+?
-		echo '<div class="debug">Using 2.6.05 Schema</div>';
+		if (DEBUG) echo '<div class="debug">Using 2.6.05 Schema</div>';
 		$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
 			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table', 'y' => 'fmap_table', 'units' => '%', 'hot' => 'descending'),
 			'advanceTable' => array('name' => 'Timing Advance', 'x' => 'srpm_table', 'y' => 'smap_table', 'units' => 'degrees', 'hot' => 'ascending'),
@@ -34,7 +34,7 @@ function parseSchema($test)
 	}
 	else
 	{
-		echo '<div class="debug">Using default (1.3) Schema</div>';
+		if (DEBUG) echo '<div class="debug">Using default (1.3) Schema</div>';
 		$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
 			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
 			'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
