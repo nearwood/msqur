@@ -18,7 +18,8 @@ function parseSchema($test)
 			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
 			'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
 			'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
-			'egoType' => array('name' => 'O2 Sensor Type')
+			'egoType' => array('name' => 'O2 Sensor Type'),
+			'nCylinders' => array('name' => 'Cylinders')
 		);
 	}
 	else if (strpos($test, '2.6.05') !== FALSE)
@@ -29,7 +30,8 @@ function parseSchema($test)
 			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table', 'y' => 'fmap_table', 'units' => '%', 'hot' => 'descending'),
 			'advanceTable' => array('name' => 'Timing Advance', 'x' => 'srpm_table', 'y' => 'smap_table', 'units' => 'degrees', 'hot' => 'ascending'),
 			'afrTable1' => array('name' => 'AFR Targets', 'x' => 'frpm_table', 'y' => 'fmap_table', 'hot' => 'ascending'),
-			'egoType' => array('name' => 'O2 Sensor Type')
+			'egoType' => array('name' => 'O2 Sensor Type'),
+			'nCylinders' => array('name' => 'Cylinders')
 		);
 	}
 	else
@@ -39,7 +41,8 @@ function parseSchema($test)
 			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
 			'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
 			'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
-			'egoType' => array('name' => 'O2 Sensor Type')
+			'egoType' => array('name' => 'O2 Sensor Type'),
+			'nCylinders' => array('name' => 'Cylinders')
 		);
 	}
 	
@@ -101,6 +104,11 @@ function msqTable(&$output, $name, $data, $x, $y, $hot)
 	
 	$output .= "</tr>";
 	$output .= "</table>";
+}
+
+function msqConstant($constant, $value)
+{
+	return '<div class="constant">$constant: ' . $value . '</div>';
 }
 
 function getMSQ($id)
@@ -214,6 +222,12 @@ function parseMSQ($xml, &$output)
 						$errorCount += 1;
 					}
 				}
+			}
+			else
+			{//regular constant?
+				
+				$constant = $msq->xpath('//constant[@name="' . $key . '"]')[0];
+				$output .= msqConstant($constant, $value);
 			}
 		}
 		
