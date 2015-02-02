@@ -64,6 +64,7 @@ function addFiles($files, $engineid)
 	foreach ($files as $file)
 	{
 		//echo 'Adding ' . $file['tmp_name'];
+		//TODO if -1 failed
 		$fileList[] = addFile($file, $engineid);
 	}
 	
@@ -88,23 +89,27 @@ function addFile($file, $engineid, $db = null)
 		//Strip out invalid xmlns
 		$xml = preg_replace('/xmlns=".*?"/', '', $xml);
 		$st->bindParam(":xml", $xml);
-		$st->execute();
-		$id = $db->lastInsertId();
-		$st = $db->prepare("INSERT INTO metadata (url,msq,engine,fileFormat,signature,uploadDate) VALUES (:url, :id, :engine, '4.0', 'unknown', :uploaded)");
-		$st->bindParam(":url", $id); //could do hash but for now, just the id
-		$st->bindParam(":id", $id);
-		if (!is_numeric($engineid)) $engineid = null;
-		$st->bindParam(":engine", $engineid);
-		//TODO Make sure it's an int
-		$dt = new DateTime();
-		$dt = $dt->format('Y-m-d H:i:s');
-		$st->bindParam(":uploaded", $dt);
-		$st->execute();
-		$id = $db->lastInsertId();
+		if ($st->execute())
+		{
+			$id = $db->lastInsertId();
+			$st = $db->prepare("INSERT INTO metadata (url,msq,engine,fileFormat,signature,uploadDate) VALUES (:url, :id, :engine, '4.0', 'unknown', :uploaded)");
+			$st->bindParam(":url", $id); //could do hash but for now, just the id
+			$st->bindParam(":id", $id);
+			if (!is_numeric($engineid)) $engineid = null;
+			$st->bindParam(":engine", $engineid);
+			//TODO Make sure it's an int
+			$dt = new DateTime();
+			$dt = $dt->format('Y-m-d H:i:s');
+			$st->bindParam(":uploaded", $dt);
+			if ($st->execute()) $id = $db->lastInsertId();
+			else $id = -1;
+		}
+		else $id = -1;
 	}
 	catch(PDOException $e)
 	{
 		dbError($e);
+		$id = -1;
 	}
 	
 	return $id;
