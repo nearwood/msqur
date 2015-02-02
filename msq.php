@@ -1,50 +1,62 @@
 <?php
+require "parse.ini.php";
+
+$result = parse_ms_ini("ini/ms2/test.ini", TRUE);
 
 //TODO Find better name
 define("LARGE_HOT", 0x1);
 define("LARGE_COLD", 0x2);
 
-function parseSchema($test)
+function parseSchema($signature)
 {
-	//Since we don't know official schema, we use some simple heuristics.
+	//sig is 19 bytes + \0
+	//"MS3 Format 0262.09 "
+	//"MS3 Format 0435.14P"
+	//"MS2Extra comms332m2"
+	//"MS2Extra comms333e2"
+	//"MS2Extra Serial321 "
+	//"MS2Extra Serial310 "
+	//"MSII Rev 3.83000   "
 	
-	if (strpos($test, '2.0.6') !== FALSE ||
-	 strpos($test, '1.13') !== FALSE)
+	//Get the signature from the MSQ
+	$sig = explode(' ', $signature, 3); //limit 3 buckets
+	$msVersion = $sig[0];
+	if ($msVersion == "MS2Extra") $fwVersion = $sig[1];
+	else $fwVersion = $sig[2];
+	
+	if (DEBUG) echo "<div class=\"debug\">$msVersion/$fwVersion</div>"; 
+	
+	//Look for a matching INI file
+	switch ($msVersion)
 	{
-		if (DEBUG) echo '<div class="debug">Using 2.0.6 Schema</div>';
-		//This should be json and stored somewhere else
-		//2.0.6?
-		$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
-			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
-			'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
-			'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
-			'egoType' => array('name' => 'O2 Sensor Type'),
-			'nCylinders' => array('name' => 'Cylinders')
-		);
+		case "MS1":
+			$msDir = "ms1";
+			$msFilePrefix = "megasquirt-I.";
+			break;
+		case "MSII":
+			$msDir = "ms2";
+			$msFilePrefix = "megasquirt-II.";
+			break;
+		case "MS2Extra":
+			$msDir = "ms2extra";
+			$msFilePrefix = "megasquirt-I.";
+			break;
+		case "MS3":
+			$msDir = "ms3";
+			$msFilePrefix = "megasquirt-I.";
+			break;
 	}
-	else if (strpos($test, '2.6.05') !== FALSE)
-	{
-		//2.6.05+?
-		if (DEBUG) echo '<div class="debug">Using 2.6.05 Schema</div>';
-		$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
-			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table', 'y' => 'fmap_table', 'units' => '%', 'hot' => 'descending'),
-			'advanceTable' => array('name' => 'Timing Advance', 'x' => 'srpm_table', 'y' => 'smap_table', 'units' => 'degrees', 'hot' => 'ascending'),
-			'afrTable1' => array('name' => 'AFR Targets', 'x' => 'frpm_table', 'y' => 'fmap_table', 'hot' => 'ascending'),
-			'egoType' => array('name' => 'O2 Sensor Type'),
-			'nCylinders' => array('name' => 'Cylinders')
-		);
-	}
-	else
-	{
-		if (DEBUG) echo '<div class="debug">Using default (1.3) Schema</div>';
-		$msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
-			'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
-			'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
-			'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
-			'egoType' => array('name' => 'O2 Sensor Type'),
-			'nCylinders' => array('name' => 'Cylinders')
-		);
-	}
+	
+	
+	
+		//~ if (DEBUG) echo '<div class="debug">Using default (1.3) Schema</div>';
+		//~ $msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
+			//~ 'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
+			//~ 'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
+			//~ 'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
+			//~ 'egoType' => array('name' => 'O2 Sensor Type'),
+			//~ 'nCylinders' => array('name' => 'Cylinders')
+		//~ );
 	
 	return $msqMap;
 }
@@ -111,6 +123,7 @@ function msqConstant($constant, $value)
 	return '<div class="constant">$constant: ' . $value . '</div>';
 }
 
+//TODO Uh, this should be in db.php
 function getMSQ($id)
 {
 	if (DEBUG) echo '<div class="debug">getMSQ()</div>';
@@ -128,7 +141,7 @@ function getMSQ($id)
 		{
 			$result = $st->fetch(PDO::FETCH_ASSOC);
 			$html = $result['html'];
-			if ($html === NULL)
+			if ($html === NULL || DISABLE_MSQ_CACHE)
 			{//MSQ not parsed yet.
 				if (DEBUG) echo '<div class="debug">no html, get xml</div>';
 				$st = $db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
@@ -186,7 +199,7 @@ function parseMSQ($xml, &$output)
 		$output .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
 		$output .= '</div>';
 		
-		$msqMap = parseSchema($msq->bibliography['author']);
+		$msqMap = parseSchema($msq->versionInfo['signature']);
 		
 		//if cols and rows exist it's a table (maybe 1xR)
 		//otherwise it's a single value

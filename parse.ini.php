@@ -2,12 +2,13 @@
 <body>
 <?php
 
-$result = parse_ms_ini("ini/ms2/test.ini", TRUE);
+//$result = parse_ms_ini("ini/test.ini", TRUE);
 
-print "<pre>";
-var_export($result);
-print "</pre>";
+//~ print "<pre>";
+//~ var_export($result);
+//~ print "</pre>";
 
+//goulven.ch@gmail.com (php.net comments) http://php.net/manual/en/function.parse-ini-file.php#78815
 function parse_ms_ini($file, $something)
 {
 	$ini = file($file, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
@@ -15,6 +16,7 @@ function parse_ms_ini($file, $something)
 	
 	$globals = array();
 	$sections = array();
+	$currentSection = NULL;
 	$values = array();
 	$i = 0;
 	
@@ -29,7 +31,7 @@ function parse_ms_ini($file, $something)
 		
 		if ($line[0] == '[')
 		{
-			$sections[] = substr($line, 1, -1); //TODO until before ] not end of line
+			$sections[] = $currentSection = substr($line, 1, -1); //TODO until before ] not end of line
 			$i++;
 			continue;
 		}
@@ -44,13 +46,61 @@ function parse_ms_ini($file, $something)
 			
 		$value = trim($value);
 		if ($i == 0)
-		{// Array values
-			if (substr($line, -1, 2) == '[]') $globals[$key][] = $value;
+		{// Global values
+			//MS doesn't seem to use this syntax for arrays
+			//if (substr($line, -1, 2) == '[]') $globals[$key][] = $value;
+			if (strpos($value, ',') != FALSE)
+			{
+				//Use trim() as a callback on elements returned from explode()
+				$globals[$key] = array_map('trim', explode(',', $value));
+			}
 			else $globals[$key] = $value;
 		}
 		else
-		{// Array values
-			if (substr($line, -1, 2) == '[]') $values[$i - 1][$key][] = $value;
+		{// Section array values
+			//MS doesn't seem to use this syntax for arrays
+			//if (substr($line, -1, 2) == '[]') $values[$i - 1][$key][] = $value;
+			if (strpos($value, ',') != FALSE)
+			{
+				$ass = array();
+				$temp = array_map('trim', explode(',', $value));
+				
+				$ass['type'] = $temp[0];
+				$ass['datatype'] = $temp[1];
+				$ass['offset'] = $temp[2];
+				
+				//figure out what type of array we have
+				switch (count($temp))
+				{
+					case 4: //bits
+						$ass['bits'] = $temp[3];
+						break;
+						
+					case 9: //scalar
+						$ass['units']	=	$temp[3];
+						$ass['scale']	=	$temp[4];
+						$ass['translate'] =	$temp[5];
+						$ass['lo']		= 	$temp[6];
+						$ass['hi']		=	$temp[7];
+						$ass['digits']	=	$temp[8];
+						break;
+						
+					case 10: //array
+						$ass['shape']	=	$temp[3];
+						$ass['units']	=	$temp[4];
+						$ass['scale']	=	$temp[5];
+						$ass['translate'] =	$temp[6];
+						$ass['lo']		= 	$temp[7];
+						$ass['hi']		=	$temp[8];
+						$ass['digits']	=	$temp[9];
+						break;
+						
+					default:
+						break;
+				}
+				
+				$values[$i - 1][$key] = $ass;
+			}
 			else $values[$i - 1][$key] = $value;
 		}
 	}
