@@ -1,8 +1,12 @@
+<html>
+<body>
 <?php
 
 $result = parse_ms_ini("ini/ms2/test.ini", TRUE);
 
-var_dump($result);
+print "<pre>";
+var_export($result);
+print "</pre>";
 
 function parse_ms_ini($file, $something)
 {
@@ -18,6 +22,11 @@ function parse_ms_ini($file, $something)
 	{
 		$line = trim($line);
 		if ($line == '' || $line[0] == ';') continue;
+		if ($line[0] == '#')
+		{//TODO Parse directives, each needs to be a checkbox (combobox?) on the FE
+			continue;
+		}
+		
 		if ($line[0] == '[')
 		{
 			$sections[] = substr($line, 1, -1); //TODO until before ] not end of line
@@ -75,3 +84,5 @@ function parse_ms_ini($file, $something)
 #endif
 */
 ?>
+</body>
+</html>
