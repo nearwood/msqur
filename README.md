@@ -8,7 +8,12 @@ Parses MSQ "XML" and displays it in a familiar format for viewing and comparison
 MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 
 # TODO #
+v0.5:
 1. Parse engine details and update from MSQ
+1. Organize constants to collapsable area(s)
+1. Get firmware flavor and version in DB.
+
+Future:
 1. DB update management
 1. Admin so things are easier
 1. Strip whitespace (except in table data!)
@@ -41,6 +46,10 @@ Displayer
 * Create database user and tables
 * Upload web files
 * How to run tests
+
+### hgrc ##
+[hooks]
+post-update = hg log -r . --template "v{latesttag}-{latesttagdistance}-{node|short}\n" > VERSION
 
 ### Deployment instructions ###
 * Export tables (not entire DB)

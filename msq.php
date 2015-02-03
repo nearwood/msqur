@@ -118,9 +118,6 @@ function msqConstant($constant, $value)
 	return '<div class="constant">' . $constant . ': ' . $value . '</div>';
 }
 
-//TODO Uh, this should be in db.php
-
-
 function parseMSQ($xml, &$output)
 {
 	if (DEBUG) echo '<div class="debug">Parsing MSQ...</div>';
