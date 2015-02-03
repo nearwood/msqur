@@ -2,8 +2,7 @@
 <body>
 <?php
 
-//$result = parse_ms_ini("ini/test.ini", TRUE);
-
+//~ $result = parse_ms_ini("ini/test.ini", TRUE);
 //~ print "<pre>";
 //~ var_export($result);
 //~ print "</pre>";
@@ -11,8 +10,10 @@
 //goulven.ch@gmail.com (php.net comments) http://php.net/manual/en/function.parse-ini-file.php#78815
 function parse_ms_ini($file, $something)
 {
+	if (DEBUG) echo "<div class=\"debug\">Attempting to open: $file</div>";
 	$ini = file($file, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
 	if (count($ini) == 0) return array();
+	else if (DEBUG) echo "<div class=\"debug\">File opened.</div>";
 	
 	$globals = array();
 	$sections = array();
@@ -35,6 +36,10 @@ function parse_ms_ini($file, $something)
 			$i++;
 			continue;
 		}
+		
+		//We don't handle formulas yet
+		if (strpos($line, '{') !== FALSE) continue;
+		
 		// Key-value pair
 		list($key, $value) = explode('=', $line, 2);
 		$key = trim($key);
@@ -46,60 +51,17 @@ function parse_ms_ini($file, $something)
 			
 		$value = trim($value);
 		if ($i == 0)
-		{// Global values
-			//MS doesn't seem to use this syntax for arrays
-			//if (substr($line, -1, 2) == '[]') $globals[$key][] = $value;
+		{// Global values (see section version for comments)
 			if (strpos($value, ',') !== FALSE)
-			{
-				//Use trim() as a callback on elements returned from explode()
 				$globals[$key] = array_map('trim', explode(',', $value));
-			}
 			else $globals[$key] = $value;
 		}
 		else
 		{// Section array values
-			//MS doesn't seem to use this syntax for arrays
-			//if (substr($line, -1, 2) == '[]') $values[$i - 1][$key][] = $value;
 			if (strpos($value, ',') !== FALSE)
 			{
-				$ass = array();
-				$temp = array_map('trim', explode(',', $value));
-				
-				$ass['type'] = $temp[0];
-				$ass['datatype'] = $temp[1];
-				$ass['offset'] = $temp[2];
-				
-				//figure out what type of array we have
-				switch (count($temp))
-				{
-					case 4: //bits
-						$ass['bits'] = $temp[3];
-						break;
-						
-					case 9: //scalar
-						$ass['units']	=	$temp[3];
-						$ass['scale']	=	$temp[4];
-						$ass['translate'] =	$temp[5];
-						$ass['lo']		= 	$temp[6];
-						$ass['hi']		=	$temp[7];
-						$ass['digits']	=	$temp[8];
-						break;
-						
-					case 10: //array
-						$ass['shape']	=	$temp[3];
-						$ass['units']	=	$temp[4];
-						$ass['scale']	=	$temp[5];
-						$ass['translate'] =	$temp[6];
-						$ass['lo']		= 	$temp[7];
-						$ass['hi']		=	$temp[8];
-						$ass['digits']	=	$temp[9];
-						break;
-						
-					default:
-						break;
-				}
-				
-				$values[$i - 1][$key] = $ass;
+				//Use trim() as a callback on elements returned from explode()
+				$values[$i - 1][$key] = array_map('trim', explode(',', $value));
 			}
 			else $values[$i - 1][$key] = $value;
 		}
@@ -114,6 +76,12 @@ function parse_ms_ini($file, $something)
 
 
 /*
+
+ * INTERESTING SETTINGS:
+settingOption = MICROSQUIRT_MODULE, "MicroSquirt Module, MSPNP/DIYPNP"
+indicator = { crank              }, "Not Cranking", "Cranking",    white, black, green,   black
+
+
 [MegaTune]
    MTversion      = 2.25 ; MegaTune itself; needs to match exec version.
 
