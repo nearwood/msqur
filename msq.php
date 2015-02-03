@@ -26,7 +26,7 @@ function parseSchema($signature)
 	
 	if (DEBUG) echo "<div class=\"debug\">$msVersion/$fwVersion</div>";
 	
-	//Look for a matching INI file
+	//Parse msVersion
 	switch ($msVersion)
 	{
 		case "MS1":
@@ -46,6 +46,12 @@ function parseSchema($signature)
 			$msFilePrefix = "ms3-";
 			break;
 	}
+	
+	//Setup firmware version for matching.
+	//(explode() already trimmed the string of spaces)
+	//If there's a decimal, remove any trailing zeros.
+	if (strrpos($fwVersion, '.') !== FALSE)
+		$fwVersion = rtrim($fwVersion, '0');
 	
 	$iniFile = "ini/" . $msDir . $msFilePrefix . $fwVersion;
 	if (DEBUG) echo "<div class=\"debug\">Attempting to open: $iniFile</div>";
