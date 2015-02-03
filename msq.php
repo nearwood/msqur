@@ -31,19 +31,15 @@ function parseSchema($signature)
 	{
 		case "MS1":
 			$msDir = "ms1/";
-			$msFilePrefix = "ms1-";
 			break;
 		case "MSII":
 			$msDir = "ms2/";
-			$msFilePrefix = "ms2-";
 			break;
 		case "MS2Extra":
 			$msDir = "ms2extra/";
-			$msFilePrefix = "ms2e-";
 			break;
 		case "MS3":
 			$msDir = "ms3/";
-			$msFilePrefix = "ms3-";
 			break;
 	}
 	
@@ -53,8 +49,7 @@ function parseSchema($signature)
 	if (strrpos($fwVersion, '.') !== FALSE)
 		$fwVersion = rtrim($fwVersion, '0');
 	
-	$iniFile = "ini/" . $msDir . $msFilePrefix . $fwVersion;
-	if (DEBUG) echo "<div class=\"debug\">Attempting to open: $iniFile</div>";
+	$iniFile = "ini/" . $msDir . $fwVersion . ".ini";
 	$msqMap = parse_ms_ini($iniFile, TRUE);
 	
 	//~ if (DEBUG) echo '<div class="debug">Using default (1.3) Schema</div>';
@@ -128,7 +123,8 @@ function msqTable(&$output, $name, $data, $x, $y, $hot)
 
 function msqConstant($constant, $value)
 {
-	return '<div class="constant">$constant: ' . $value . '</div>';
+	//var_export($value);
+	return '<div class="constant">' . $constant . ': ' . $value . '</div>';
 }
 
 //TODO Uh, this should be in db.php
@@ -208,6 +204,8 @@ function parseMSQ($xml, &$output)
 		$output .= '</div>';
 		
 		$msqMap = parseSchema($msq->versionInfo['signature']);
+		$msqMap = $msqMap['Constants'];
+		//if (DEBUG) { echo '<div class="debug"><pre>'; var_export($msqMap); echo '</pre></div>'; }
 		
 		//if cols and rows exist it's a table (maybe 1xR)
 		//otherwise it's a single value
@@ -218,9 +216,21 @@ function parseMSQ($xml, &$output)
 		//foreach ($msq->page as $page)
 		//foreach ($page->constant as $constant)
 		// //constant[@name="veTable1"]
-		foreach ($msqMap as $key => $value)
+		foreach ($msqMap as $key => $schema)
 		{
-			$constant = $msq->xpath('//constant[@name="' . $key . '"]')[0];
+			if (DEBUG) echo "<div class=\"debug\">Searching for: $key</div>";
+			$search = $msq->xpath('//constant[@name="' . $key . '"]');
+			if ($search === FALSE || count($search) == 0) continue;
+			
+			if (DEBUG) echo "<div class=\"debug\">Found constant: $search[0]</div>";
+			
+			//TODO need lookup table of user-friendly names (nCylinders => Number of Cylinders, etc.).
+			//TODO Use ini to know how many values?
+			//TODO Still need lookup for veTableX => frpmTableX matching
+			$output .= msqConstant($key, $search[0]);
+			
+			/*
+			$constant = $search[0];
 			if (isset($constant['cols'])) //and >= 1?
 			{//We have a table
 				//See if this is one we know how to handle
@@ -250,6 +260,7 @@ function parseMSQ($xml, &$output)
 				$constant = $msq->xpath('//constant[@name="' . $key . '"]')[0];
 				$output .= msqConstant($constant, $value);
 			}
+			*/
 		}
 		
 		//foreach ($movies->xpath('//settings/setting') as $setting) {

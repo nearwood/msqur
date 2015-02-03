@@ -6,7 +6,7 @@ div.error {
 	color: red;
 }
 
-div.warn {
+div.warn, div.warning {
 	color: orange;
 }
 
