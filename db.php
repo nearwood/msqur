@@ -6,10 +6,10 @@ function connect()
 	$db = null;
 	try
 	{
-		if (DEBUG) echo "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . ", [****]";
+		if (DEBUG) echo '<div class="debug">' . "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . ", [****]" . '</div>';
 		$db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD);
 	}
-	catch(PDOException $e)
+	catch (PDOException $e)
 	{
 		echo '<div class="error">Error connecting to database.</div>';// echo $e->getMessage();
 		$db = null; //Redundant.

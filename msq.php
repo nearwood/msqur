@@ -1,6 +1,6 @@
 <?php
 require "parse.ini.php";
-
+require "msq.format.php";
 //$result = parse_ms_ini("ini/ms2/test.ini", TRUE);
 
 //TODO Find better name
@@ -51,15 +51,7 @@ function parseSchema($signature)
 	
 	$iniFile = "ini/" . $msDir . $fwVersion . ".ini";
 	$msqMap = parse_ms_ini($iniFile, TRUE);
-	
-	//~ if (DEBUG) echo '<div class="debug">Using default (1.3) Schema</div>';
-	//~ $msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
-		//~ 'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
-		//~ 'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
-		//~ 'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
-		//~ 'egoType' => array('name' => 'O2 Sensor Type'),
-		//~ 'nCylinders' => array('name' => 'Cylinders')
-	//~ );
+
 	
 	return $msqMap;
 }
@@ -183,7 +175,7 @@ function getMSQ($id)
 
 function parseMSQ($xml, &$output)
 {
-	if (DEBUG) echo '<div class="debug">parseXML()</div>';
+	if (DEBUG) echo '<div class="debug">Parsing MSQ...</div>';
 	$errorCount = 0; //Keep track of how many things go wrong.
 	
 	$msq = simplexml_load_string($xml);
@@ -205,6 +197,7 @@ function parseMSQ($xml, &$output)
 		
 		$msqMap = parseSchema($msq->versionInfo['signature']);
 		$msqMap = $msqMap['Constants'];
+		
 		//if (DEBUG) { echo '<div class="debug"><pre>'; var_export($msqMap); echo '</pre></div>'; }
 		
 		//if cols and rows exist it's a table (maybe 1xR)
@@ -227,40 +220,36 @@ function parseMSQ($xml, &$output)
 			//TODO need lookup table of user-friendly names (nCylinders => Number of Cylinders, etc.).
 			//TODO Use ini to know how many values?
 			//TODO Still need lookup for veTableX => frpmTableX matchinghg 
-			$output .= msqConstant($key, $search[0]);
 			
-			/*
-			$constant = $search[0];
-			if (isset($constant['cols'])) //and >= 1?
-			{//We have a table
-				//See if this is one we know how to handle
-				if (isset($value['x'])) //and y hopefully
-				{
-					$numCols = (int)$constant['cols'];
-					$numRows = (int)$constant['rows'];
-					$x = msqAxis($msq->xpath('//constant[@name="' . $value['x'] . '"]')[0]);
-					$y = msqAxis($msq->xpath('//constant[@name="' . $value['y'] . '"]')[0]);
-					
-					if ((count($x) == $numCols) && (count($y) == $numRows))
+			if (array_key_exists($key, getLookup()))
+			{
+				$output .= msqConstant($key, $search[0]);
+				
+				$constant = $search[0];
+				if (isset($constant['cols'])) //and >= 1?
+				{//We have a table
+					//See if this is one we know how to handle
+					if (isset($value['x'])) //and y hopefully
 					{
-						$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-						msqTable($output, $value['name'], $tableData, $x, $y, $value['hot']);
-					}
-					else
-					{
-						$output .= '<div class="error">' . $value['name'] . ' axis count mismatched with data count.</div>';
-						$output .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
-						$errorCount += 1;
+						$numCols = (int)$constant['cols'];
+						$numRows = (int)$constant['rows'];
+						$x = msqAxis($msq->xpath('//constant[@name="' . $value['x'] . '"]')[0]);
+						$y = msqAxis($msq->xpath('//constant[@name="' . $value['y'] . '"]')[0]);
+						
+						if ((count($x) == $numCols) && (count($y) == $numRows))
+						{
+							$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
+							msqTable($output, $value['name'], $tableData, $x, $y, $value['hot']);
+						}
+						else
+						{
+							$output .= '<div class="error">' . $value['name'] . ' axis count mismatched with data count.</div>';
+							$output .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+							$errorCount += 1;
+						}
 					}
 				}
 			}
-			else
-			{//regular constant?
-				
-				$constant = $msq->xpath('//constant[@name="' . $key . '"]')[0];
-				$output .= msqConstant($constant, $value);
-			}
-			*/
 		}
 		
 		//foreach ($movies->xpath('//settings/setting') as $setting) {
