@@ -226,7 +226,7 @@ function parseMSQ($xml, &$output)
 			
 			//TODO need lookup table of user-friendly names (nCylinders => Number of Cylinders, etc.).
 			//TODO Use ini to know how many values?
-			//TODO Still need lookup for veTableX => frpmTableX matching
+			//TODO Still need lookup for veTableX => frpmTableX matchinghg 
 			$output .= msqConstant($key, $search[0]);
 			
 			/*
