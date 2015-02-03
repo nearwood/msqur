@@ -41,7 +41,7 @@ function parse_ms_ini($file, $something)
 		
 		//Remove any line end comment
 		$hasComment = strpos($value, ';');
-		if ($hasComment != FALSE)
+		if ($hasComment !== FALSE)
 			$value = substr($value, 0, $hasComment);
 			
 		$value = trim($value);
@@ -49,7 +49,7 @@ function parse_ms_ini($file, $something)
 		{// Global values
 			//MS doesn't seem to use this syntax for arrays
 			//if (substr($line, -1, 2) == '[]') $globals[$key][] = $value;
-			if (strpos($value, ',') != FALSE)
+			if (strpos($value, ',') !== FALSE)
 			{
 				//Use trim() as a callback on elements returned from explode()
 				$globals[$key] = array_map('trim', explode(',', $value));
@@ -60,7 +60,7 @@ function parse_ms_ini($file, $something)
 		{// Section array values
 			//MS doesn't seem to use this syntax for arrays
 			//if (substr($line, -1, 2) == '[]') $values[$i - 1][$key][] = $value;
-			if (strpos($value, ',') != FALSE)
+			if (strpos($value, ',') !== FALSE)
 			{
 				$ass = array();
 				$temp = array_map('trim', explode(',', $value));
