@@ -1,7 +1,7 @@
 <?php
 require "parse.ini.php";
 
-$result = parse_ms_ini("ini/ms2/test.ini", TRUE);
+//$result = parse_ms_ini("ini/ms2/test.ini", TRUE);
 
 //TODO Find better name
 define("LARGE_HOT", 0x1);
@@ -24,39 +24,41 @@ function parseSchema($signature)
 	if ($msVersion == "MS2Extra") $fwVersion = $sig[1];
 	else $fwVersion = $sig[2];
 	
-	if (DEBUG) echo "<div class=\"debug\">$msVersion/$fwVersion</div>"; 
+	if (DEBUG) echo "<div class=\"debug\">$msVersion/$fwVersion</div>";
 	
 	//Look for a matching INI file
 	switch ($msVersion)
 	{
 		case "MS1":
-			$msDir = "ms1";
-			$msFilePrefix = "megasquirt-I.";
+			$msDir = "ms1/";
+			$msFilePrefix = "ms1-";
 			break;
 		case "MSII":
-			$msDir = "ms2";
-			$msFilePrefix = "megasquirt-II.";
+			$msDir = "ms2/";
+			$msFilePrefix = "ms2-";
 			break;
 		case "MS2Extra":
-			$msDir = "ms2extra";
-			$msFilePrefix = "megasquirt-I.";
+			$msDir = "ms2extra/";
+			$msFilePrefix = "ms2e-";
 			break;
 		case "MS3":
-			$msDir = "ms3";
-			$msFilePrefix = "megasquirt-I.";
+			$msDir = "ms3/";
+			$msFilePrefix = "ms3-";
 			break;
 	}
 	
+	$iniFile = "ini/" . $msDir . $msFilePrefix . $fwVersion;
+	if (DEBUG) echo "<div class=\"debug\">Attempting to open: $iniFile</div>";
+	$msqMap = parse_ms_ini($iniFile, TRUE);
 	
-	
-		//~ if (DEBUG) echo '<div class="debug">Using default (1.3) Schema</div>';
-		//~ $msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
-			//~ 'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
-			//~ 'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
-			//~ 'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
-			//~ 'egoType' => array('name' => 'O2 Sensor Type'),
-			//~ 'nCylinders' => array('name' => 'Cylinders')
-		//~ );
+	//~ if (DEBUG) echo '<div class="debug">Using default (1.3) Schema</div>';
+	//~ $msqMap = array(//xmlName => pretty name, [xAxisXmlName, yAxisXmlName]
+		//~ 'veTable1' => array('name' => 'VE Table 1', 'x' => 'frpm_table1', 'y' => 'fmap_table1', 'units' => '%', 'hot' => 'descending'),
+		//~ 'advanceTable1' => array('name' => 'Timing Advance', 'x' => 'srpm_table1', 'y' => 'smap_table1', 'units' => 'degrees', 'hot' => 'ascending'),
+		//~ 'afrTable1' => array('name' => 'AFR Targets', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
+		//~ 'egoType' => array('name' => 'O2 Sensor Type'),
+		//~ 'nCylinders' => array('name' => 'Cylinders')
+	//~ );
 	
 	return $msqMap;
 }
