@@ -7,7 +7,7 @@ require "msq.format.php";
 define("LARGE_HOT", 0x1);
 define("LARGE_COLD", 0x2);
 
-function parseSchema($signature)
+function getConfig($signature)
 {
 	//sig is 19 bytes + \0
 	//"MS3 Format 0262.09 "
@@ -102,10 +102,9 @@ function msqTable(&$output, $name, $data, $x, $y, $hot)
 		$output .= "<tr><th>" . $y[$r] . "</th>";
 		for ($c = 0; $c < $cols; $c++)
 		{
-			//if ($r == 0) $output .= "<td>" . $data[$c] . "</td>";
-			//else
-			$output .= "<td>" . $data[$r * $rows + $c] . "</td>";
-			//$output .= "</tr>($c, $r) ";
+			//If just a 2D table we ignore the $rows offset.
+			if ($cols == 1) $output .= "<td>" . $data[$r] . "</td>";
+			else $output .= "<td>" . $data[$r * $rows + $c] . "</td>";
 		}
 	}
 	
@@ -195,8 +194,9 @@ function parseMSQ($xml, &$output)
 		$output .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
 		$output .= '</div>';
 		
-		$msqMap = parseSchema($msq->versionInfo['signature']);
+		$msqMap = getConfig($msq->versionInfo['signature']);
 		$msqMap = $msqMap['Constants'];
+		$schema = getSchema();
 		
 		//if (DEBUG) { echo '<div class="debug"><pre>'; var_export($msqMap); echo '</pre></div>'; }
 		
@@ -209,7 +209,7 @@ function parseMSQ($xml, &$output)
 		//foreach ($msq->page as $page)
 		//foreach ($page->constant as $constant)
 		// //constant[@name="veTable1"]
-		foreach ($msqMap as $key => $schema)
+		foreach ($msqMap as $key => $config)
 		{
 			if (DEBUG) echo "<div class=\"debug\">Searching for: $key</div>";
 			$search = $msq->xpath('//constant[@name="' . $key . '"]');
@@ -221,33 +221,57 @@ function parseMSQ($xml, &$output)
 			//TODO Use ini to know how many values?
 			//TODO Still need lookup for veTableX => frpmTableX matchinghg 
 			
-			if (array_key_exists($key, getLookup()))
+			if (array_key_exists($key, $schema))
 			{
-				$output .= msqConstant($key, $search[0]);
-				
+				$format = $schema[$key];
 				$constant = $search[0];
+				
 				if (isset($constant['cols'])) //and >= 1?
 				{//We have a table
 					//See if this is one we know how to handle
-					if (isset($value['x'])) //and y hopefully
-					{
+					if (isset($format['x']) && isset($format['y']))
+					{//3D Table
 						$numCols = (int)$constant['cols'];
 						$numRows = (int)$constant['rows'];
-						$x = msqAxis($msq->xpath('//constant[@name="' . $value['x'] . '"]')[0]);
-						$y = msqAxis($msq->xpath('//constant[@name="' . $value['y'] . '"]')[0]);
+						$x = msqAxis($msq->xpath('//constant[@name="' . $format['x'] . '"]')[0]);
+						$y = msqAxis($msq->xpath('//constant[@name="' . $format['y'] . '"]')[0]);
 						
 						if ((count($x) == $numCols) && (count($y) == $numRows))
 						{
 							$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-							msqTable($output, $value['name'], $tableData, $x, $y, $value['hot']);
+							msqTable($output, $format['name'], $tableData, $x, $y, $format['hot']);
 						}
 						else
 						{
-							$output .= '<div class="error">' . $value['name'] . ' axis count mismatched with data count.</div>';
+							$output .= '<div class="error">' . $format['name'] . ' axis count mismatched with data count.</div>';
 							$output .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
 							$errorCount += 1;
 						}
 					}
+					else if (isset($format['y']))
+					{//2D
+						$numCols = (int)$constant['cols'];
+						$numRows = (int)$constant['rows'];
+						$x = array($format['units']);//msqAxis(trim($constant));
+						$y = msqAxis($msq->xpath('//constant[@name="' . $format['y'] . '"]')[0]);
+						
+						if ((count($x) == $numCols) && (count($y) == $numRows))
+						{
+							$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
+							msqTable($output, $format['name'], $tableData, $x, $y, $format['hot']);
+						}
+						else
+						{
+							$output .= '<div class="error">' . $format['name'] . ' configured axis count mismatched with data count.</div>';
+							$output .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+							$errorCount += 1;
+						}
+					}
+				}
+				else
+				{
+					$output .= msqConstant($format['name'], $search[0]);
+					//TODO $format['units']
 				}
 			}
 		}
