@@ -8,6 +8,7 @@ Parses MSQ "XML" and displays it in a familiar format for viewing and comparison
 MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 
 # TODO #
+1. Parse engine details and update from MSQ
 1. DB update management
 1. Admin so things are easier
 1. Strip whitespace (except in table data!)
