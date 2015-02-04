@@ -22,7 +22,6 @@
 		<div id="engineForm">
 			<fieldset>
 			<legend>Engine Information</legend>
-			<div>Cylinders: <input name="cylinders" type="number" min="0" value="6" max="99" style="width:3em;"/></div>
 			<div>Displacement (liters): <input name="displacement" type="number" min="0" step="0.01" value="3.0" style="width:4em;"/></div>
 			<div>Compression (X:1) <input name="compression" type="number" min="0" step="0.1" value="9.0" style="width:4em;"/></div>
 			<div>Aspiration: 

@@ -18,8 +18,14 @@ function connect()
 	return $db;
 }
 
-function addEngine($displacement, $cylinders, $compression, $turbo)
+/**
+ * Add engine details not available from MSQ
+ * 
+ */
+function addEngine($displacement, $compression, $turbo)
 {
+	$id = null;
+	
 	if (!is_numeric($displacement) || !is_numeric($cylinders) || !is_numeric($compression))
 		echo '<div class="error">Invalid engine configuration.</div>';
 	else
@@ -30,9 +36,8 @@ function addEngine($displacement, $cylinders, $compression, $turbo)
 		try
 		{
 			//TODO use any existing one before creating
-			$st = $db->prepare("INSERT INTO engines (displacement, numCylinders, compression, induction) VALUES (:displacement, :cylinders, :compression, :induction)");
+			$st = $db->prepare("INSERT INTO engines (displacement, compression, induction) VALUES (:displacement, :compression, :induction)");
 			$st->bindParam(":displacement", $displacement);
-			$st->bindParam(":cylinders", $cylinders);
 			$st->bindParam(":compression", $compression);
 			
 			if ($turbo == "na")
@@ -40,18 +45,16 @@ function addEngine($displacement, $cylinders, $compression, $turbo)
 			else
 				$t = 1;
 			$st->bindParam(":induction", $t);
-			$st->execute();
-			$id = $db->lastInsertId();
+			if ($st->execute())
+				$id = $db->lastInsertId();
 		}
 		catch(PDOException $e)
 		{
 			echo '<div class="error">Error adding to the database.</div>'; echo $e->getMessage();
 		}
-		
-		return $id;
 	}
 	
-	return null;
+	return $id;
 }
 
 function addFiles($files, $engineid)
@@ -115,7 +118,58 @@ function addFile($file, $engineid, $db = null)
 	return $id;
 }
 
-
+function getMSQ($id)
+{
+	if (DEBUG) echo '<div class="debug">getMSQ()</div>';
+	$db = connect();
+	if ($db == null) return null;
+	
+	$html = null;
+	
+	try
+	{
+		$st = $db->prepare("SELECT html FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
+		$st->bindParam(":id", $id);
+		$st->execute();
+		if ($st->rowCount() > 0)
+		{
+			$result = $st->fetch(PDO::FETCH_ASSOC);
+			$html = $result['html'];
+			if ($html === NULL || DISABLE_MSQ_CACHE)
+			{//MSQ not parsed yet.
+				if (DEBUG) echo '<div class="debug">no html, get xml</div>';
+				$st = $db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
+				$st->bindParam(":id", $id);
+				$st->execute();
+				$result = $st->fetch(PDO::FETCH_ASSOC);
+				$html = "";
+				parseMSQ($result['xml'], $html);
+				
+				if (DEBUG) echo '<div class="debug">put html in db</div>';
+				$st = $db->prepare("UPDATE msqs ms, metadata m SET ms.html=:html WHERE m.msq = ms.id AND m.id = :id");
+				//$xml = mb_convert_encoding($html, "UTF-8");
+				$st->bindParam(":id", $id);
+				$st->bindParam(":html", $html);
+				$st->execute();
+			}
+			else
+			{
+				if (DEBUG) echo '<div class="debug">Found html</div>';
+			}
+		}
+		else
+		{
+			if (DEBUG) echo '<div class="debug">0 rows for $id</div>';
+			echo '<div class="error">Invalid MSQ</div>';
+		}
+	}
+	catch(PDOException $e)
+	{
+		dbError($e);
+	}
+	
+	return $html;
+}
 
 //TODO Rename?
 //TODO Pagination
