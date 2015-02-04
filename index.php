@@ -81,7 +81,7 @@ if (isset($_GET['msq'])) {
 		else
 			echo '<div class="info">' . count($files) . ' files were uploaded:</div>';
 		//$motor = $validate($_POST['cylinders'])
-		$engineid = addEngine($_POST['displacement'], $_POST['cylinders'], $_POST['compression'], $_POST['aspiration']);
+		$engineid = addEngine($_POST['displacement'], $_POST['compression'], $_POST['aspiration']);
 		$fileList = addFiles($files, $engineid);
 		echo '<div class="info"><ul id="fileList">';
 		foreach ($fileList as $f)

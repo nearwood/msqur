@@ -8,11 +8,11 @@ Parses MSQ "XML" and displays it in a familiar format for viewing and comparison
 MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 
 # TODO #
-1. Parse XML once! Save to DB. Allow re-ingest and stuff though.
-1. Strip whitespace
+1. DB update management
+1. Admin so things are easier
+1. Strip whitespace (except in table data!)
 1. Store gzipped?
 1. Add Ads
-1. Show extended info (warmup, etc.)
 1. Searching MSQ comments?
 1. Allow download
 1. Allow export of just fuel/spark tables (msqpart, .table)
@@ -27,6 +27,8 @@ MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 1. Parse File, show basic info
 1. Show Fuel Table
 1. Show Timing Table
+1. Parse XML once! Save to DB. Allow re-ingest and stuff though.
+1. Show extended info (warmup, etc.) [Loads corresponding INI file to parse.]
 
 Uploader (user)/Manager (admin)
 Parser
