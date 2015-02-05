@@ -9,9 +9,7 @@ MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 
 # TODO #
 v0.5:
-1. Parse engine details and update from MSQ
-1. Organize constants to collapsable area(s)
-1. Get firmware flavor and version in DB.
+1. Add more/Organize constants to collapsable area(s)
 
 Future:
 1. DB update management
@@ -25,6 +23,10 @@ Future:
 1. Sign-in?
 1. Updating/Versioning/Differential MSQ info
 
+Far Future:
+1. Put collective INI schema into DB, allow searching by dynamic values
+1. Profit!
+
 # Done #
 1. Basic browse
 1. Upload file
@@ -35,6 +37,8 @@ Future:
 1. Show Timing Table
 1. Parse XML once! Save to DB. Allow re-ingest and stuff though.
 1. Show extended info (warmup, etc.) [Loads corresponding INI file to parse.]
+1. Parse engine details and update from MSQ
+1. Get firmware flavor and version in DB
 
 Uploader (user)/Manager (admin)
 Parser

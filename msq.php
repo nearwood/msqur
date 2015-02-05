@@ -7,7 +7,7 @@ require "msq.format.php";
 define("LARGE_HOT", 0x1);
 define("LARGE_COLD", 0x2);
 
-function getConfig($signature)
+function getConfig(&$signature)
 {
 	//sig is 19 bytes + \0
 	//"MS3 Format 0262.09 "
@@ -19,7 +19,7 @@ function getConfig($signature)
 	//"MSII Rev 3.83000   "
 	
 	//Get the signature from the MSQ
-	$sig = explode(' ', $signature, 3); //limit 3 buckets
+	$sig = explode(' ', $signature); //, 3); limit 3 buckets
 	$msVersion = $sig[0];
 	if ($msVersion == "MS2Extra") $fwVersion = $sig[1];
 	else $fwVersion = $sig[2];
@@ -44,14 +44,16 @@ function getConfig($signature)
 	}
 	
 	//Setup firmware version for matching.
-	//(explode() already trimmed the string of spaces)
+	//(explode() already trimmed the string of spaces) -- this isn't true a couple inis
 	//If there's a decimal, remove any trailing zeros.
 	if (strrpos($fwVersion, '.') !== FALSE)
 		$fwVersion = rtrim($fwVersion, '0');
 	
+	//store all our hardwork for use in the calling function
+	$signature = array($msVersion, $fwVersion);
+	
 	$iniFile = "ini/" . $msDir . $fwVersion . ".ini";
 	$msqMap = parse_ms_ini($iniFile, TRUE);
-
 	
 	return $msqMap;
 }
@@ -118,7 +120,7 @@ function msqConstant($constant, $value)
 	return '<div class="constant">' . $constant . ': ' . $value . '</div>';
 }
 
-function parseMSQ($xml, &$output)
+function parseMSQ($xml, &$html, &$engine, &$metadata)
 {
 	if (DEBUG) echo '<div class="debug">Parsing MSQ...</div>';
 	$errorCount = 0; //Keep track of how many things go wrong.
@@ -133,16 +135,30 @@ function parseMSQ($xml, &$output)
 		 */
 		
 		//var_dump($msq);
-		$output .= '<div class="info">';
-		$output .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
-		$output .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
-		$output .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
-		$output .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
-		$output .= '</div>';
+		$html .= '<div class="info">';
+		$html .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
+		$html .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
+		$html .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
+		$html .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
+		$html .= '</div>';
 		
-		$msqMap = getConfig($msq->versionInfo['signature']);
+		$sig = $msq->versionInfo['signature'];
+		$msqMap = getConfig($sig);
+		
+		if ($msqMap == null)
+		{
+			echo '<div class="error">Unable to load that MSQ, sorry.</div>';
+		}
+		
+		//Calling function will update
+		$metadata['fileFormat'] = $msq->versionInfo['fileFormat'];
+		$metadata['signature'] = $sig[1];
+		$metadata['firmware'] = $sig[0];
+		$metadata['author'] = $msq->bibliography['author'];
+		
 		$msqMap = $msqMap['Constants'];
 		$schema = getSchema();
+		$engineSchema = getEngineSchema();
 		
 		//if (DEBUG) { echo '<div class="debug"><pre>'; var_export($msqMap); echo '</pre></div>'; }
 		
@@ -160,6 +176,7 @@ function parseMSQ($xml, &$output)
 			if (DEBUG) echo "<div class=\"debug\">Searching for: $key</div>";
 			$search = $msq->xpath('//constant[@name="' . $key . '"]');
 			if ($search === FALSE || count($search) == 0) continue;
+			$constant = $search[0];
 			
 			if (DEBUG) echo "<div class=\"debug\">Found constant: $search[0]</div>";
 			
@@ -170,7 +187,6 @@ function parseMSQ($xml, &$output)
 			if (array_key_exists($key, $schema))
 			{
 				$format = $schema[$key];
-				$constant = $search[0];
 				
 				if (isset($constant['cols'])) //and >= 1?
 				{//We have a table
@@ -185,12 +201,12 @@ function parseMSQ($xml, &$output)
 						if ((count($x) == $numCols) && (count($y) == $numRows))
 						{
 							$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-							msqTable($output, $format['name'], $tableData, $x, $y, $format['hot']);
+							msqTable($html, $format['name'], $tableData, $x, $y, $format['hot']);
 						}
 						else
 						{
-							$output .= '<div class="error">' . $format['name'] . ' axis count mismatched with data count.</div>';
-							$output .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+							$html .= '<div class="error">' . $format['name'] . ' axis count mismatched with data count.</div>';
+							$html .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
 							$errorCount += 1;
 						}
 					}
@@ -204,31 +220,34 @@ function parseMSQ($xml, &$output)
 						if ((count($x) == $numCols) && (count($y) == $numRows))
 						{
 							$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-							msqTable($output, $format['name'], $tableData, $x, $y, $format['hot']);
+							msqTable($html, $format['name'], $tableData, $x, $y, $format['hot']);
 						}
 						else
 						{
-							$output .= '<div class="error">' . $format['name'] . ' configured axis count mismatched with data count.</div>';
-							$output .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+							$html .= '<div class="error">' . $format['name'] . ' configured axis count mismatched with data count.</div>';
+							$html .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
 							$errorCount += 1;
 						}
 					}
 				}
 				else
 				{
-					$output .= msqConstant($format['name'], $search[0]);
+					$html .= msqConstant($format['name'], $constant);
 					//TODO $format['units']
 				}
 			}
+			
+			//if (DEBUG) echo "<div class=\"debug\">Trying $key for engine data</div>";
+			if (array_key_exists($key, $engineSchema))
+			{
+				if (DEBUG) echo "<div class=\"debug\">Found engine data: $key ($constant)</div>";
+				$engine[$key] = trim($constant, '"');
+			}
 		}
-		
-		//foreach ($movies->xpath('//settings/setting') as $setting) {
-		//	$output .= $setting->name, 'value: ', $setting->value, PHP_EOL;
-		//}
 	}
 	else
 	{
-		$output .= '<div class="error">Unable to parse tune.</div>';
+		$html .= '<div class="error">Unable to parse tune.</div>';
 	}
 	
 	return $errorCount;

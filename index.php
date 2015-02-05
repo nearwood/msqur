@@ -60,7 +60,29 @@ require('header.php');
 <div id='content'>
 <?php
 if (isset($_GET['msq'])) {
-	echo getMSQ($_GET['msq']);
+	/**
+	 * get html from md id
+	 * if msq xml not cached,
+	 * parse xml and update engine
+	 * else if cached just return html
+	 */
+	
+	$id = $_GET['msq'];
+	$html = getMSQ($id);
+	if ($html == null)
+	{
+		$html = "";
+		$engine = array();
+		$metadata = array();
+		$xml = getXML($id);
+		parseMSQ($xml, $html, $engine, $metadata);
+		updateMetadata($id, $metadata);
+		updateEngine($id, $engine);
+		updateCache($id, $html);
+	}
+	
+	echo $html;
+	
 } else if (isset($_POST['upload']) && isset($_FILES)) {
 	//var_dump($_POST);
 	//var_dump($_FILES);

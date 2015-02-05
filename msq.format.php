@@ -11,15 +11,28 @@ function getSchema()
 		'advanceTable2' => array('name' => 'Timing Advance 2', 'x' => 'srpm_table2', 'y' => 'smap_table2', 'units' => 'degrees', 'hot' => 'ascending'),
 		'afrTable1' => array('name' => 'AFR Targets 1', 'x' => 'arpm_table1', 'y' => 'amap_table1', 'hot' => 'ascending'),
 		'afrTable2' => array('name' => 'AFR Targets 2', 'x' => 'arpm_table2', 'y' => 'amap_table2', 'hot' => 'ascending'),
-		'nCylinders' => array('name' => 'Cylinders'),
-		'engineType' => array('name' => 'Engine Type'),
+//		'nCylinders' => array('name' => 'Cylinders'),
+//		'engineType' => array('name' => 'Engine Type'),
 		'reqFuel' => array('name' => 'Base Fuel (reqFuel)'),
-		'twoStroke' => array('name' => '# Strokes'),
-		'injType' => array('name' => 'Injection'),
-		'nInjectors' => array('name' => 'Injectors'),
+//		'twoStroke' => array('name' => '# Strokes'),
+//		'injType' => array('name' => 'Injection'),
+//		'nInjectors' => array('name' => 'Injectors'),
 		'egoType' => array('name' => 'O2 Sensor Type'),
 		'crankingRPM' => array('name' => 'Cranking RPM Threshold'),
 		'dwellcorr' => array('name' => 'Dwell Voltage Correction', 'y' => 'dwellvolts', 'units' => '%', 'hot' => 'ascending')
+	);
+}
+
+function getEngineSchema()
+{
+	return array(
+		'nCylinders' => null,
+		'engineType' => null,
+		'reqFuel' => null,
+		'twoStroke' => null,
+		'injType' => null,
+		'nInjectors' => null,
+		'egoType' => null
 	);
 }
 

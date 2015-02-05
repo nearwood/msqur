@@ -3,6 +3,8 @@ require "config.php";
 
 function connect()
 {
+	//TODO Reuse connection
+	
 	$db = null;
 	try
 	{
@@ -109,7 +111,7 @@ function addFile($file, $engineid, $db = null)
 		}
 		else $id = -1;
 	}
-	catch(PDOException $e)
+	catch (PDOException $e)
 	{
 		dbError($e);
 		$id = -1;
@@ -118,9 +120,138 @@ function addFile($file, $engineid, $db = null)
 	return $id;
 }
 
+function updateMetadata($id, $metadata)
+{
+	$db = connect();
+	if ($db == null) return false;
+	
+	try
+	{
+		if (DEBUG) echo '<div class="debug">Updating HTML cache...</div>';
+		$st = $db->prepare("UPDATE metadata md SET md.fileFormat = :fileFormat, md.signature = :signature, md.firmware = :firmware, md.author = :author WHERE md.id = :id");
+		//$xml = mb_convert_encoding($html, "UTF-8");
+		$st->bindParam(":id", $id);
+		$st->bindParam(":fileFormat", $metadata['fileFormat']);
+		$st->bindParam(":signature", $metadata['signature']);
+		$st->bindParam(":firmware", $metadata['firmware']);
+		$st->bindParam(":author", $metadata['author']);
+		if ($st->execute())
+		{
+			if (DEBUG) echo '<div class="debug">Metadata updated.</div>';
+			return true;
+		}
+		else
+			if (DEBUG) echo '<div class="warn">Unable to update metadata.</div>';
+	}
+	catch (PDOException $e)
+	{
+		dbError($e);
+	}
+	
+	return false;
+}
+
+function updateEngine($id, $engine)
+{
+	$db = connect();
+	if ($db == null) return false;
+	
+	try
+	{
+		if (DEBUG) echo '<div class="debug">Updating engine information...</div>';
+		$st = $db->prepare("UPDATE engines e, metadata m SET e.numCylinders = :nCylinders, twoStroke = :twoStroke, injType = :injType, nInjectors = :nInjectors, engineType = :engineType WHERE e.id = m.engine AND m.id = :id");
+		$st->bindParam(":id", $id);
+		$st->bindParam(":nCylinders", $engine['nCylinders']);
+		$st->bindParam(":twoStroke", $engine['twoStroke']);
+		$st->bindParam(":injType", $engine['injType']);
+		$st->bindParam(":nInjectors", $engine['nInjectors']);
+		$st->bindParam(":engineType", $engine['engineType']);
+		if ($st->execute())
+		{
+			if (DEBUG) echo '<div class="debug">Engine updated.</div>';
+			return true;
+		}
+		else
+			if (DEBUG) echo '<div class="warn">Unable to update engine.</div>';
+	}
+	catch (PDOException $e)
+	{
+		dbError($e);
+	}
+	
+	return false;
+}
+
+/**
+ * Update HTML cache of MSQ by metadata id
+ */
+function updateCache($id, $html)
+{
+	$db = connect();
+	if ($db == null) return false;
+	
+	try
+	{
+		if (DEBUG) echo '<div class="debug">Updating HTML cache...</div>';
+		$st = $db->prepare("UPDATE msqs ms, metadata m SET ms.html=:html WHERE m.msq = ms.id AND m.id = :id");
+		//$xml = mb_convert_encoding($html, "UTF-8");
+		$st->bindParam(":id", $id);
+		$st->bindParam(":html", $html);
+		if ($st->execute())
+		{
+			if (DEBUG) echo '<div class="debug">Cache updated.</div>';
+			return true;
+		}
+		else
+			if (DEBUG) echo '<div class="warn">Unable to update cache.</div>';
+	}
+	catch (PDOException $e)
+	{
+		dbError($e);
+	}
+	
+	return false;
+}
+
+function getXML($id)
+{
+	$db = connect();
+	if ($db == null) return null;
+	
+	$xml = null;
+	
+	try
+	{
+		if (DEBUG) echo '<div class="debug">Getting XML for id: ' . $id . '</div>';
+		$st = $db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
+		$st->bindParam(":id", $id);
+		if ($st->execute())
+		{
+			if (DEBUG) echo '<div class="debug">XML Found...</div>';
+			$result = $st->fetch(PDO::FETCH_ASSOC);
+			$xml = $result['xml'];
+		}
+		else echo '<div class="error">XML not found.</div>';
+	}
+	catch (PDOException $e)
+	{
+		dbError($e);
+	}
+	
+	return $xml;
+}
+
+/**
+ * Get MSQ HTML from metadata $id
+ */
 function getMSQ($id)
 {
-	if (DEBUG) echo '<div class="debug">getMSQ()</div>';
+	if (DISABLE_MSQ_CACHE)
+	{
+		if (DEBUG) echo '<div class="debug">Cache disabled.</div>';
+		return null;
+	}
+	
 	$db = connect();
 	if ($db == null) return null;
 	
@@ -135,27 +266,11 @@ function getMSQ($id)
 		{
 			$result = $st->fetch(PDO::FETCH_ASSOC);
 			$html = $result['html'];
-			if ($html === NULL || DISABLE_MSQ_CACHE)
-			{//MSQ not parsed yet.
-				if (DEBUG) echo '<div class="debug">no html, get xml</div>';
-				$st = $db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
-				$st->bindParam(":id", $id);
-				$st->execute();
-				$result = $st->fetch(PDO::FETCH_ASSOC);
-				$html = "";
-				parseMSQ($result['xml'], $html);
-				
-				if (DEBUG) echo '<div class="debug">put html in db</div>';
-				$st = $db->prepare("UPDATE msqs ms, metadata m SET ms.html=:html WHERE m.msq = ms.id AND m.id = :id");
-				//$xml = mb_convert_encoding($html, "UTF-8");
-				$st->bindParam(":id", $id);
-				$st->bindParam(":html", $html);
-				$st->execute();
-			}
-			else
+			if ($html === NULL)
 			{
-				if (DEBUG) echo '<div class="debug">Found html</div>';
+				if (DEBUG) echo '<div class="debug">No HTML cache found.</div>';
 			}
+			else if (DEBUG) echo '<div class="debug">Cached, returning HTML.</div>';
 		}
 		else
 		{
@@ -163,7 +278,7 @@ function getMSQ($id)
 			echo '<div class="error">Invalid MSQ</div>';
 		}
 	}
-	catch(PDOException $e)
+	catch (PDOException $e)
 	{
 		dbError($e);
 	}
@@ -181,16 +296,18 @@ function getAll()
 	try
 	{
 		$st = $db->prepare("SELECT * FROM metadata INNER JOIN engines ON metadata.engine = engines.id");
-		$st->execute();
-		$result = $st->fetchAll(PDO::FETCH_ASSOC);
+		if ($st->execute())
+		{
+			$result = $st->fetchAll(PDO::FETCH_ASSOC);
+			return $result;
+		}
 	}
-	catch(PDOException $e)
+	catch (PDOException $e)
 	{
 		dbError($e);
 	}
 	
-	if (!$result) return null;
-	else return $result;
+	return null;
 }
 
 function dbError($e)
