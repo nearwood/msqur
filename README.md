@@ -8,45 +8,13 @@ Parses MSQ "XML" and displays it in a familiar format for viewing and comparison
 MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
 
 # TODO #
-v0.5:
-1. Add more/Organize constants to collapsable area(s)
-
-Future:
-1. DB update management
-1. Admin so things are easier
-1. Strip whitespace (except in table data!)
-1. Store gzipped?
-1. Add Ads
-1. Searching MSQ comments?
-1. Allow download
-1. Allow export of just fuel/spark tables (msqpart, .table)
-1. Sign-in?
-1. Updating/Versioning/Differential MSQ info
-
-Far Future:
-1. Put collective INI schema into DB, allow searching by dynamic values
-1. Profit!
-
-# Done #
-1. Basic browse
-1. Upload file
-1. Store files in DB instead of FS
-1. Re-encode as UTF-8 or degrees symbol breaks things
-1. Parse File, show basic info
-1. Show Fuel Table
-1. Show Timing Table
-1. Parse XML once! Save to DB. Allow re-ingest and stuff though.
-1. Show extended info (warmup, etc.) [Loads corresponding INI file to parse.]
-1. Parse engine details and update from MSQ
-1. Get firmware flavor and version in DB
 
 Uploader (user)/Manager (admin)
-Parser
-Displayer
 
 ### How do I get set up? ###
 
 * AMP Stack
+* Arch: PHP, PHP-Apache, MariaDB/MySQL, phpMyAdmin, pdo_mysql.so in php.ini
 * Create database user and tables
 * Upload web files
 * How to run tests

@@ -86,10 +86,7 @@ if (isset($_GET['msq'])) {
 } else if (isset($_POST['upload']) && isset($_FILES)) {
 	//var_dump($_POST);
 	//var_dump($_FILES);
-?>
-<div class="info">Upload successful</div>
-
-<?php
+	
 	$files = checkUploads(fixFileArray($_FILES['files']));
 	if (count($files) == 0)
 	{
@@ -99,18 +96,27 @@ if (isset($_GET['msq'])) {
 	else
 	{
 		if (count($files) == 1)
-			echo '<div class="info">' . count($files) . ' file was uploaded:</div>';
+			echo '<div class="info">' . count($files) . ' file was uploaded.</div>';
 		else
-			echo '<div class="info">' . count($files) . ' files were uploaded:</div>';
+			echo '<div class="info">' . count($files) . ' files were uploaded.</div>';
 		//$motor = $validate($_POST['cylinders'])
 		$engineid = addEngine($_POST['displacement'], $_POST['compression'], $_POST['aspiration']);
 		$fileList = addFiles($files, $engineid);
-		echo '<div class="info"><ul id="fileList">';
-		foreach ($fileList as $f)
+		
+		if ($fileList != null)
 		{
-			echo '<li><a href="' . $_SERVER['REQUEST_URI'] . '?msq=' . $f . '">' . $f . '</a></li>';
+			echo '<div class="info">Upload successful.</div>';
+			echo '<div class="info"><ul id="fileList">';
+			foreach ($fileList as $f)
+			{
+				echo '<li><a href="' . $_SERVER['REQUEST_URI'] . '?msq=' . $f . '">' . $f . '</a></li>';
+			}
+			echo '</div></ul>';
 		}
-		echo '</div></ul>';
+		else
+		{
+			echo '<div class="error">Unable to store uploaded file.</div>';
+		}
 	}
 }
 else
