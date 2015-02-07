@@ -147,7 +147,7 @@ function parseMSQ($xml, &$engine, &$metadata)
 		
 		if ($msqMap == null)
 		{
-			echo '<div class="error">Unable to load that MSQ, sorry.</div>';
+			echo "<div class=\"error\">Unable to load the corresponding INI file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1].ini</div>";
 		}
 		
 		//Calling function will update
@@ -189,19 +189,26 @@ function parseMSQ($xml, &$engine, &$metadata)
 					{//3D Table
 						$numCols = (int)$constant['cols'];
 						$numRows = (int)$constant['rows'];
-						$x = msqAxis($msq->xpath('//constant[@name="' . $format['x'] . '"]')[0]);
-						$y = msqAxis($msq->xpath('//constant[@name="' . $format['y'] . '"]')[0]);
 						
-						if ((count($x) == $numCols) && (count($y) == $numRows))
+						$x = $msq->xpath('//constant[@name="' . $format['x'] . '"]');
+						$y = $msq->xpath('//constant[@name="' . $format['y'] . '"]');
+						
+						if (isset($x[0]) || isset($y[0]))
 						{
-							$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-							$html[$group] .= msqTable($format['name'], $tableData, $x, $y, $format['hot']);
-						}
-						else
-						{
-							$html[$group] .= '<div class="error">' . $format['name'] . ' axis count mismatched with data count.</div>';
-							$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
-							$errorCount += 1;
+							$x = msqAxis($x[0]);
+							$y = msqAxis($y[0]);
+							
+							if ((count($x) == $numCols) && (count($y) == $numRows))
+							{
+								$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
+								$html[$group] .= msqTable($format['name'], $tableData, $x, $y, $format['hot']);
+							}
+							else
+							{
+								$html[$group] .= '<div class="error">' . $format['name'] . ' axis count mismatched with data count.</div>';
+								$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+								$errorCount += 1;
+							}
 						}
 					}
 					else if (isset($format['y']))
@@ -209,18 +216,23 @@ function parseMSQ($xml, &$engine, &$metadata)
 						$numCols = (int)$constant['cols'];
 						$numRows = (int)$constant['rows'];
 						$x = array($format['units']);//msqAxis(trim($constant));
-						$y = msqAxis($msq->xpath('//constant[@name="' . $format['y'] . '"]')[0]);
 						
-						if ((count($x) == $numCols) && (count($y) == $numRows))
+						$y = $msq->xpath('//constant[@name="' . $format['y'] . '"]');
+						if (isset($y[0]))
 						{
-							$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-							$html[$group] .= msqTable($format['name'], $tableData, $x, $y, $format['hot']);
-						}
-						else
-						{
-							$html[$group] .= '<div class="error">' . $format['name'] . ' configured axis count mismatched with data count.</div>';
-							$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
-							$errorCount += 1;
+							$y = msqAxis($y[0]);
+							
+							if ((count($x) == $numCols) && (count($y) == $numRows))
+							{
+								$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
+								$html[$group] .= msqTable($format['name'], $tableData, $x, $y, $format['hot']);
+							}
+							else
+							{
+								$html[$group] .= '<div class="error">' . $format['name'] . ' configured axis count mismatched with data count.</div>';
+								$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+								$errorCount += 1;
+							}
 						}
 					}
 				}

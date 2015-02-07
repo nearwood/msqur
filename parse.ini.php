@@ -14,7 +14,7 @@ function parse_ms_ini($file, $something)
 		return null;
 	}
 	
-	if ($ini == null || count($ini) == 0) return null;
+	if ($ini == FALSE || count($ini) == 0) return null;
 	else if (DEBUG) echo "<div class=\"debug\">File opened.</div>";
 	
 	$globals = array();
