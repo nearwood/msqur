@@ -65,8 +65,9 @@ function msqAxis($el)
 	return preg_split("/\s+/", trim($el));//, PREG_SPLIT_NO_EMPTY);
 }
 
-function msqTable(&$output, $name, $data, $x, $y, $hot)
+function msqTable($name, $data, $x, $y, $hot)
 {
+	$output = "";
 	$rows = count($y);
 	$cols = count($x);
 	
@@ -112,6 +113,8 @@ function msqTable(&$output, $name, $data, $x, $y, $hot)
 	
 	$output .= "</tr>";
 	$output .= "</table>";
+	
+	return $output;
 }
 
 function msqConstant($constant, $value)
@@ -120,8 +123,9 @@ function msqConstant($constant, $value)
 	return '<div class="constant">' . $constant . ': ' . $value . '</div>';
 }
 
-function parseMSQ($xml, &$html, &$engine, &$metadata)
+function parseMSQ($xml, &$engine, &$metadata)
 {
+	$html = array();
 	if (DEBUG) echo '<div class="debug">Parsing MSQ...</div>';
 	$errorCount = 0; //Keep track of how many things go wrong.
 	
@@ -129,18 +133,14 @@ function parseMSQ($xml, &$html, &$engine, &$metadata)
 	
 	if ($msq)
 	{
-		/*
-		 * <bibliography author="TunerStudio MS 2.0.6 - EFI Analytics, Inc." tuneComment="    &lt;br&gt;&#13;    &lt;br&gt;&#13;    &lt;br&gt;&#13;    &lt;br&gt;&#13;    &lt;br&gt;&#13;    &lt;br&gt;&#13;  " writeDate="Mon Jul 15 09:16:28 EDT 2013"/>
-		 * <versionInfo fileFormat="4.0" firmwareInfo="" nPages="15" signature="MS3 Format 0262.09 "/>
-		 */
+		$htmlHeader = '<div class="info">';
+		$htmlHeader .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
+		$htmlHeader .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
+		$htmlHeader .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
+		$htmlHeader .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
+		$htmlHeader .= '</div>';
 		
-		//var_dump($msq);
-		$html .= '<div class="info">';
-		$html .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
-		$html .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
-		$html .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
-		$html .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
-		$html .= '</div>';
+		$html['header'] = $htmlHeader;
 		
 		$sig = $msq->versionInfo['signature'];
 		$msqMap = getConfig($sig);
@@ -160,17 +160,6 @@ function parseMSQ($xml, &$html, &$engine, &$metadata)
 		$schema = getSchema();
 		$engineSchema = getEngineSchema();
 		
-		//if (DEBUG) { echo '<div class="debug"><pre>'; var_export($msqMap); echo '</pre></div>'; }
-		
-		//if cols and rows exist it's a table (maybe 1xR)
-		//otherwise it's a single value
-		//looks like cols=1 is typical for single dimension
-		//still need lookup table of axis
-		//wtf is digits?
-		
-		//foreach ($msq->page as $page)
-		//foreach ($page->constant as $constant)
-		// //constant[@name="veTable1"]
 		foreach ($msqMap as $key => $config)
 		{
 			if (DEBUG) echo "<div class=\"debug\">Searching for: $key</div>";
@@ -180,17 +169,22 @@ function parseMSQ($xml, &$html, &$engine, &$metadata)
 			
 			if (DEBUG) echo "<div class=\"debug\">Found constant: $search[0]</div>";
 			
-			//TODO need lookup table of user-friendly names (nCylinders => Number of Cylinders, etc.).
-			//TODO Use ini to know how many values?
-			//TODO Still need lookup for veTableX => frpmTableX matchinghg 
-			
 			if (array_key_exists($key, $schema))
 			{
 				$format = $schema[$key];
 				
+				if (isset($format['group']))
+					$group = $format['group'];
+				else
+				{
+					if (DEBUG) echo "<div class=\"debug\">No group set for: $key</div>";
+					$group = "misc";
+				}
+				
+				if (!isset($html[$group])) $html[$group] = "";
+				
 				if (isset($constant['cols'])) //and >= 1?
 				{//We have a table
-					//See if this is one we know how to handle
 					if (isset($format['x']) && isset($format['y']))
 					{//3D Table
 						$numCols = (int)$constant['cols'];
@@ -201,12 +195,12 @@ function parseMSQ($xml, &$html, &$engine, &$metadata)
 						if ((count($x) == $numCols) && (count($y) == $numRows))
 						{
 							$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-							msqTable($html, $format['name'], $tableData, $x, $y, $format['hot']);
+							$html[$group] .= msqTable($format['name'], $tableData, $x, $y, $format['hot']);
 						}
 						else
 						{
-							$html .= '<div class="error">' . $format['name'] . ' axis count mismatched with data count.</div>';
-							$html .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+							$html[$group] .= '<div class="error">' . $format['name'] . ' axis count mismatched with data count.</div>';
+							$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
 							$errorCount += 1;
 						}
 					}
@@ -220,19 +214,19 @@ function parseMSQ($xml, &$html, &$engine, &$metadata)
 						if ((count($x) == $numCols) && (count($y) == $numRows))
 						{
 							$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-							msqTable($html, $format['name'], $tableData, $x, $y, $format['hot']);
+							$html[$group] .= msqTable($format['name'], $tableData, $x, $y, $format['hot']);
 						}
 						else
 						{
-							$html .= '<div class="error">' . $format['name'] . ' configured axis count mismatched with data count.</div>';
-							$html .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+							$html[$group] .= '<div class="error">' . $format['name'] . ' configured axis count mismatched with data count.</div>';
+							$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
 							$errorCount += 1;
 						}
 					}
 				}
 				else
 				{
-					$html .= msqConstant($format['name'], $constant);
+					$html[$group] .= msqConstant($format['name'], $constant);
 					//TODO $format['units']
 				}
 			}
@@ -247,10 +241,10 @@ function parseMSQ($xml, &$html, &$engine, &$metadata)
 	}
 	else
 	{
-		$html .= '<div class="error">Unable to parse tune.</div>';
+		$html['header'] = '<div class="error">Unable to parse tune.</div>';
 	}
 	
-	return $errorCount;
+	return $html;
 }
 
 function msqError($e)
