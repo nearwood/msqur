@@ -54,6 +54,8 @@ div.footer {
 }
 
 div#settings {
+	z-index: 999;
+	background: rgba(224, 224, 224, 32);
 	position: absolute;
 	margin-top: 4px;
 	right: 8px;
@@ -80,6 +82,10 @@ table caption {
 	font-style: bold;
 	text-align: left;
 	padding: 0.2em;
+}
+
+div[class^="group-"] {
+	border: 4px solid #F0F0F0;
 }
 
 table.msq td:hover {

@@ -12,7 +12,7 @@
 	<script src="msqur.js"></script>
 </head>
 <body>
-<div id="navigation"><span><button id="btnUpload">Upload</button></span><span><a href="browse.php">Browse</a></span><span><a href="search.php">Search</a></span><span><a href="stats.php">Stats</a></span><span id="aboutLink">About</span></div>
+<div id="navigation"><span><button id="btnUpload">Upload</button></span><span><a href="browse.php">Browse</a></span><span><a>Search</a></span><span><a>Stats</a></span><span id="aboutLink">About</span></div>
 <div id="upload" style="display:none;">
 	<form action="index.php" method="post" enctype="multipart/form-data">
 		<div id="fileDropZone">Drop files here
@@ -39,7 +39,7 @@
 	<img id="settingsIcon" src="img/settings3.png"/>
 	<div id="settingsPanel" style="display:none;">
 		<label><input id="colorizeData" type="checkbox" />Colorize</label>
-		<label><input id="normalizeData" type="checkbox" />Normalize Data</label>
+		<label><input id="normalizeData" type="checkbox" title="Recalculate VE table values to a 5-250 unit scale"/>Normalize Data</label>
 		<label><input id="normalizeAxis" type="checkbox" disabled />Normalize Axis</label>
 	</div>
 </div>

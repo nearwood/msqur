@@ -30,7 +30,7 @@ function getSchema()
 		'wueBins' => array('name' => 'Warmup Enrichment', 'y' => 'tempTable', 'units' => '%', 'hot' => 'ascending', 'group' => 'start'),
 		'cold_adv_table' => array('name' => 'Cold Advance', 'y' => 'tempTable', 'units' => '°', 'hot' => 'ascending', 'group' => 'start'),
 		'primePWTable' => array('name' => 'Prime PW', 'y' => 'tempTable', 'units' => 'ms', 'hot' => 'ascending', 'group' => 'start'),
-		'matRetard' => array('name' => 'MAT Timing Retard', 'y' => 'matTemps', 'units' => '°', 'hot' => 'ascending', 'group' => 'engine'),
+		'matRetard' => array('name' => 'MAT Timing Retard', 'y' => 'matTemps', 'units' => '°', 'hot' => 'ascending', 'group' => 'timing'),
 		'crankPctTable' => array('name' => 'Crank PW', 'y' => 'tempTable', 'units' => '%', 'hot' => 'ascending', 'group' => 'start')
 		//advanceTable3 srpm_table3 smap_table3
 		//veTable3  frpm_table3

@@ -67,21 +67,33 @@ if (isset($_GET['msq'])) {
 	 * else if cached just return html
 	 */
 	
+	//Get cached HTML and display it, or reparse and display (in order)
 	$id = $_GET['msq'];
 	$html = getMSQ($id);
 	if ($html == null)
 	{
-		$html = "";
+		//$html = array(); //array of strings with group keys
 		$engine = array();
 		$metadata = array();
 		$xml = getXML($id);
-		parseMSQ($xml, $html, $engine, $metadata);
+		$groupedHtml = parseMSQ($xml, $engine, $metadata);
 		updateMetadata($id, $metadata);
 		updateEngine($id, $engine);
+		
+		$html = "";
+		foreach($groupedHtml as $group => $v)
+		{
+			//TODO Group name as fieldset legend or sth
+			$html .= "<div class=\"group-$group\">";
+			$html .= $v;
+			$html .= '</div>';
+		}
+		
 		updateCache($id, $html);
 	}
 	
 	echo $html;
+	
 	
 } else if (isset($_POST['upload']) && isset($_FILES)) {
 	//var_dump($_POST);
