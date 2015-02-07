@@ -13,7 +13,8 @@ function connect()
 	}
 	catch (PDOException $e)
 	{
-		echo '<div class="error">Error connecting to database.</div>';// echo $e->getMessage();
+		echo '<div class="error">Error connecting to database.</div>';
+		dbError($e);
 		$db = null; //Redundant.
 	}
 	
@@ -28,7 +29,7 @@ function addEngine($displacement, $compression, $turbo)
 {
 	$id = null;
 	
-	if (!is_numeric($displacement) || !is_numeric($cylinders) || !is_numeric($compression))
+	if (!is_numeric($displacement) || !is_numeric($compression))
 		echo '<div class="error">Invalid engine configuration.</div>';
 	else
 	{
@@ -312,9 +313,12 @@ function getAll()
 
 function dbError($e)
 {
-	echo '<div class="error">Error executing database query. ';
-	echo $e->getMessage();
-	echo '</div>';
+	if (DEBUG)
+	{
+		echo '<div class="error">Error executing database query. ';
+		echo $e->getMessage();
+		echo '</div>';
+	}
 }
 
 ?>

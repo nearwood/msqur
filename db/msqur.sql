@@ -15,7 +15,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `msqur`
 --
-CREATE DATABASE IF NOT EXISTS `msqur` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS `msqur` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `msqur`;
 
 -- --------------------------------------------------------
