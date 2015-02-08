@@ -296,7 +296,7 @@ function getAll()
 	
 	try
 	{
-		$st = $db->prepare("SELECT * FROM metadata INNER JOIN engines ON metadata.engine = engines.id");
+		$st = $db->prepare("SELECT m.id as mid, numCylinders, displacement, compression, induction, firmware, signature, uploadDate FROM metadata m INNER JOIN engines e ON m.engine = e.id");
 		if ($st->execute())
 		{
 			$result = $st->fetchAll(PDO::FETCH_ASSOC);
