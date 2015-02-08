@@ -1,7 +1,6 @@
 <?php
 require "parse.ini.php";
 require "msq.format.php";
-//$result = parse_ms_ini("ini/ms2/test.ini", TRUE);
 
 //TODO Find better name
 define("LARGE_HOT", 0x1);
@@ -140,15 +139,15 @@ function parseMSQ($xml, &$engine, &$metadata)
 		$htmlHeader .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
 		$htmlHeader .= '</div>';
 		
-		$html['header'] = $htmlHeader;
-		
 		$sig = $msq->versionInfo['signature'];
 		$msqMap = getConfig($sig);
 		
 		if ($msqMap == null)
 		{
-			echo "<div class=\"error\">Unable to load the corresponding INI file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1].ini</div>";
+			$htmlHeader .= "<div class=\"error\">Unable to load the corresponding configuration file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1].ini</div>";
 		}
+		
+		$html['header'] = $htmlHeader;
 		
 		//Calling function will update
 		$metadata['fileFormat'] = $msq->versionInfo['fileFormat'];
