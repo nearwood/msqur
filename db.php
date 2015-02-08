@@ -1,21 +1,31 @@
 <?php
 require "config.php";
 
+/**
+ * Connect to the DB, reusing any existing connection
+ */
 function connect()
 {
-	//TODO Reuse connection
-	
-	$db = null;
-	try
+	global $db;
+	if (isset($db) && $db instanceof PDO)
 	{
-		if (DEBUG) echo '<div class="debug">' . "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . ", [****]" . '</div>';
-		$db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD);
+		if (DEBUG) echo '<div class="debug">Reusing DB connection.</div>';
 	}
-	catch (PDOException $e)
+	else
 	{
-		echo '<div class="error">Error connecting to database.</div>';
-		dbError($e);
-		$db = null; //Redundant.
+		try
+		{
+			if (DEBUG) echo '<div class="debug">Connecting to DB: ' . "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . ", [****]" . '</div>';
+			$db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD);
+			//Persistent connection:
+			//$db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD, array(PDO::ATTR_PERSISTENT => true);
+		}
+		catch (PDOException $e)
+		{
+			echo '<div class="error">Error connecting to database.</div>';
+			dbError($e);
+			$db = null; //Redundant.
+		}
 	}
 	
 	return $db;
@@ -289,7 +299,7 @@ function getMSQ($id)
 
 //TODO Rename?
 //TODO Pagination
-function getAll()
+function browseAll()
 {
 	$db = connect();
 	if ($db == null) return null;
