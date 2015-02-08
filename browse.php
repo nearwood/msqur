@@ -24,7 +24,7 @@ require('header.php');
 </form>
 </div>
 <?php
-$results = getAll();
+$results = browseAll();
 $numResults = count($results);
 
 //echo '<div class="debug">'; var_export($results); echo '</div>';
