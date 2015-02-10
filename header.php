@@ -16,12 +16,14 @@
 <div id="upload" style="display:none;">
 	<form action="index.php" method="post" enctype="multipart/form-data">
 		<div id="fileDropZone">Drop files here
-			<input type="file" id="fileSelect" name="files[]" multiple />
+			<input type="file" id="fileSelect" accept=".msq" name="files[]" multiple />
 		</div>
 		<output id="fileList"></output>
 		<div id="engineForm">
 			<fieldset>
 			<legend>Engine Information</legend>
+			<div>Engine Make/Manufacturer: <input name="make" type="text" placeholder="e.g. GM" maxlength="32" style="width:4em;"/></div>
+			<div>Engine Code: <input name="code" type="text" placeholder="LS3" maxlength="32" style="width:4em;"/></div>
 			<div>Displacement (liters): <input name="displacement" type="number" min="0" step="0.01" value="3.0" style="width:4em;"/></div>
 			<div>Compression (X:1) <input name="compression" type="number" min="0" step="0.1" value="9.0" style="width:4em;"/></div>
 			<div>Aspiration: 
