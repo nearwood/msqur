@@ -1,4 +1,8 @@
 <?php
+/**
+*@mainpage
+* msqur.com MSQ File Viewer
+*/ 
 
 //TODO if debug
 error_reporting(E_ALL);
@@ -8,6 +12,12 @@ ini_set('html_errors', false);
 require('db.php');
 require('msq.php');
 
+/**
+ * @brief Restructure file upload array
+ *
+ * Extended description goes here.
+ * @param $file_post array
+ */ 
 function fixFileArray(&$file_post)
 {//From php.net anonymous comment
 	$file_ary = array();
