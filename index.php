@@ -34,7 +34,11 @@ function fixFileArray(&$file_post)
 	
 	return $file_ary;
 }
-
+/**
+ * @brief Sanity check for uploaded files.
+ * @param $files array
+ * @returns $files array with bad apples removed.
+ */
 function checkUploads($files)
 {//Expects fixed array instead of $_FILES array
 	foreach ($files as $index => $file)

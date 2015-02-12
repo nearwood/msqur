@@ -1,6 +1,14 @@
 <?php
 
-//goulven.ch@gmail.com (php.net comments) http://php.net/manual/en/function.parse-ini-file.php#78815
+/**
+ * @brief Parse a MS INI file into sections.
+ * 
+ * Based on code from: goulven.ch@gmail.com (php.net comments) http://php.net/manual/en/function.parse-ini-file.php#78815
+ * 
+ * @param $file The path to the INI file that will be loaded and parsed.
+ * @param $something Unused
+ * @returns A huge array of arrays, starting with sections.
+ */
 function parse_ms_ini($file, $something)
 {
 	if (DEBUG) echo "<div class=\"debug\">Attempting to open: $file</div>";

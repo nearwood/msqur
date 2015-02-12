@@ -1,3 +1,4 @@
 .*.msq
 ^config.php$
 VERSION
+doxygen/*

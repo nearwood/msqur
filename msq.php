@@ -2,10 +2,16 @@
 require "parse.ini.php";
 require "msq.format.php";
 
-//TODO Find better name
+//TODO Deprecated
 define("LARGE_HOT", 0x1);
 define("LARGE_COLD", 0x2);
 
+/**
+ * @brief Given a signature string, finds and parses the respective INI file.
+ * 
+ * Returns an array of the config file contents.
+ * @param $signature The signature string which will be modified into a firmware/version array.
+ */
 function getConfig(&$signature)
 {
 	//sig is 19 bytes + \0
@@ -57,6 +63,11 @@ function getConfig(&$signature)
 	return $msqMap;
 }
 
+/**
+ * @brief Split and format string of Axis values
+ * @param $el string
+ * @returns A array of strings
+ */
 function msqAxis($el)
 {
 	//Why the fuck does this flag bork here on not on the table data?
@@ -64,6 +75,15 @@ function msqAxis($el)
 	return preg_split("/\s+/", trim($el));//, PREG_SPLIT_NO_EMPTY);
 }
 
+/**
+ * @brief Get an HTML table from data, axes, and some other stuff.
+ * @param $name Friendly name to use for the table
+ * @param $data 1D array of data
+ * @param $x X axis data array
+ * @param $y Y axis data array
+ * @param $hot For colorizing on the front end, which values are "high"
+ * @returns A huge string containing a root <table> element
+ */
 function msqTable($name, $data, $x, $y, $hot)
 {
 	$output = "";
@@ -115,13 +135,25 @@ function msqTable($name, $data, $x, $y, $hot)
 	
 	return $output;
 }
-
+/**
+ * @brief Format a constant to HTML
+ * @param $constant The constant name
+ * @param $value It's value
+ * @returns String HTML \<div\>
+ */
 function msqConstant($constant, $value)
 {
 	//var_export($value);
 	return '<div class="constant">' . $constant . ': ' . $value . '</div>';
 }
 
+/**
+ * @brief Parse MSQ XML into an array of HTML 'groups'.
+ * @param $xml SimpleXML
+ * @param $engine 
+ * @param $metadata 
+ * @returns String HTML
+ */
 function parseMSQ($xml, &$engine, &$metadata)
 {
 	$html = array();
