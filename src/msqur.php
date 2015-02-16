@@ -22,28 +22,34 @@ class Msqur
 	
 	function __construct()
 	{
-		
-		$db = new MsqurDB(); //TODO check reuse
+		echo "Msqur()";
+		$this->db = new MsqurDB(); //TODO check reuse
 	}
 	
-	public function getMSQ()
+	public function getMSQ($id)
 	{
+		//TODO santize $id
+		
 	}
 	
 	public function putMSQ()
 	{
+		
 	}
+	
+	public function header() { include "view/header.php"; }
+	public function footer() { include "view/footer.php"; }
 	
 	public function splash()
 	{
-		include "view/header.php";
+		$this->header();
 		include "view/splash.php";
-		include "view/footer.php";
+		$this->footer();
 	}
 	
 	public function browse($page = 0)
 	{
-		
+		return $this->db->browse($page);
 	}
 	
 	/**
@@ -55,7 +61,8 @@ class Msqur
 	public function view($id)
 	{
 		//Get cached HTML and display it, or reparse and display (in order)
-		$id = $_GET['msq'];
+		//$id = $_GET['msq'];
+		$msq = $this->getMSQ($id);
 		$html = getMSQ($id);
 		if ($html == null)
 		{
