@@ -39,7 +39,49 @@ class MsqurDB
 	public function addMSQs() {}
 	public function addEngine() {}
 	
-	public function getMSQ() {}
+	/**
+	 * Get MSQ HTML from metadata $id
+	 */
+	public function getMSQ($id)
+	{
+		if (DISABLE_MSQ_CACHE)
+		{
+			if (DEBUG) echo '<div class="debug">Cache disabled.</div>';
+			return null;
+		}
+		
+		if (!$this->connect()) return null;
+		
+		$html = null;
+		
+		try
+		{
+			$st = $this->db->prepare("SELECT html FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
+			$st->bindParam(":id", $id);
+			$st->execute();
+			if ($st->rowCount() > 0)
+			{
+				$result = $st->fetch(PDO::FETCH_ASSOC);
+				$html = $result['html'];
+				if ($html === NULL)
+				{
+					if (DEBUG) echo '<div class="debug">No HTML cache found.</div>';
+				}
+				else if (DEBUG) echo '<div class="debug">Cached, returning HTML.</div>';
+			}
+			else
+			{
+				if (DEBUG) echo '<div class="debug">0 rows for $id</div>';
+				echo '<div class="error">Invalid MSQ</div>';
+			}
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return $html;
+	}
 	
 	public function browse($page)
 	{
@@ -77,7 +119,33 @@ class MsqurDB
 		}
 	}
 	
-	private function getXML() {}
+	public function getXML($id)
+	{
+		if (DEBUG) echo '<div class="debug">Getting XML for id: ' . $id . '</div>';
+		
+		if (!$this->connect()) return null;
+		
+		$xml = null;
+		
+		try
+		{
+			$st = $this->db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
+			$st->bindParam(":id", $id);
+			if ($st->execute())
+			{
+				if (DEBUG) echo '<div class="debug">XML Found...</div>';
+				$result = $st->fetch(PDO::FETCH_ASSOC);
+				$xml = $result['xml'];
+			}
+			else echo '<div class="error">XML not found.</div>';
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return $xml;
+	}
 }
 
 ?>

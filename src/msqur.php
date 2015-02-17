@@ -28,8 +28,8 @@ class Msqur
 	
 	public function getMSQ($id)
 	{
-		//TODO santize $id
-		
+		//TODO hrm
+		return $this->db->getMSQ($id);
 	}
 	
 	public function putMSQ()
@@ -60,19 +60,22 @@ class Msqur
 	 */
 	public function view($id)
 	{
+		if (DEBUG) echo '<div class="debug">Load MSQ: ' . $id . '</div>';
 		//Get cached HTML and display it, or reparse and display (in order)
 		//$id = $_GET['msq'];
-		$msq = $this->getMSQ($id);
-		$html = getMSQ($id);
+		//$msq = $this->getMSQ($id);
+		$html = $this->getMSQ($id);
+		$msq = new MSQ();
+		
 		if ($html == null)
 		{
 			//$html = array(); //array of strings with group keys
 			$engine = array();
 			$metadata = array();
-			$xml = getXML($id);
-			$groupedHtml = parseMSQ($xml, $engine, $metadata);
-			updateMetadata($id, $metadata);
-			updateEngine($id, $engine);
+			$xml = $this->db->getXML($id);
+			$groupedHtml = $msq->parseMSQ($xml, $engine, $metadata);
+			$this->db->updateMetadata($id, $metadata);
+			$this->db->updateEngine($id, $engine);
 			
 			$html = "";
 			foreach($groupedHtml as $group => $v)

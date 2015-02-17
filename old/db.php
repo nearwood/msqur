@@ -279,7 +279,7 @@ function getMSQ($id)
 			$html = $result['html'];
 			if ($html === NULL)
 			{
-				if (DEBUG) echo '<div class="debug">No HTML cache found.</div>';
+				if (DEBUG) echo '<div class="debug">Not catched.</div>';
 			}
 			else if (DEBUG) echo '<div class="debug">Cached, returning HTML.</div>';
 		}
