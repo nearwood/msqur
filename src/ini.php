@@ -5,7 +5,7 @@
  */
 class INI
 {
-	private static $fileScheme = "msq/whatever";
+	//private static $fileScheme = "msq/whatever";
 	
 	/**
 	 * @brief Given a signature string, finds and parses the respective INI file.
