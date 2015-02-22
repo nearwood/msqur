@@ -105,9 +105,9 @@ class MsqurDB
 		return null;
 	}
 	
-	private function updateMSQ() {} //Cached HTML
-	private function updateEngine() {}
-	private function updateMetadata() {}
+	public function updateCache() {} //Cached MSQ HTML
+	public function updateEngine() {}
+	public function updateMetadata() {}
 	
 	private function dbError($e)
 	{

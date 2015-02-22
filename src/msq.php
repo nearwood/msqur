@@ -66,6 +66,7 @@ class MSQ
 
 	/**
 	 * @brief Split and format string of Axis values
+	 * TODO This should be static
 	 * @param $el string
 	 * @returns A array of strings
 	 */
@@ -78,6 +79,7 @@ class MSQ
 
 	/**
 	 * @brief Get an HTML table from data, axes, and some other stuff.
+	 * TODO This should be static
 	 * @param $name Friendly name to use for the table
 	 * @param $data 1D array of data
 	 * @param $x X axis data array
@@ -227,13 +229,13 @@ class MSQ
 							
 							if (isset($x[0]) || isset($y[0]))
 							{
-								$x = msqAxis($x[0]);
-								$y = msqAxis($y[0]);
+								$x = $this->msqAxis($x[0]);
+								$y = $this->msqAxis($y[0]);
 								
 								if ((count($x) == $numCols) && (count($y) == $numRows))
 								{
 									$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-									$html[$group] .= msqTable($format['name'], $tableData, $x, $y, $format['hot']);
+									$html[$group] .= $this->msqTable($format['name'], $tableData, $x, $y, $format['hot']);
 								}
 								else
 								{
@@ -252,12 +254,12 @@ class MSQ
 							$y = $msq->xpath('//constant[@name="' . $format['y'] . '"]');
 							if (isset($y[0]))
 							{
-								$y = msqAxis($y[0]);
+								$y = $this->msqAxis($y[0]);
 								
 								if ((count($x) == $numCols) && (count($y) == $numRows))
 								{
 									$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-									$html[$group] .= msqTable($format['name'], $tableData, $x, $y, $format['hot']);
+									$html[$group] .= $this->msqTable($format['name'], $tableData, $x, $y, $format['hot']);
 								}
 								else
 								{
@@ -270,7 +272,7 @@ class MSQ
 					}
 					else
 					{
-						$html[$group] .= msqConstant($format['name'], $constant);
+						$html[$group] .= $this->msqConstant($format['name'], $constant);
 						//TODO $format['units']
 					}
 				}
