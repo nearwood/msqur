@@ -22,7 +22,6 @@ class Msqur
 	
 	function __construct()
 	{
-		echo "Msqur()";
 		$this->db = new MsqurDB(); //TODO check reuse
 	}
 	
