@@ -59,6 +59,7 @@ class Msqur
 	 */
 	public function view($id)
 	{
+		$this->header();
 		if (DEBUG) echo '<div class="debug">Load MSQ: ' . $id . '</div>';
 		//Get cached HTML and display it, or reparse and display (in order)
 		//$id = $_GET['msq'];
@@ -85,10 +86,11 @@ class Msqur
 				$html .= '</div>';
 			}
 			
-			updateCache($id, $html);
+			$this->db->updateCache($id, $html);
 		}
 		
 		echo $html;
+		$this->footer();
 	}
 }
 
