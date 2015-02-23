@@ -31,9 +31,18 @@ class Msqur
 		return $this->db->getMSQ($id);
 	}
 	
-	public function putMSQ()
+	public function addMSQs($files, $engineid)
 	{
+		$fileList = array();
 		
+		foreach ($files as $file)
+		{
+			//echo 'Adding ' . $file['tmp_name'];
+			//TODO if -1 failed
+			$fileList[] = $this->db->addMSQ($file, $engineid);
+		}
+		
+		return $fileList;
 	}
 	
 	public function header() { include "view/header.php"; }
@@ -91,6 +100,15 @@ class Msqur
 		
 		echo $html;
 		$this->footer();
+	}
+	
+	/**
+	 * Add engine details not available from MSQ
+	 * 
+	 */
+	public function addEngine($displacement, $compression, $turbo)
+	{
+		$this->db->addEngine($displacement, $compression, $turbo);
 	}
 }
 

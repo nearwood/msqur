@@ -77,7 +77,7 @@ if (isset($_POST['upload']) && isset($_FILES))
 			echo '<div class="info">' . count($files) . ' files were uploaded.</div>';
 		//$motor = $validate($_POST['cylinders'])
 		$engineid = $msqur->addEngine($_POST['displacement'], $_POST['compression'], $_POST['aspiration']);
-		$fileList = $msqur->addFiles($files, $engineid);
+		$fileList = $msqur->addMSQs($files, $engineid);
 		
 		if ($fileList != null)
 		{
@@ -85,7 +85,7 @@ if (isset($_POST['upload']) && isset($_FILES))
 			echo '<div class="info"><ul id="fileList">';
 			foreach ($fileList as $f)
 			{
-				echo '<li><a href="' . $_SERVER['REQUEST_URI'] . '?msq=' . $f . '">' . $f . '</a></li>';
+				echo '<li><a href="view.php?msq=' . $f . '">' . $f . '</a></li>';
 			}
 			echo '</div></ul>';
 		}

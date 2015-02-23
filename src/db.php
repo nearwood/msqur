@@ -16,7 +16,7 @@ class MsqurDB
 				if (DEBUG) echo '<div class="debug">Connecting to DB: ' . "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . ", [****]" . '</div>';
 				$this->db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD);
 				//Persistent connection:
-				//$db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD, array(PDO::ATTR_PERSISTENT => true);
+				//$this->db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD, array(PDO::ATTR_PERSISTENT => true);
 			}
 			catch (PDOException $e)
 			{
@@ -35,9 +35,79 @@ class MsqurDB
 		$this->connect();
 	} 
 	
-	public function addMSQ() {}
-	public function addMSQs() {}
-	public function addEngine() {}
+	public function addMSQ($file, $engineid)
+	{
+		if (!$this->connect()) return null;
+		
+		try
+		{
+			//TODO Compress?
+			$st = $this->db->prepare("INSERT INTO msqs (xml) VALUES (:xml)");
+			$xml = file_get_contents($file['tmp_name']);
+			//Convert encoding to UTF-8
+			$xml = mb_convert_encoding($xml, "UTF-8");
+			//Strip out invalid xmlns
+			$xml = preg_replace('/xmlns=".*?"/', '', $xml);
+			$st->bindParam(":xml", $xml);
+			if ($st->execute())
+			{
+				$id = $this->db->lastInsertId();
+				$st = $this->db->prepare("INSERT INTO metadata (url,msq,engine,fileFormat,signature,uploadDate) VALUES (:url, :id, :engine, '4.0', 'unknown', :uploaded)");
+				$st->bindParam(":url", $id); //could do hash but for now, just the id
+				$st->bindParam(":id", $id);
+				if (!is_numeric($engineid)) $engineid = null;
+				$st->bindParam(":engine", $engineid);
+				//TODO Make sure it's an int
+				$dt = new DateTime();
+				$dt = $dt->format('Y-m-d H:i:s');
+				$st->bindParam(":uploaded", $dt);
+				if ($st->execute()) $id = $this->db->lastInsertId();
+				else $id = -1;
+			}
+			else $id = -1;
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+			$id = -1;
+		}
+		
+		return $id;
+	}
+	
+	public function addEngine($displacement, $compression, $turbo)
+	{
+		$id = null;
+		
+		if (!is_numeric($displacement) || !is_numeric($compression))
+			echo '<div class="error">Invalid engine configuration.</div>';
+		else
+		{
+			if (!$this->connect()) return null;
+			
+			try
+			{
+				//TODO use any existing one before creating
+				$st = $this->db->prepare("INSERT INTO engines (displacement, compression, induction) VALUES (:displacement, :compression, :induction)");
+				$st->bindParam(":displacement", $displacement);
+				$st->bindParam(":compression", $compression);
+				
+				if ($turbo == "na")
+					$t = 0;
+				else
+					$t = 1;
+				$st->bindParam(":induction", $t);
+				if ($st->execute())
+					$id = $this->db->lastInsertId();
+			}
+			catch (PDOException $e)
+			{
+				$this->dbError($e);
+			}
+		}
+		
+		return $id;
+	}
 	
 	/**
 	 * Get MSQ HTML from metadata $id
@@ -105,9 +175,95 @@ class MsqurDB
 		return null;
 	}
 	
-	public function updateCache() {} //Cached MSQ HTML
-	public function updateEngine() {}
-	public function updateMetadata() {}
+	/**
+	* Update HTML cache of MSQ by metadata id
+	*/
+	public function updateCache($id, $html)
+	{
+		if (!$this->connect()) return null;
+		
+		try
+		{
+			if (DEBUG) echo '<div class="debug">Updating HTML cache...</div>';
+			$st = $this->db->prepare("UPDATE msqs ms, metadata m SET ms.html=:html WHERE m.msq = ms.id AND m.id = :id");
+			//$xml = mb_convert_encoding($html, "UTF-8");
+			$st->bindParam(":id", $id);
+			$st->bindParam(":html", $html);
+			if ($st->execute())
+			{
+				if (DEBUG) echo '<div class="debug">Cache updated.</div>';
+				return true;
+			}
+			else
+				if (DEBUG) echo '<div class="warn">Unable to update cache.</div>';
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return false;
+	}
+	
+	public function updateEngine()
+	{
+		if (!$this->connect()) return null;
+		
+		try
+		{
+			if (DEBUG) echo '<div class="debug">Updating engine information...</div>';
+			$st = $this->db->prepare("UPDATE engines e, metadata m SET e.numCylinders = :nCylinders, twoStroke = :twoStroke, injType = :injType, nInjectors = :nInjectors, engineType = :engineType WHERE e.id = m.engine AND m.id = :id");
+			$st->bindParam(":id", $id);
+			$st->bindParam(":nCylinders", $engine['nCylinders']);
+			$st->bindParam(":twoStroke", $engine['twoStroke']);
+			$st->bindParam(":injType", $engine['injType']);
+			$st->bindParam(":nInjectors", $engine['nInjectors']);
+			$st->bindParam(":engineType", $engine['engineType']);
+			if ($st->execute())
+			{
+				if (DEBUG) echo '<div class="debug">Engine updated.</div>';
+				return true;
+			}
+			else
+				if (DEBUG) echo '<div class="warn">Unable to update engine.</div>';
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return false;
+	}
+	
+	public function updateMetadata()
+	{
+		if (!$this->connect()) return null;
+		
+		try
+		{
+			if (DEBUG) echo '<div class="debug">Updating HTML cache...</div>';
+			$st = $this->db->prepare("UPDATE metadata md SET md.fileFormat = :fileFormat, md.signature = :signature, md.firmware = :firmware, md.author = :author WHERE md.id = :id");
+			//$xml = mb_convert_encoding($html, "UTF-8");
+			$st->bindParam(":id", $id);
+			$st->bindParam(":fileFormat", $metadata['fileFormat']);
+			$st->bindParam(":signature", $metadata['signature']);
+			$st->bindParam(":firmware", $metadata['firmware']);
+			$st->bindParam(":author", $metadata['author']);
+			if ($st->execute())
+			{
+				if (DEBUG) echo '<div class="debug">Metadata updated.</div>';
+				return true;
+			}
+			else
+				if (DEBUG) echo '<div class="warn">Unable to update metadata.</div>';
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return false;
+	}
 	
 	private function dbError($e)
 	{
