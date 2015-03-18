@@ -1,5 +1,5 @@
 <div class="footer">
-	<?php include "VERSION"; ?> <a href="http://httpd.apache.org/">Apache</a> <a href="http://php.net/">PHP</a> <a href="https://angularjs.org/">AngularJS</a> <a href="http://jquery.com/">jQuery</a>
+	<?php include "../VERSION"; ?> <a href="http://httpd.apache.org/">Apache</a> <a href="http://php.net/">PHP</a> <a href="https://angularjs.org/">AngularJS</a> <a href="http://jquery.com/">jQuery</a>
 </div>
 <?php
 IF (!DEBUG)
