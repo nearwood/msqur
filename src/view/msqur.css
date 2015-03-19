@@ -119,6 +119,23 @@ span#literMargin input{
 	display: none;
 }
 
+#engineForm {
+	display: table;
+}
+
+#engineForm div.formDiv {
+	display: table-row;
+}
+
+#engineForm input, #engineForm label {
+	display: table-cell;
+	width: 100%;
+}
+
+#engineForm span {
+	font-size: small;
+}
+
 form#filter {
 	display: none;
 }

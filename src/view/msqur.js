@@ -5,7 +5,7 @@ $(function() {
 		modal: true,
 		autoOpen: false,
 		title: "Upload Tune Files",
-		width: "450px",
+		width: "512px",
 		buttons: {
 			Upload: upload,
 			Cancel: function() { $(this).dialog('close'); }
