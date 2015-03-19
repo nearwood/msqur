@@ -85,6 +85,7 @@ class Msqur
 			$groupedHtml = $msq->parseMSQ($xml, $engine, $metadata);
 			$this->db->updateMetadata($id, $metadata);
 			$this->db->updateEngine($id, $engine);
+			$this->db->updateViews($id);
 			
 			$html = "";
 			foreach($groupedHtml as $group => $v)
@@ -102,13 +103,9 @@ class Msqur
 		$this->footer();
 	}
 	
-	/**
-	 * Add engine details not available from MSQ
-	 * 
-	 */
-	public function addEngine($displacement, $compression, $turbo)
+	public function addEngine($make, $code, $displacement, $compression, $turbo)
 	{
-		$this->db->addEngine($displacement, $compression, $turbo);
+		return $this->db->addEngine($make, $code, $displacement, $compression, $turbo);
 	}
 }
 

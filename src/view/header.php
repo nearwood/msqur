@@ -14,27 +14,41 @@
 <body>
 <div id="navigation"><span><button id="btnUpload">Upload</button></span><span><a href="browse.php">Browse</a></span><span><a>Search</a></span><span><a>Stats</a></span><span id="aboutLink">About</span></div>
 <div id="upload" style="display:none;">
-	<form action="upload.php" method="post" enctype="multipart/form-data">
-		<div id="fileDropZone">Drop files here
+	<form id="engineForm" action="upload.php" method="post" enctype="multipart/form-data">
+		<div id="fileDropZone"><label for="fileSelect">Drop files here</label>
 			<input type="file" id="fileSelect" accept=".msq" name="files[]" multiple />
 		</div>
 		<output id="fileList"></output>
-		<div id="engineForm">
+		<div>
 			<fieldset>
-			<legend>Engine Information</legend>
-			<div>Engine Make/Manufacturer: <input name="make" type="text" placeholder="e.g. GM" maxlength="32" style="width:4em;"/></div>
-			<div>Engine Code: <input name="code" type="text" placeholder="LS3" maxlength="32" style="width:4em;"/></div>
-			<div>Displacement (liters): <input name="displacement" type="number" min="0" step="0.01" value="3.0" style="width:4em;"/></div>
-			<div>Compression (X:1) <input name="compression" type="number" min="0" step="0.1" value="9.0" style="width:4em;"/></div>
-			<div>Aspiration: 
+				<legend>Engine Information</legend>
+				<div><span>All fields are required. Please enter accurate information to help other users.</span></div>
+				<div class="formDiv">
+				<label for="make">Engine Make:</label>
+				<input name="make" type="text" placeholder="e.g. GM" maxlength="32" style="width:4em;"/>
+				</div>
+				<div class="formDiv">
+				<label for="code">Engine Code:</label>
+				<input name="code" type="text" placeholder="LS3" maxlength="32" style="width:4em;"/>
+				</div>
+				<div class="formDiv">
+				<label for="displacement">Displacement (liters):</label>
+				<input name="displacement" type="number" min="0" step="0.01" value="3.0" style="width:4em;"/>
+				</div>
+				<div class="formDiv">
+				<label for="compression">Compression (X:1)</label>
+				<input name="compression" type="number" min="0" step="0.1" value="9.0" style="width:4em;"/>
+				</div>
+				<div class="formDiv">
+				<label for="aspiration">Aspiration:</label>
 				<select name="aspiration">
-					<option value="na" title="AKA: Slow">Naturally Aspirated</option>
-					<option value="fi" title="The way God intended">Forced Induction</option>
+					<option value="na" title="Slow">Naturally Aspirated</option>
+					<option value="fi" title="Fast">Forced Induction</option>
 				</select>
-			</div>
+				</div>
+				<input type="hidden" name="upload" value="upload" style="display:none;">
 			</fieldset>
 		</div>
-		<input type="hidden" name="upload" value="upload" style="display:none;">
 	</form>
 </div>
 <div id="settings">

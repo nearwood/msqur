@@ -23,6 +23,7 @@ function fixFileArray(&$file_post)
 	
 	return $file_ary;
 }
+
 /**
  * @brief Sanity check for uploaded files.
  * @param $files array
@@ -60,6 +61,7 @@ function checkUploads($files)
 
 if (isset($_POST['upload']) && isset($_FILES))
 {
+	$msqur->header();
 	//var_dump($_POST);
 	//var_dump($_FILES);
 	
@@ -76,7 +78,10 @@ if (isset($_POST['upload']) && isset($_FILES))
 		else
 			echo '<div class="info">' . count($files) . ' files were uploaded.</div>';
 		//$motor = $validate($_POST['cylinders'])
-		$engineid = $msqur->addEngine($_POST['displacement'], $_POST['compression'], $_POST['aspiration']);
+		
+		if (DEBUG) echo '<div class="debug">Adding engine: ' . $_POST['make'] . ', ' . $_POST['code'] . ', ' . $_POST['displacement'] . ', ' . $_POST['compression'] . ', ' . $_POST['aspiration'] . '</div>';
+		
+		$engineid = $msqur->addEngine($_POST['make'], $_POST['code'], $_POST['displacement'], $_POST['compression'], $_POST['aspiration']);
 		$fileList = $msqur->addMSQs($files, $engineid);
 		
 		if ($fileList != null)
@@ -94,6 +99,8 @@ if (isset($_POST['upload']) && isset($_FILES))
 			echo '<div class="error">Unable to store uploaded file.</div>';
 		}
 	}
+	
+	$msqur->footer();
 }
 else include "index.php";
 ?>
