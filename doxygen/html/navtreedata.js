@@ -1,7 +1,7 @@
 var NAVTREE =
 [
   [ "msqur", "index.html", [
-    [ "MSQur", "md__r_e_a_d_m_e.html", null ],
+    [ "MSQur", "md__srv_http_msqur__r_e_a_d_m_e.html", null ],
     [ "Data Structures", null, [
       [ "Data Structures", "annotated.html", "annotated" ],
       [ "Data Structure Index", "classes.html", null ],
@@ -24,7 +24,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"admin_8php.html"
+"annotated.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
