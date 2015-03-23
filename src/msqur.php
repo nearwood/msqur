@@ -74,30 +74,34 @@ class Msqur
 		//$id = $_GET['msq'];
 		//$msq = $this->getMSQ($id);
 		$html = $this->getMSQ($id);
-		$msq = new MSQ();
-		
-		if ($html == null)
+		if ($html !== null)
 		{
-			//$html = array(); //array of strings with group keys
-			$engine = array();
-			$metadata = array();
-			$xml = $this->db->getXML($id);
-			$groupedHtml = $msq->parseMSQ($xml, $engine, $metadata);
-			$this->db->updateMetadata($id, $metadata);
-			$this->db->updateEngine($id, $engine);
 			$this->db->updateViews($id);
+			$msq = new MSQ(); //ugh
 			
-			$html = "";
-			foreach($groupedHtml as $group => $v)
+			if ($html == FALSE)
 			{
-				//TODO Group name as fieldset legend or sth
-				$html .= "<div class=\"group-$group\">";
-				$html .= $v;
-				$html .= '</div>';
+				//$html = array(); //array of strings with group keys
+				$engine = array();
+				$metadata = array();
+				$xml = $this->db->getXML($id);
+				$groupedHtml = $msq->parseMSQ($xml, $engine, $metadata);
+				$this->db->updateMetadata($id, $metadata);
+				$this->db->updateEngine($id, $engine);
+				
+				$html = "";
+				foreach($groupedHtml as $group => $v)
+				{
+					//TODO Group name as fieldset legend or sth
+					$html .= "<div class=\"group-$group\">";
+					$html .= $v;
+					$html .= '</div>';
+				}
+				
+				$this->db->updateCache($id, $html);
 			}
-			
-			$this->db->updateCache($id, $html);
 		}
+		//TODO else show 404
 		
 		echo $html;
 		$this->footer();
