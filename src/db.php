@@ -78,7 +78,7 @@ class MsqurDB
 	/**
 	 * @brief Add a new engine to the DB
 	 * @param $make String The engine make (Nissan)
-	 * @param $model String the engine code (VG30)
+	 * @param $code String the engine code (VG30)
 	 * @param $displacement decimal in liters
 	 * @param $compression decimal The X from X:1 compression ratio
 	 * @param $turbo boolean Forced induction
