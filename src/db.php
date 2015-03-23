@@ -75,6 +75,15 @@ class MsqurDB
 		return $id;
 	}
 	
+	/**
+	 * @brief Add a new engine to the DB
+	 * @param $make String The engine make (Nissan)
+	 * @param $model String the engine code (VG30)
+	 * @param $displacement decimal in liters
+	 * @param $compression decimal The X from X:1 compression ratio
+	 * @param $turbo boolean Forced induction
+	 * @returns the ID of the new engine record, or null if unsuccessful.
+	 */
 	public function addEngine($make, $code, $displacement, $compression, $turbo)
 	{
 		$id = null;
@@ -119,19 +128,21 @@ class MsqurDB
 	}
 	
 	/**
-	 * Get MSQ HTML from metadata $id
+	 * @brief Get MSQ HTML from metadata $id
+	 * @param $id The metadata id
+	 * @returns FALSE if not cached, null if not found, otherwise the HTML.
 	 */
 	public function getMSQ($id)
 	{
 		if (DISABLE_MSQ_CACHE)
 		{
 			if (DEBUG) echo '<div class="debug warn">Cache disabled.</div>';
-			return null;
+			return FALSE;
 		}
 		
 		if (!$this->connect()) return null;
 		
-		$html = null;
+		$html = FALSE;
 		
 		try
 		{
@@ -150,8 +161,9 @@ class MsqurDB
 			}
 			else
 			{
-				if (DEBUG) echo '<div class="debug">0 rows for $id</div>';
+				if (DEBUG) echo "<div class=\"debug\">No results for $id</div>";
 				echo '<div class="error">Invalid MSQ</div>';
+				return null;
 			}
 		}
 		catch (PDOException $e)
@@ -185,8 +197,11 @@ class MsqurDB
 	}
 	
 	/**
-	* Update HTML cache of MSQ by metadata id
-	*/
+	 * @brief Update HTML cache of MSQ by metadata id
+	 * @param $id integer The ID of the metadata.
+	 * @param $html String HTML string of the shit to update.
+	 * @returns TRUE or FALSE depending on success.
+	 */
 	public function updateCache($id, $html)
 	{
 		if (!$this->connect()) return false;
@@ -214,6 +229,13 @@ class MsqurDB
 		return false;
 	}
 	
+	/**
+	 * @brief Update engine with extra data.
+	 * This is used after parsing a MSQ and getting additional engine information (injector size, number of cylinders, etc.)
+	 * @param $id integer The ID of the engine.
+	 * @param $engine array The associative array of new engine data.
+	 * @returns TRUE or FALSE depending on success.
+	 */
 	public function updateEngine($id, $engine)
 	{
 		if (!$this->connect()) return false;
@@ -244,6 +266,13 @@ class MsqurDB
 		return false;
 	}
 	
+	/**
+	 * @brief Update metadata with extra information.
+	 * This is used after parsing a MSQ and getting additional information (firmware version, etc.)
+	 * @param $id integer The ID of the metadata.
+	 * @param $metadata array The associative array of extra metadata.
+	 * @returns TRUE or FALSE depending on success.
+	 */
 	public function updateMetadata($id, $metadata)
 	{
 		if (!$this->connect()) return false;
@@ -274,6 +303,11 @@ class MsqurDB
 		return false;
 	}
 	
+	/**
+	 * @brief Increment the view count of a metadata record.
+	 * @param $id integer The ID of the metadata to update.
+	 * @returns TRUE or FALSE depending on success.
+	 */
 	public function updateViews($id)
 	{
 		if (!$this->connect()) return false;
