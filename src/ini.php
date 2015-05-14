@@ -93,7 +93,7 @@ class INI
 		$sections = array();
 		$currentSection = NULL;
 		$values = array();
-		$i = 0;
+		$sectionNumber = 0;
 		
 		foreach ($ini as $line)
 		{
@@ -104,48 +104,99 @@ class INI
 				continue;
 			}
 			
+			//[ at the beginning of the line is the indicator of a new section.
 			if ($line[0] == '[')
 			{
 				$sections[] = $currentSection = substr($line, 1, -1); //TODO until before ] not end of line
-				$i++;
+				$sectionNumber++;
+				if (DEBUG) echo "<div class=\"debug\">Reading section: $currentSection</div>";
 				continue;
 			}
 			
-			//We don't handle formulas yet
+			//We don't handle formulas/composites yet
 			if (strpos($line, '{') !== FALSE) continue;
 			
-			// Key-value pair
+			//Pretty much anything left has an equals sign I think.
+			//Key-value pair around equals sign
 			list($key, $value) = explode('=', $line, 2);
 			$key = trim($key);
 			
 			//Remove any line end comment
+			//This could be moved somewhere else, but works fine here I guess.
 			$hasComment = strpos($value, ';');
-			if ($hasComment !== FALSE)
-				$value = substr($value, 0, $hasComment);
-				
+			if ($hasComment !== FALSE) $value = substr($value, 0, $hasComment);
+			
 			$value = trim($value);
-			if ($i == 0)
-			{// Global values (see section version for comments)
-				if (strpos($value, ',') !== FALSE)
-					$globals[$key] = array_map('trim', explode(',', $value));
-				else $globals[$key] = $value;
+			
+			switch ($currentSection)
+			{
+				case "Constants": //The start of our journey. Fill in details about variables.
+				$value = INI::defaultSectionHandler($value);
+				break;
+				
+				case "SettingContextHelp": //Any help text for our variable
+				$value = INI::defaultSectionHandler($value);
+				break;
+				
+				//Whenever I do menu recreation these two will be used
+				case "Menu":
+				break;
+				case "UserDefined":
+				break;
+				
+				case "CurveEditor": //2D Graph //curve = coldAdvance, "Cold Ignition Advance Offset"
+				break;
+				case "TableEditor": //3D Table/Graph
+				break;
+				
+				//Don't care about these
+				case "MegaTune":
+				case "ReferenceTables": //misc MAF stuff
+				case "SettingGroups": //misc settings
+				case "ConstantsExtensions": //misc reset required fields
+				case "PortEditor": //not sure
+				case "GaugeConfigurations": //Not relevant
+				case "FrontPage": //Not relevant
+				case "RunTime": //Not relevant
+				case "Tuning": //Not relevant
+				case "AccelerationWizard": //Not sure
+				case "BurstMode": //Not relevant
+				case "OutputChannels": //These are for gauges and datalogging
+				case "Datalog": //Not relevant
+				default:
+					break;
+				case NULL:
+					//Should be global values (don't think any ini's have them)
+					assert($sectionNumber == 0);
+					$globals[$key] = defaultSectionHandler($value);
+					continue; //Skip the section values assignment below
+				break;
 			}
-			else
-			{// Section array values
-				if (strpos($value, ',') !== FALSE)
-				{
-					//Use trim() as a callback on elements returned from explode()
-					$values[$i - 1][$key] = array_map('trim', explode(',', $value));
-				}
-				else $values[$i - 1][$key] = $value;
-			}
+			
+			$values[$sectionNumber - 1][$key] = $value;
 		}
 		
-		for ($j = 0; $j < $i; $j++)
+		for ($j = 0; $j < $sectionNumber; $j++)
 		{
 			$result[$sections[$j]] = $values[$j];
 		}
 		return $result + $globals;
+	}
+	
+	//function constantSectionHandler($value)
+	public static function defaultSectionHandler($value)
+	{
+		//For things like "nCylinders      = bits,    U08,      0,"
+		//split CSV into an array
+		if (strpos($value, ',') !== FALSE)
+			return array_map('trim', explode(',', $value)); //Use trim() as a callback on elements returned from explode()
+		else //otherwise just return the value
+			return $value;
+	}
+	
+	public static function curveSectionHandler($value)
+	{
+		return NULL;
 	}
 }
 ?>
