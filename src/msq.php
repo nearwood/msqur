@@ -144,10 +144,12 @@ class MSQ
 	 * @param $value It's value
 	 * @returns String HTML \<div\>
 	 */
-	private function msqConstant($constant, $value)
+	private function msqConstant($constant, $value, $help)
 	{
+		//var_export($constant);
 		//var_export($value);
-		return '<div class="constant">' . $constant . ': ' . $value . '</div>';
+		//var_export($help);
+		return '<div class="constant">' . $constant . ' (' . $help . '): ' . $value . '</div>';
 	}
 
 	/**
@@ -192,6 +194,7 @@ class MSQ
 			
 			$constants = $msqMap['Constants'];
 			$curves = $msqMap['CurveEditor'];
+			$helpTexts = $msqMap['SettingContextHelp'];
 			//$tables = $msqMap['TableEditor'];
 			$engineSchema = getEngineSchema();
 			
@@ -296,14 +299,25 @@ class MSQ
 					//}
 				//}
 			}
+			
 			foreach ($constants as $key => $config)
 			{
+				$value = $this->findConstant($msq, $key);
+				
 				//if (DEBUG) echo "<div class=\"debug\">Trying $key for engine data</div>";
-				if (array_key_exists($key, $engineSchema))
+				if ($value !== NULL)
 				{
-					if (DEBUG) echo "<div class=\"debug\">Found engine data: $key</div>";
-					$constant = $this->findConstant($msq, $key);
-					$engine[$key] = trim($constant, '"');
+					$value = trim($value, '"');
+					if (array_key_exists($key, $engineSchema))
+					{
+						if (DEBUG) echo "<div class=\"debug\">Found engine data: $key => $value</div>";
+						$engine[$key] = $value;
+					}
+					
+					if (array_key_exists($key, $helpTexts))
+					$help = $helpTexts[$key];
+					
+					$this->msqConstant($key, $value, $help);
 				}
 			}
 		}
