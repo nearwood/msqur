@@ -179,7 +179,7 @@ class MSQ
 			
 			if ($msqMap == null)
 			{
-				$htmlHeader .= "<div class=\"error\">Unable to load the corresponding configuration file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1].ini</div>";
+				$htmlHeader .= "<div class=\"error\">Unable to load the corresponding configuration file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1]</div>";
 			}
 			
 			$html['header'] = $htmlHeader;
@@ -190,18 +190,39 @@ class MSQ
 			$metadata['firmware'] = $sig[0];
 			$metadata['author'] = $msq->bibliography['author'];
 			
-			$msqMap = $msqMap['Constants'];
-			$schema = getSchema();
+			$constants = $msqMap['Constants'];
+			$curves = $msqMap['CurveEditor'];
+			//$tables = $msqMap['TableEditor'];
 			$engineSchema = getEngineSchema();
 			
-			foreach ($msqMap as $key => $config)
+			//foreach ($msqMap as $key => $config)
+			foreach ($curves as $curve)
 			{
-				if (DEBUG) echo "<div class=\"debug\">Searching for: $key</div>";
-				$search = $msq->xpath('//constant[@name="' . $key . '"]');
-				if ($search === FALSE || count($search) == 0) continue;
-				$constant = $search[0];
+				if (DEBUG) echo "<div class=\"debug\">Curve: $curve['id']</div>";
 				
-				if (DEBUG) echo "<div class=\"debug\">Found constant: $search[0]</div>";
+				//id is just for menu (and our reference)
+				//need to find xBin (index 0, 1 is the live meatball variable)
+				//and find yBin and output those.
+				//columnLabel also for labels
+				//xAxis and yAxis are just for maximums?
+				if (array_key_exists('topicHelp', $curve)
+					$help = $curve['topicHelp'];
+				else
+					$help = NULL;
+					
+				msqTable2($curve['desc'],         $help);
+				
+				
+				//if (DEBUG) echo "<div class=\"debug\">Searching for: $key</div>";
+				//$search = $msq->xpath('//constant[@name="' . $key . '"]');
+				//if ($search === FALSE || count($search) == 0) continue;
+				//$constant = $search[0];
+				
+				//if (DEBUG) echo "<div class=\"debug\">Found constant: $search[0]</div>";
+				
+				
+				
+				
 				
 				if (array_key_exists($key, $schema))
 				{

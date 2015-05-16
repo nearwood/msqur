@@ -91,6 +91,8 @@ class INI
 		
 		$globals = array();
 		$sections = array();
+		$curve = array();
+		$table = array();
 		$currentSection = NULL;
 		$values = array();
 		$sectionNumber = 0;
@@ -131,20 +133,92 @@ class INI
 			switch ($currentSection)
 			{
 				case "Constants": //The start of our journey. Fill in details about variables.
-				$value = INI::defaultSectionHandler($value);
-				break;
+					$values[$sectionNumber - 1][$key] = INI::defaultSectionHandler($value);
+					break;
 				
 				case "SettingContextHelp": //Any help text for our variable
-				$value = INI::defaultSectionHandler($value);
-				break;
+					$values[$sectionNumber - 1][$key] = INI::defaultSectionHandler($value);
+					break;
 				
 				//Whenever I do menu recreation these two will be used
 				case "Menu":
-				break;
+					break;
 				case "UserDefined":
-				break;
+					break;
 				
 				case "CurveEditor": //2D Graph //curve = coldAdvance, "Cold Ignition Advance Offset"
+					switch ($key)
+					{
+						case "curve": //start of new curve
+							if (!empty($curve))
+							{//save the last one, if any
+								$values[$sectionNumber - 1][$key] = $curve;
+							}
+							
+							$value = array_map('trim', explode(',', $value));
+							if (length($value) == 2)
+							{
+								$curve = array();
+								$curve['id'] = $value[0];
+								$curve['desc'] = $value[1];
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid curve: $key</div>";
+							break;
+						case "topicHelp":
+							if (is_array($curve))
+							{
+								$curve[$key] = $value;
+							}
+							break;
+						case "columnLabel":
+							$value = array_map('trim', explode(',', $value));
+							if (length($value) == 2)
+							{
+								$curve['xLabel'] = $value[0];
+								$curve['yLabel'] = $value[1];
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid curve column label: $key</div>";
+							break;
+						case "xAxis":
+							$value = array_map('trim', explode(',', $value));
+							if (length($value) == 3)
+							{
+								$curve['xMin'] = $value[0];
+								$curve['xMax'] = $value[1];
+								$curve['xSomething'] = $value[2];
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid curve X axis: $key</div>";
+							break;
+						case "yAxis":
+							$value = array_map('trim', explode(',', $value));
+							if (length($value) == 3)
+							{
+								$curve['yMin'] = $value[0];
+								$curve['yMax'] = $value[1];
+								$curve['ySomething'] = $value[2];
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid curve Y axis: $key</div>";
+							break;
+						case "xBins":
+							$value = array_map('trim', explode(',', $value));
+							if (length($value) == 2)
+							{
+								$curve['xBinConstant'] = $value[0];
+								//$curve['xBinVar'] = $value[1]; //The value read from the ECU
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid curve X axis: $key</div>";
+							break;
+						case "yBins":
+							$value = array_map('trim', explode(',', $value));
+							if (length($value) == 2)
+							{
+								$curve['yBinConstant'] = $value[0];
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid curve X axis: $key</div>";
+							break;
+						case "gauge": //not all have this
+							break;
+					}
 				break;
 				case "TableEditor": //3D Table/Graph
 				break;
@@ -172,8 +246,6 @@ class INI
 					continue; //Skip the section values assignment below
 				break;
 			}
-			
-			$values[$sectionNumber - 1][$key] = $value;
 		}
 		
 		for ($j = 0; $j < $sectionNumber; $j++)
