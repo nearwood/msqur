@@ -71,8 +71,6 @@ class Msqur
 		$this->header();
 		if (DEBUG) echo '<div class="debug">Load MSQ: ' . $id . '</div>';
 		//Get cached HTML and display it, or reparse and display (in order)
-		//$id = $_GET['msq'];
-		//$msq = $this->getMSQ($id);
 		$html = $this->getMSQ($id);
 		if ($html !== null)
 		{
@@ -81,7 +79,6 @@ class Msqur
 			
 			if ($html == FALSE)
 			{
-				//$html = array(); //array of strings with group keys
 				$engine = array();
 				$metadata = array();
 				$xml = $this->db->getXML($id);
