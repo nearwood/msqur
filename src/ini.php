@@ -135,7 +135,7 @@ class INI
 					break;
 				
 				case "SettingContextHelp": //Any help text for our variable
-					$values[$currentSection][$key] = INI::defaultSectionHandler($value);
+					$values[$currentSection][$key] = INI::helpSectionHandler($value);
 					break;
 				
 				//Whenever I do menu recreation these two will be used
@@ -251,6 +251,11 @@ class INI
 		
 		//var_export($values);
 		return $values + $globals;
+	}
+	
+	public static function helpSectionHandler($value)
+	{
+		return trim($value);
 	}
 	
 	//function constantSectionHandler($value)
