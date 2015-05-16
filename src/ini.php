@@ -90,12 +90,10 @@ class INI
 		else if (DEBUG) echo "<div class=\"debug\">File opened.</div>";
 		
 		$globals = array();
-		$sections = array();
 		$curve = array();
 		$table = array();
 		$currentSection = NULL;
 		$values = array();
-		$sectionNumber = 0;
 		
 		foreach ($ini as $line)
 		{
@@ -107,10 +105,10 @@ class INI
 			}
 			
 			//[ at the beginning of the line is the indicator of a new section.
-			if ($line[0] == '[')
+			if ($line[0] == '[') //TODO until before ] not end of line
 			{
-				$sections[] = $currentSection = substr($line, 1, -1); //TODO until before ] not end of line
-				$sectionNumber++;
+				$currentSection = substr($line, 1, -1);
+				$values[$currentSection] = array();
 				if (DEBUG) echo "<div class=\"debug\">Reading section: $currentSection</div>";
 				continue;
 			}
@@ -133,11 +131,11 @@ class INI
 			switch ($currentSection)
 			{
 				case "Constants": //The start of our journey. Fill in details about variables.
-					$values[$sectionNumber - 1][$key] = INI::defaultSectionHandler($value);
+					$values[$currentSection][$key] = INI::defaultSectionHandler($value);
 					break;
 				
 				case "SettingContextHelp": //Any help text for our variable
-					$values[$sectionNumber - 1][$key] = INI::defaultSectionHandler($value);
+					$values[$currentSection][$key] = INI::defaultSectionHandler($value);
 					break;
 				
 				//Whenever I do menu recreation these two will be used
@@ -152,15 +150,17 @@ class INI
 						case "curve": //start of new curve
 							if (!empty($curve))
 							{//save the last one, if any
-								$values[$sectionNumber - 1][$key] = $curve;
+								if (DEBUG) echo '<div class="debug">Parsed curve: ' . $curve['id'] . '</div>';
+								//var_export($curve);
+								$values[$currentSection][$curve['id']] = $curve;
 							}
 							
 							$value = array_map('trim', explode(',', $value));
-							if (length($value) == 2)
+							if (count($value) == 2)
 							{
 								$curve = array();
 								$curve['id'] = $value[0];
-								$curve['desc'] = $value[1];
+								$curve['desc'] = trim($value[1], '"');
 							}
 							else if (DEBUG) echo "<div class=\"warn\">Invalid curve: $key</div>";
 							break;
@@ -172,7 +172,7 @@ class INI
 							break;
 						case "columnLabel":
 							$value = array_map('trim', explode(',', $value));
-							if (length($value) == 2)
+							if (count($value) == 2)
 							{
 								$curve['xLabel'] = $value[0];
 								$curve['yLabel'] = $value[1];
@@ -181,7 +181,7 @@ class INI
 							break;
 						case "xAxis":
 							$value = array_map('trim', explode(',', $value));
-							if (length($value) == 3)
+							if (count($value) == 3)
 							{
 								$curve['xMin'] = $value[0];
 								$curve['xMax'] = $value[1];
@@ -191,7 +191,7 @@ class INI
 							break;
 						case "yAxis":
 							$value = array_map('trim', explode(',', $value));
-							if (length($value) == 3)
+							if (count($value) == 3)
 							{
 								$curve['yMin'] = $value[0];
 								$curve['yMax'] = $value[1];
@@ -201,20 +201,21 @@ class INI
 							break;
 						case "xBins":
 							$value = array_map('trim', explode(',', $value));
-							if (length($value) == 2)
+							if (count($value) >= 1)
 							{
 								$curve['xBinConstant'] = $value[0];
 								//$curve['xBinVar'] = $value[1]; //The value read from the ECU
+								//Think they all have index 1 except bogus curves
 							}
-							else if (DEBUG) echo "<div class=\"warn\">Invalid curve X axis: $key</div>";
+							else if (DEBUG) echo "<div class=\"warn\">Invalid curve X bins: $key</div>";
 							break;
 						case "yBins":
 							$value = array_map('trim', explode(',', $value));
-							if (length($value) == 2)
+							if (count($value) == 1)
 							{
 								$curve['yBinConstant'] = $value[0];
 							}
-							else if (DEBUG) echo "<div class=\"warn\">Invalid curve X axis: $key</div>";
+							else if (DEBUG) echo "<div class=\"warn\">Invalid curve Y bins: $key</div>";
 							break;
 						case "gauge": //not all have this
 							break;
@@ -241,18 +242,15 @@ class INI
 					break;
 				case NULL:
 					//Should be global values (don't think any ini's have them)
-					assert($sectionNumber == 0);
+					assert($currentSection === NULL);
 					$globals[$key] = defaultSectionHandler($value);
 					continue; //Skip the section values assignment below
 				break;
 			}
 		}
 		
-		for ($j = 0; $j < $sectionNumber; $j++)
-		{
-			$result[$sections[$j]] = $values[$j];
-		}
-		return $result + $globals;
+		//var_export($values);
+		return $values + $globals;
 	}
 	
 	//function constantSectionHandler($value)

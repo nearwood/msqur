@@ -195,113 +195,114 @@ class MSQ
 			//$tables = $msqMap['TableEditor'];
 			$engineSchema = getEngineSchema();
 			
-			//foreach ($msqMap as $key => $config)
+			//--foreach ($msqMap as $key => $config)
+			//foreach ($tabless as $table)
+			//foreach ($constants as $constant)
+			$html["curves"] = "";
 			foreach ($curves as $curve)
 			{
-				if (DEBUG) echo "<div class=\"debug\">Curve: $curve['id']</div>";
+				if (DEBUG) echo '<div class="debug">Curve: ' . $curve['id'] . '</div>';
 				
 				//id is just for menu (and our reference)
 				//need to find xBin (index 0, 1 is the live meatball variable)
 				//and find yBin and output those.
 				//columnLabel also for labels
 				//xAxis and yAxis are just for maximums?
-				if (array_key_exists('topicHelp', $curve)
+				$help = NULL;
+				if (array_key_exists('topicHelp', $curve))
 					$help = $curve['topicHelp'];
-				else
-					$help = NULL;
-					
-				msqTable2($curve['desc'],         $help);
 				
-				
-				//if (DEBUG) echo "<div class=\"debug\">Searching for: $key</div>";
-				//$search = $msq->xpath('//constant[@name="' . $key . '"]');
-				//if ($search === FALSE || count($search) == 0) continue;
-				//$constant = $search[0];
+				$xBins = $this->findConstant($msq, $curve['xBinConstant']);
+				$yBins = $this->findConstant($msq, $curve['yBinConstant']);
+				$xAxis = $this->msqAxis($xBins);
+				$yAxis = $this->msqAxis($yBins);
+				$html["curves"] .= $this->msqTable2D($curve, $curve['xMin'], $curve['xMax'], $xAxis, $curve['yMin'], $curve['yMax'], $yAxis, $help);
 				
 				//if (DEBUG) echo "<div class=\"debug\">Found constant: $search[0]</div>";
 				
 				
 				
-				
-				
-				if (array_key_exists($key, $schema))
-				{
-					$format = $schema[$key];
+				//if (array_key_exists($key, $schema))
+				//{
+					//$format = $schema[$key];
 					
-					if (isset($format['group']))
-						$group = $format['group'];
-					else
-					{
-						if (DEBUG) echo "<div class=\"debug\">No group set for: $key</div>";
-						$group = "misc";
-					}
+					//if (isset($format['group']))
+						//$group = $format['group'];
+					//else
+					//{
+						//if (DEBUG) echo "<div class=\"debug\">No group set for: $key</div>";
+						//$group = "misc";
+					//}
 					
-					if (!isset($html[$group])) $html[$group] = "";
+					//if (!isset($html[$group])) $html[$group] = "";
 					
-					if (isset($constant['cols'])) //and >= 1?
-					{//We have a table
-						if (isset($format['x']) && isset($format['y']))
-						{//3D Table
-							$numCols = (int)$constant['cols'];
-							$numRows = (int)$constant['rows'];
+					//if (isset($constant['cols'])) //and >= 1?
+					//{//We have a table
+						//if (isset($format['x']) && isset($format['y']))
+						//{//3D Table
+							//$numCols = (int)$constant['cols'];
+							//$numRows = (int)$constant['rows'];
 							
-							$x = $msq->xpath('//constant[@name="' . $format['x'] . '"]');
-							$y = $msq->xpath('//constant[@name="' . $format['y'] . '"]');
+							//$x = $msq->xpath('//constant[@name="' . $format['x'] . '"]');
+							//$y = $msq->xpath('//constant[@name="' . $format['y'] . '"]');
 							
-							if (isset($x[0]) || isset($y[0]))
-							{
-								$x = $this->msqAxis($x[0]);
-								$y = $this->msqAxis($y[0]);
+							//if (isset($x[0]) || isset($y[0]))
+							//{
+								//$x = $this->msqAxis($x[0]);
+								//$y = $this->msqAxis($y[0]);
 								
-								if ((count($x) == $numCols) && (count($y) == $numRows))
-								{
-									$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-									$html[$group] .= $this->msqTable($format['name'], $tableData, $x, $y, $format['hot']);
-								}
-								else
-								{
-									$html[$group] .= '<div class="error">' . $format['name'] . ' axis count mismatched with data count.</div>';
-									$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
-									$errorCount += 1;
-								}
-							}
-						}
-						else if (isset($format['y']))
-						{//2D
-							$numCols = (int)$constant['cols'];
-							$numRows = (int)$constant['rows'];
-							$x = array($format['units']);//msqAxis(trim($constant));
+								//if ((count($x) == $numCols) && (count($y) == $numRows))
+								//{
+									//$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
+									//$html[$group] .= $this->msqTable($format['name'], $tableData, $x, $y, $format['hot']);
+								//}
+								//else
+								//{
+									//$html[$group] .= '<div class="error">' . $format['name'] . ' axis count mismatched with data count.</div>';
+									//$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+									//$errorCount += 1;
+								//}
+							//}
+						//}
+						//else if (isset($format['y']))
+						//{//2D
+							//$numCols = (int)$constant['cols'];
+							//$numRows = (int)$constant['rows'];
+							//$x = array($format['units']);//msqAxis(trim($constant));
 							
-							$y = $msq->xpath('//constant[@name="' . $format['y'] . '"]');
-							if (isset($y[0]))
-							{
-								$y = $this->msqAxis($y[0]);
+							//$y = $msq->xpath('//constant[@name="' . $format['y'] . '"]');
+							//if (isset($y[0]))
+							//{
+								//$y = $this->msqAxis($y[0]);
 								
-								if ((count($x) == $numCols) && (count($y) == $numRows))
-								{
-									$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-									$html[$group] .= $this->msqTable($format['name'], $tableData, $x, $y, $format['hot']);
-								}
-								else
-								{
-									$html[$group] .= '<div class="error">' . $format['name'] . ' configured axis count mismatched with data count.</div>';
-									$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
-									$errorCount += 1;
-								}
-							}
-						}
-					}
-					else
-					{
-						$html[$group] .= $this->msqConstant($format['name'], $constant);
-						//TODO $format['units']
-					}
-				}
-				
+								//if ((count($x) == $numCols) && (count($y) == $numRows))
+								//{
+									//$tableData = preg_split("/\s+/", trim($constant));//, PREG_SPLIT_NO_EMPTY); //, $limit);
+									//$html[$group] .= $this->msqTable($format['name'], $tableData, $x, $y, $format['hot']);
+								//}
+								//else
+								//{
+									//$html[$group] .= '<div class="error">' . $format['name'] . ' configured axis count mismatched with data count.</div>';
+									//$html[$group] .= '<div class="debug">' . count($x) . ", " . count($y) . " vs $numCols, $numRows</div>";
+									//$errorCount += 1;
+								//}
+							//}
+						//}
+					//}
+					//else
+					//{
+						//$html[$group] .= $this->msqConstant($format['name'], $constant);
+						////TODO $format['units']
+					//}
+				//}
+			}
+			foreach ($constants as $key => $config)
+			{
 				//if (DEBUG) echo "<div class=\"debug\">Trying $key for engine data</div>";
 				if (array_key_exists($key, $engineSchema))
 				{
-					if (DEBUG) echo "<div class=\"debug\">Found engine data: $key ($constant)</div>";
+					if (DEBUG) echo "<div class=\"debug\">Found engine data: $key</div>";
+					$constant = $this->findConstant($msq, $key);
 					$engine[$key] = trim($constant, '"');
 				}
 			}
@@ -320,7 +321,44 @@ class MSQ
 		echo $e->getMessage();
 		echo '</div>';
 	}
-
+	
+	private function findConstant($xml, $constant)
+	{
+		$search = $xml->xpath('//constant[@name="' . $constant . '"]');
+		if ($search === FALSE || count($search) == 0) return NULL;
+		else return $search[0];
+	}
+	
+	private function msqTable2D($curve, $xMin, $xMax, $xAxis, $yMin, $yMax, $yAxis, $helpText)
+	{
+		$output = "";
+		$hot = 0;
+		
+		if (DEBUG) echo '<div class="debug">Formatting curve: ' . $curve['id'] . '</div>';
+		
+		$dataCount = count($xAxis);
+		if ($dataCount !== count($yAxis))
+		{
+			$output .= '<div class="error">Axis lengths not equal for: ' . $curve['desc'] . '</div>';
+			//if (DEBUG) $output .= "<div class=\"debug\">Found engine data: $key ($constant)</div>";
+			return $output;
+		}
+		
+		$output .= '<table class="msq tablesorter 2d" hot="' . $hot . '">';
+		$output .= '<caption>' . $curve['desc'] . '</caption>';
+		
+		for ($c = 0; $c < $dataCount; $c++)
+		{
+			//TODO This is not triggering tablesorter
+			$output .= '<tr><th class="{sorter: false}">';
+			$output .= $yAxis[$c];
+			$output .= "</th><td>";
+			$output .= $xAxis[$c];
+			$output .= "</td></tr>";
+		}
+		$output .= "</table>";
+		return $output;
+	}
 }
 
 ?>
