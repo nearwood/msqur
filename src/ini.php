@@ -82,11 +82,15 @@ class INI
 		}
 		catch (Exception $e)
 		{
-			echo "<div class=\"error\">Could not open: $file</div>";
+			echo "<div class=\"error\">Error opening file: $file</div>";
 			return null;
 		}
 		
-		if ($ini == FALSE || count($ini) == 0) return null;
+		if ($ini == FALSE || count($ini) == 0)
+		{
+			echo "<div class=\"error\">Error opening file: $file</div>";
+			return null;
+		}
 		else if (DEBUG) echo "<div class=\"debug\">File opened.</div>";
 		
 		$globals = array();
