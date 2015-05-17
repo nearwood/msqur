@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @brief DB handling stuff.
+ * 
+ */
 class MsqurDB
 {
 	private $db;
@@ -36,6 +40,12 @@ class MsqurDB
 		$this->connect();
 	} 
 	
+	/**
+	 * @brief Add a new MSQ to the DB
+	 * @param $file The uploaded file
+	 * @param $engineid String The ID of the engine metadata
+	 * @returns the ID of the new engine record, or null if unsuccessful.
+	 */
 	public function addMSQ($file, $engineid)
 	{
 		if (!$this->connect()) return null;
@@ -197,6 +207,7 @@ class MsqurDB
 				if ($html === NULL)
 				{
 					if (DEBUG) echo '<div class="debug">No HTML cache found.</div>';
+					return FALSE;
 				}
 				else if (DEBUG) echo '<div class="debug">Cached, returning HTML.</div>';
 			}
@@ -215,6 +226,11 @@ class MsqurDB
 		return $html;
 	}
 	
+	/**
+	 * @brief Get a list of MSQs
+	 * @param $page The page of results (NI)
+	 * @returns A list of metadata, or null if unsuccessful
+	 */
 	public function browse($page)
 	{
 		if (!$this->connect()) return null;
@@ -410,6 +426,11 @@ class MsqurDB
 		else echo '<div class="error">Error executing database query.</div>';
 	}
 	
+	/**
+	 * @brief Get the raw XML of a MSQ
+	 * @param $id The ID of the associated metadata
+	 * @returns XML String or null if unsuccessful
+	 */
 	public function getXML($id)
 	{
 		if (DEBUG) echo '<div class="debug">Getting XML for id: ' . $id . '</div>';
