@@ -170,6 +170,8 @@ class MSQ
 			if ($msqMap == null)
 			{
 				$htmlHeader .= "<div class=\"error\">Unable to load the corresponding configuration file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1]</div>";
+				$html['header'] = $htmlHeader;
+				return $html;
 			}
 			
 			$html['header'] = $htmlHeader;
@@ -180,10 +182,16 @@ class MSQ
 			$metadata['firmware'] = $sig[0];
 			$metadata['author'] = $msq->bibliography['author'];
 			
-			$constants = $msqMap['Constants'];
-			$curves = $msqMap['CurveEditor'];
-			$helpTexts = $msqMap['SettingContextHelp'];
-			$tables = $msqMap['TableEditor'];
+			$constants = array();
+			$helpTexts = array();
+			$curves = array();
+			$tables = array();
+			
+			if (array_key_exists('Constants', $msqMap)) $constants = $msqMap['Constants'];
+			if (array_key_exists('SettingContextHelp', $msqMap)) $helpTexts = $msqMap['SettingContextHelp'];
+			if (array_key_exists('CurveEditor', $msqMap)) $curves = $msqMap['CurveEditor'];
+			if (array_key_exists('TableEditor', $msqMap)) $tables = $msqMap['TableEditor'];
+			
 			$engineSchema = getEngineSchema();
 			
 			$html["curves"] = "";

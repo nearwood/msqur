@@ -324,6 +324,12 @@ class MsqurDB
 	{
 		if (!$this->connect()) return false;
 		
+		if (!array_keys_exist($metadata, 'fileFormat', 'signature', 'firmware', 'author'))
+		{
+			echo '<div class="warn">Incomplete MSQ metadata.</div>';
+			return false;
+		}
+		
 		try
 		{
 			if (DEBUG) echo '<div class="debug">Updating HTML cache...</div>';
