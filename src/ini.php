@@ -221,7 +221,62 @@ class INI
 							break;
 					}
 				break;
+				
 				case "TableEditor": //3D Table/Graph
+					switch ($key)
+					{
+						case "table": //start of new curve
+							if (!empty($table))
+							{//save the last one, if any
+								if (DEBUG) echo '<div class="debug">Parsed table: ' . $table['id'] . '</div>';
+								//var_export($curve);
+								$values[$currentSection][$table['id']] = $table;
+							}
+							
+							$value = array_map('trim', explode(',', $value));
+							if (count($value) == 4)
+							{
+								$table = array();
+								$table['id'] = $value[0];
+								$table['map3d_id'] = $value[1];
+								$table['desc'] = trim($value[2], '"');
+								//$table['page'] = $value[3]; //Don't care for this one AFAIK.
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid table: $key</div>";
+							break;
+						case "topicHelp":
+							if (is_array($table))
+							{
+								$table[$key] = $value;
+							}
+							break;
+						case "xBins":
+							$value = array_map('trim', explode(',', $value));
+							if (count($value) >= 1)
+							{
+								$table['xBinConstant'] = $value[0];
+								//$table['xBinVar'] = $value[1]; //The value read from the ECU
+								//Think they all have index 1 except bogus tables
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid table X bins: $key</div>";
+							break;
+						case "yBins":
+							$value = array_map('trim', explode(',', $value));
+							if (count($value) >= 1)
+							{
+								$table['yBinConstant'] = $value[0];
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid table Y bins: $key</div>";
+							break;
+						case "zBins": //not all have this
+							$value = array_map('trim', explode(',', $value));
+							if (count($value) >= 1)
+							{
+								$table['zBinConstant'] = $value[0];
+							}
+							else if (DEBUG) echo "<div class=\"warn\">Invalid table Z bins: $key</div>";
+							break;
+					}
 				break;
 				
 				//Don't care about these
