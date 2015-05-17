@@ -1,4 +1,5 @@
 <?php
+
 class MsqurDB
 {
 	private $db;
@@ -128,6 +129,40 @@ class MsqurDB
 	}
 	
 	/**
+	 * @brief Whether the reingest flag is set or not for the given id
+	 * @param $id The metadata id
+	 * @returns TRUE if reingest flag is set to 1, FALSE if 0
+	 */
+	public function needReingest($id)
+	{
+		if (!$this->connect()) return FALSE;
+		
+		try
+		{
+			$st = $this->db->prepare("SELECT reingest FROM metadata WHERE metadata.id = :id LIMIT 1");
+			$this->tryBind($st, ":id", $id);
+			$st->execute();
+			if ($st->rowCount() > 0)
+			{
+				$result = $st->fetch(PDO::FETCH_ASSOC);
+				$reingest = $result['reingest'];
+				return $reingest;
+			}
+			else
+			{
+				if (DEBUG) echo "<div class=\"debug\">No result for $id</div>";
+				echo '<div class="error">Invalid MSQ</div>';
+			}
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return FALSE;
+	}
+	
+	/**
 	 * @brief Get MSQ HTML from metadata $id
 	 * @param $id The metadata id
 	 * @returns FALSE if not cached, null if not found, otherwise the HTML.
@@ -137,6 +172,12 @@ class MsqurDB
 		if (DISABLE_MSQ_CACHE)
 		{
 			if (DEBUG) echo '<div class="debug warn">Cache disabled.</div>';
+			return FALSE;
+		}
+		
+		if ($this->needReingest($id))
+		{
+			if (DEBUG) echo '<div class="debug info">Reingest flagged.</div>';
 			return FALSE;
 		}
 		
@@ -161,7 +202,7 @@ class MsqurDB
 			}
 			else
 			{
-				if (DEBUG) echo "<div class=\"debug\">No results for $id</div>";
+				if (DEBUG) echo "<div class=\"debug\">No result for $id</div>";
 				echo '<div class="error">Invalid MSQ</div>';
 				return null;
 			}
@@ -239,6 +280,12 @@ class MsqurDB
 	public function updateEngine($id, $engine)
 	{
 		if (!$this->connect()) return false;
+		
+		if (!array_keys_exist($engine, 'nCylinders', 'twoStroke', 'injType', 'nInjectors', 'engineType'))
+		{
+			echo '<div class="warn">Incomplete engine information.</div>';
+			return false;
+		}
 		
 		try
 		{
