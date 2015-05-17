@@ -3,11 +3,12 @@
 include "msq.format.php";
 include "util.php";
 
+/**
+ * @brief MSQ Parsing class.
+ * 
+ */
 class MSQ
 {
-	public function getXML() {}
-	public function getHTML() {}
-	
 	/**
 	 * @brief Given a signature string, finds and parses the respective INI file.
 	 * 
@@ -64,68 +65,7 @@ class MSQ
 		
 		return $msqMap;
 	}
-
-	/**
-	 * @brief Get an HTML table from data, axes, and some other stuff.
-	 * TODO This should be static
-	 * @param $name Friendly name to use for the table
-	 * @param $data 1D array of data
-	 * @param $x X axis data array
-	 * @param $y Y axis data array
-	 * @param $hot For colorizing on the front end, which values are "high"
-	 * @returns A huge string containing a root <table> element
-	 */
-	private function msqTable($name, $data, $x, $y, $hot)
-	{
-		$output = "";
-		$rows = count($y);
-		$cols = count($x);
-		
-		//echo "ROWS: $rows, $cols";
-		//var_dump($x, "YYYYYYYYY", $y);
-		
-		if ($rows * $cols != count($data))
-		{
-			$output .= '<div class="error">' . $name . ' column/row count mismatched with data count.</div>';
-			return;
-		}
-		
-		//TODO Probably there's a better way to do this (like on the front end)
-		if (stripos($name, "VE") === FALSE)
-		{
-			$output .= '<table class="msq tablesorter" hot="' . $hot . '">';
-		}
-		else
-		{
-			$output .= '<table class="msq tablesorter ve" hot="' . $hot . '">';
-		}
-		
-		$output .= "<caption>$name</caption>";
-		
-		$output .= "<thead><tr><th></th>";
-		for ($c = 0; $c < $cols; $c++)
-		{
-			//TODO: This is not triggering tablesorter
-			$output .= '<th class="{sorter: false}">' . $x[$c] . "</th>";
-		}
-		$output .= "</tr></thead>";
-		
-		for ($r = 0; $r < $rows; $r++)
-		{
-			$output .= "<tr><th>" . $y[$r] . "</th>";
-			for ($c = 0; $c < $cols; $c++)
-			{
-				//If just a 2D table we ignore the $rows offset.
-				if ($cols == 1) $output .= "<td>" . $data[$r] . "</td>";
-				else $output .= "<td>" . $data[$r * $rows + $c] . "</td>";
-			}
-		}
-		
-		$output .= "</tr>";
-		$output .= "</table>";
-		
-		return $output;
-	}
+	
 	/**
 	 * @brief Format a constant to HTML
 	 * @param $constant The constant name
@@ -139,7 +79,7 @@ class MSQ
 		//var_export($help);
 		return '<div class="constant">' . $constant . ' (' . $help . '): ' . $value . '</div>';
 	}
-
+	
 	/**
 	 * @brief Parse MSQ XML into an array of HTML 'groups'.
 	 * @param $xml SimpleXML
@@ -277,7 +217,12 @@ class MSQ
 		
 		return $html;
 	}
-
+	
+	/**
+	 * @brief Convenience function to display errors.
+	 * @param $e The error to display.
+	 * @returns String Error in HTML form.
+	 */
 	private function msqError($e)
 	{
 		echo '<div class="error">Error parsing MSQ. ';
@@ -285,6 +230,12 @@ class MSQ
 		echo '</div>';
 	}
 	
+	/**
+	 * @brief Find constant value in MSQ XML.
+	 * @param $xml SimpleXML
+	 * @param $constant ID of constant to search for
+	 * @returns String of constant value, or NULL if not found
+	 */
 	private function findConstant($xml, $constant)
 	{
 		$search = $xml->xpath('//constant[@name="' . $constant . '"]');
@@ -292,7 +243,19 @@ class MSQ
 		else return $search[0];
 	}
 	
-	private function msqTable2D($curve, $xMin, $xMax, $xAxis, $yMin, $yMax, $yAxis, $helpText)
+	/**
+	 * @brief Get an HTML table from 2D data.
+	 * @param $curve Array of values I'm too lazy to parameterize.
+	 * @param $xMin Minimum X axis value (NI)
+	 * @param $xMax Maximum X axis value (NI)
+	 * @param $xAxis Array of actual X set points
+	 * @param $yMin Minimum Y axis value (NI)
+	 * @param $yMax Maximum Y axis value (NI)
+	 * @param $yAxis Array of actual Y set points
+	 * @param $helpText Optional text to display for more information
+	 * @returns A huge string containing a root <table> element
+	 */
+	private function msqTable2D($curve, $xMin, $xMax, $xAxis, $yMin, $yMax, $yAxis, $helpText = null)
 	{
 		$output = "";
 		$hot = 0;
@@ -323,6 +286,15 @@ class MSQ
 		return $output;
 	}
 	
+	/**
+	 * @brief Get an HTML table from 3D data.
+	 * @param $table Array of values I'm too lazy to parameterize.
+	 * @param $xAxis Array of actual X set points
+	 * @param $yAxis Array of actual Y set points
+	 * @param $zBins Array of actual Z set points
+	 * @param $helpText Optional text to display for more information
+	 * @returns A huge string containing a root <table> element
+	 */
 	private function msqTable3D($table, $xAxis, $yAxis, $zBins, $helpText)
 	{
 		$output = "";
@@ -370,8 +342,6 @@ class MSQ
 		$output .= "</tr>";
 		$output .= "</table>";
 		return $output;
-		
-		
 	}
 }
 

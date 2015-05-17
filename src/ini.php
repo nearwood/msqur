@@ -5,8 +5,6 @@
  */
 class INI
 {
-	//private static $fileScheme = "msq/whatever";
-	
 	/**
 	 * @brief Given a signature string, finds and parses the respective INI file.
 	 * 
@@ -139,7 +137,7 @@ class INI
 					break;
 				
 				case "SettingContextHelp": //Any help text for our variable
-					$values[$currentSection][$key] = INI::helpSectionHandler($value);
+					$values[$currentSection][$key] = trim($value);
 					break;
 				
 				//Whenever I do menu recreation these two will be used
@@ -312,20 +310,19 @@ class INI
 		return $values + $globals;
 	}
 	
-	public static function helpSectionHandler($value)
-	{
-		return trim($value);
-	}
-	
-	//function constantSectionHandler($value)
-	public static function defaultSectionHandler($value)
+	/**
+	 * @brief Strip excess whitespace and cruft to get to value assignments
+	 * @param $value
+	 * @returns An array if there's a comma, or just the value.
+	 */
+	private static function defaultSectionHandler($value)
 	{
 		//For things like "nCylinders      = bits,    U08,      0,"
 		//split CSV into an array
 		if (strpos($value, ',') !== FALSE)
 			return array_map('trim', explode(',', $value)); //Use trim() as a callback on elements returned from explode()
 		else //otherwise just return the value
-			return $value;
+			return trim($value);
 	}
 	
 	public static function curveSectionHandler($value)
