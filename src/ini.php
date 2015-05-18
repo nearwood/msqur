@@ -57,7 +57,7 @@ class INI
 		$signature = array($msVersion, $fwVersion);
 		
 		$iniFile = "ini/" . $msDir . $fwVersion . ".ini";
-		$msqMap = parse($iniFile, TRUE);
+		$msqMap = INI::parse($iniFile, TRUE);
 		
 		return $msqMap;
 	}
@@ -73,7 +73,6 @@ class INI
 	 */
 	public static function parse($file, $something)
 	{
-		if (DEBUG) echo "<div class=\"debug\">Attempting to open: $file</div>";
 		try
 		{
 			$ini = file($file, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
@@ -89,7 +88,7 @@ class INI
 			echo "<div class=\"error\">Error opening file: $file</div>";
 			return null;
 		}
-		else if (DEBUG) echo "<div class=\"debug\">File opened.</div>";
+		else if (DEBUG) echo "<div class=\"debug\">Opened: $file</div>";
 		
 		$globals = array();
 		$curve = array();

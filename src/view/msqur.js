@@ -26,6 +26,11 @@ $(function() {
 		$('#settingsPanel').toggle();
 	});
 	
+	
+	$('div.group-curves').accordion();
+	$('div.group-tables').accordion();
+	$('div.constant').tooltip();
+	
 	function normalizeTable(table)
 	{
 		var min = Number.MAX_SAFE_INTEGER;
