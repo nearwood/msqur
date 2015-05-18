@@ -173,6 +173,36 @@ class MsqurDB
 	}
 	
 	/**
+	 * @brief Reset regingest flag.
+	 * @param $id The metadata id
+	 * @returns true if successful, false otherwise
+	 */
+	public function resetReingest($id)
+	{
+		if (!$this->connect()) return false;
+		
+		try
+		{
+			if (DEBUG) echo '<div class="debug">Updating HTML cache...</div>';
+			$st = $this->db->prepare("UPDATE metadata m SET m.reingest=FALSE WHERE m.id = :id");
+			$this->tryBind($st, ":id", $id);
+			if ($st->execute())
+			{
+				if (DEBUG) echo '<div class="debug">Reingest reset.</div>';
+				return true;
+			}
+			else
+				if (DEBUG) echo '<div class="warn">Unable to update cache.</div>';
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * @brief Get MSQ HTML from metadata $id
 	 * @param $id The metadata id
 	 * @returns FALSE if not cached, null if not found, otherwise the HTML.
@@ -187,7 +217,8 @@ class MsqurDB
 		
 		if ($this->needReingest($id))
 		{
-			if (DEBUG) echo '<div class="debug info">Reingest flagged.</div>';
+			if (DEBUG) echo '<div class="debug info">Flagged for reingest.</div>';
+			$this->resetReingest($id);
 			return FALSE;
 		}
 		
@@ -300,6 +331,7 @@ class MsqurDB
 		if (!array_keys_exist($engine, 'nCylinders', 'twoStroke', 'injType', 'nInjectors', 'engineType'))
 		{
 			echo '<div class="warn">Incomplete engine information.</div>';
+			var_export($engine);
 			return false;
 		}
 		
