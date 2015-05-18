@@ -222,7 +222,7 @@ class MSQ
 		
 		$output .= '<h3>' . $curve['desc'] . '</h3>';
 		$output .= '<div class="curve"><table class="msq tablesorter 2d" hot="' . $hot . '">';
-		if ($helpText != null) $output .= '<caption>' . $helpText . '</caption>';
+		//if ($helpText != null) $output .= '<caption>' . $helpText . '</caption>';
 		
 		for ($c = 0; $c < $dataCount; $c++)
 		{
@@ -273,7 +273,7 @@ class MSQ
 			$output .= '<div class="table"><table class="msq tablesorter 3d ve" hot="' . $hot . '">';
 		}
 		
-		if ($helpText != null) $output .= '<caption>' . $helpText . '</caption>';
+		//if ($helpText != null) $output .= '<caption>' . $helpText . '</caption>';
 		$output .= "<thead><tr><th></th>"; //blank cell for corner
 		for ($c = 0; $c < $cols; $c++)
 		{
