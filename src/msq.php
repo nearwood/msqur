@@ -10,63 +10,6 @@ include "util.php";
 class MSQ
 {
 	/**
-	 * @brief Given a signature string, finds and parses the respective INI file.
-	 * 
-	 * Returns an array of the config file contents.
-	 * @param $signature The signature string which will be modified into a firmware/version array.
-	 */
-	public function getConfig(&$signature)
-	{
-		//sig is 19 bytes + \0
-		//"MS3 Format 0262.09 "
-		//"MS3 Format 0435.14P"
-		//"MS2Extra comms332m2"
-		//"MS2Extra comms333e2"
-		//"MS2Extra Serial321 "
-		//"MS2Extra Serial310 "
-		//"MSII Rev 3.83000   "
-		
-		//Get the signature from the MSQ
-		$sig = explode(' ', $signature); //, 3); limit 3 buckets
-		$msVersion = $sig[0];
-		if ($msVersion == "MS2Extra") $fwVersion = $sig[1];
-		else $fwVersion = $sig[2];
-		
-		if (DEBUG) echo "<div class=\"debug\">$msVersion/$fwVersion</div>";
-		
-		//Parse msVersion
-		switch ($msVersion)
-		{
-			case "MS1":
-				$msDir = "ms1/";
-				break;
-			case "MSII":
-				$msDir = "ms2/";
-				break;
-			case "MS2Extra":
-				$msDir = "ms2extra/";
-				break;
-			case "MS3":
-				$msDir = "ms3/";
-				break;
-		}
-		
-		//Setup firmware version for matching.
-		//(explode() already trimmed the string of spaces) -- this isn't true a couple inis
-		//If there's a decimal, remove any trailing zeros.
-		if (strrpos($fwVersion, '.') !== FALSE)
-			$fwVersion = rtrim($fwVersion, '0');
-		
-		//store all our hardwork for use in the calling function
-		$signature = array($msVersion, $fwVersion);
-		
-		$iniFile = "ini/" . $msDir . $fwVersion . ".ini";
-		$msqMap = INI::parse($iniFile, TRUE); //TODO Fix
-		
-		return $msqMap;
-	}
-	
-	/**
 	 * @brief Format a constant to HTML
 	 * @param $constant The constant name
 	 * @param $value It's value
@@ -77,7 +20,7 @@ class MSQ
 		//var_export($constant);
 		//var_export($value);
 		//var_export($help);
-		return '<div class="constant">' . $constant . ' (' . $help . '): ' . $value . '</div>';
+		return "<div class=\"constant\" title=\"$help\"><b>$constant</b>: $value</div>";
 	}
 	
 	/**
@@ -105,7 +48,7 @@ class MSQ
 			$htmlHeader .= '</div>';
 			
 			$sig = $msq->versionInfo['signature'];
-			$msqMap = $this->getConfig($sig);
+			$msqMap = INI::getConfig($sig);
 			
 			if ($msqMap == null)
 			{
@@ -137,7 +80,12 @@ class MSQ
 			$html["curves"] = "";
 			foreach ($curves as $curve)
 			{
-				if (DEBUG) echo '<div class="debug">Curve: ' . $curve['id'] . '</div>';
+				if (in_array($curve['id'], $this->msq_curve_blacklist))
+				{
+					if (DEBUG) echo '<div class="debug">Skipping curve: ' . $curve['id'] . '</div>';
+					continue;
+				}
+				else if (DEBUG) echo '<div class="debug">Curve: ' . $curve['id'] . '</div>';
 				
 				//id is just for menu (and our reference)
 				//need to find xBin (index 0, 1 is the live meatball variable)
@@ -188,6 +136,8 @@ class MSQ
 			$html["constants"] = "";
 			foreach ($constants as $key => $config)
 			{
+				if ($config[0] == "array") continue; //TODO Skip arrays until blacklist is done
+				
 				$value = $this->findConstant($msq, $key);
 				
 				//if (DEBUG) echo "<div class=\"debug\">Trying $key for engine data</div>";
@@ -205,9 +155,6 @@ class MSQ
 					
 					$html["constants"] .= $this->msqConstant($key, $value, $help);
 				}
-				
-				//$html[$group] .= $this->msqConstant($format['name'], $constant);
-				//TODO $format['units']
 			}
 		}
 		else
@@ -270,8 +217,9 @@ class MSQ
 			return $output;
 		}
 		
-		$output .= '<table class="msq tablesorter 2d" hot="' . $hot . '">';
-		$output .= '<caption>' . $curve['desc'] . '</caption>';
+		$output .= '<h3>' . $curve['desc'] . '</h3>';
+		$output .= '<div class="curve"><table class="msq tablesorter 2d" hot="' . $hot . '">';
+		if ($helpText != null) $output .= '<caption>' . $helpText . '</caption>';
 		
 		for ($c = 0; $c < $dataCount; $c++)
 		{
@@ -282,7 +230,7 @@ class MSQ
 			$output .= $xAxis[$c];
 			$output .= "</td></tr>";
 		}
-		$output .= "</table>";
+		$output .= "</table></div>";
 		return $output;
 	}
 	
@@ -311,17 +259,18 @@ class MSQ
 			return $output;
 		}
 		
+		$output .= '<h3>' . $table['desc'] . '</h3>';
 		//TODO Probably there's a better way to do this (like on the front end)
 		if (stripos($table['id'], "ve") === FALSE)
 		{
-			$output .= '<table class="msq tablesorter 3d" hot="' . $hot . '">';
+			$output .= '<div class="table"><table class="msq tablesorter 3d" hot="' . $hot . '">';
 		}
 		else
 		{
-			$output .= '<table class="msq tablesorter 3d ve" hot="' . $hot . '">';
+			$output .= '<div class="table"><table class="msq tablesorter 3d ve" hot="' . $hot . '">';
 		}
 		
-		$output .= '<caption>' . $table['desc'] . '</caption>';
+		if ($helpText != null) $output .= '<caption>' . $helpText . '</caption>';
 		$output .= "<thead><tr><th></th>"; //blank cell for corner
 		for ($c = 0; $c < $cols; $c++)
 		{
@@ -340,9 +289,18 @@ class MSQ
 		}
 		
 		$output .= "</tr>";
-		$output .= "</table>";
+		$output .= "</table></div>";
 		return $output;
 	}
+	
+	private $msq_curve_blacklist = array("vmcurve", "s5curve");
+	
+	private $msq_constant_blacklist = array("afrTable1",
+		"afrTable2",
+		"veTable1",
+		"veTable2",
+		"veTable3"
+	);
 }
 
 ?>
