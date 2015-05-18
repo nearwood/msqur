@@ -346,7 +346,7 @@ class MsqurDB
 			if (array_key_exists('injType'))
 				$this->tryBind($st, ":injType", $engine['injType']);
 			else
-				$this->tryBind($st, ":injType", "Four-stroke");
+				$this->tryBind($st, ":injType", "Port Injection");
 			
 			$this->tryBind($st, ":nInjectors", $engine['nInjectors']);
 			$this->tryBind($st, ":engineType", $engine['engineType']);
