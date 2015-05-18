@@ -40,24 +40,24 @@ class MSQ
 		
 		if ($msq)
 		{
-			$htmlHeader = '<div class="info">';
-			$htmlHeader .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
-			$htmlHeader .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
-			$htmlHeader .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
-			$htmlHeader .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
-			$htmlHeader .= '</div>';
+			$msqHeader = '<div class="info">';
+			$msqHeader .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
+			$msqHeader .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
+			$msqHeader .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
+			$msqHeader .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
+			$msqHeader .= '</div>';
 			
 			$sig = $msq->versionInfo['signature'];
 			$msqMap = INI::getConfig($sig);
 			
 			if ($msqMap == null)
 			{
-				$htmlHeader .= "<div class=\"error\">Unable to load the corresponding configuration file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1]</div>";
-				$html['header'] = $htmlHeader;
+				$msqHeader .= "<div class=\"error\">Unable to load the corresponding configuration file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1]</div>";
+				$html['msqHeader'] = $msqHeader;
 				return $html;
 			}
 			
-			$html['header'] = $htmlHeader;
+			$html['msqHeader'] = $msqHeader;
 			
 			//Calling function will update
 			$metadata['fileFormat'] = $msq->versionInfo['fileFormat'];
@@ -77,6 +77,7 @@ class MSQ
 			
 			$engineSchema = getEngineSchema();
 			
+			$html["precurves"] = '<div class="group-header">2D Tables (Curves)</div>';
 			$html["curves"] = "";
 			foreach ($curves as $curve)
 			{
@@ -109,6 +110,7 @@ class MSQ
 				else if (DEBUG) echo '<div class="debug">Missing/unsupported curve information: ' . $curve['id'] . '</div>';
 			}
 			
+			$html["pretables"] = '<div class="group-header">3D Tables</div>';;
 			$html["tables"] = "";
 			foreach ($tables as $table)
 			{
@@ -133,6 +135,7 @@ class MSQ
 				else if (DEBUG) echo '<div class="debug">Missing/unsupported table information: ' . $table['id'] . '</div>';
 			}
 			
+			$html["preconstants"] = '<div class="group-header">Constants</div>';
 			$html["constants"] = "";
 			foreach ($constants as $key => $config)
 			{
