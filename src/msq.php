@@ -215,7 +215,7 @@ class MSQ
 		$dataCount = count($xAxis);
 		if ($dataCount !== count($yAxis))
 		{
-			$output .= '<div class="error">Axis lengths not equal for: ' . $curve['desc'] . '</div>';
+			$output .= '<h3>' . $curve['desc'] . '</h3><div class="error">Axis lengths not equal for: ' . $curve['desc'] . '</div>';
 			//if (DEBUG) $output .= "<div class=\"debug\">Found engine data: $key ($constant)</div>";
 			return $output;
 		}
@@ -258,7 +258,7 @@ class MSQ
 		$dataCount = count($zBins);
 		if ($dataCount !== $rows * $cols)
 		{
-			$output .= '<div class="error">Axis/data lengths not equal for: ' . $table['desc'] . '</div>';
+			$output .= '<h3>' . $table['desc'] . '</h3><div class="error">Axis/data lengths not equal for: ' . $table['desc'] . '</div>';
 			return $output;
 		}
 		
