@@ -328,10 +328,10 @@ class MsqurDB
 	{
 		if (!$this->connect()) return false;
 		
-		if (!array_keys_exist($engine, 'nCylinders', 'twoStroke', 'injType', 'nInjectors', 'engineType'))
-		{
-			echo '<div class="warn">Incomplete engine information.</div>';
-			var_export($engine);
+		if (!array_keys_exist($engine, 'nCylinders', 'engineType', 'twoStroke', 'nInjectors'))
+		{//Some MSQs seem to be missing the injType
+			echo '<div class="warn">Incomplete engine information. Unable to update engine metadata.</div>';
+			//var_export($engine);
 			return false;
 		}
 		
@@ -342,7 +342,12 @@ class MsqurDB
 			$this->tryBind($st, ":id", $id);
 			$this->tryBind($st, ":nCylinders", $engine['nCylinders']);
 			$this->tryBind($st, ":twoStroke", $engine['twoStroke']);
-			$this->tryBind($st, ":injType", $engine['injType']);
+			
+			if (array_key_exists('injType'))
+				$this->tryBind($st, ":injType", $engine['injType']);
+			else
+				$this->tryBind($st, ":injType", "Four-stroke");
+			
 			$this->tryBind($st, ":nInjectors", $engine['nInjectors']);
 			$this->tryBind($st, ":engineType", $engine['engineType']);
 			if ($st->execute())
@@ -351,7 +356,7 @@ class MsqurDB
 				return true;
 			}
 			else
-				if (DEBUG) echo '<div class="warn">Unable to update engine.</div>';
+				if (DEBUG) echo '<div class="warn">Unable to update engine metadata.</div>';
 		}
 		catch (PDOException $e)
 		{
