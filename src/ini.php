@@ -1,7 +1,7 @@
 <?php
 /*
- * @brief INI Stuff
- * INI.getConfig
+ * @brief INI parsing
+ * 
  */
 class INI
 {
@@ -115,7 +115,17 @@ class INI
 			}
 			
 			//We don't handle formulas/composites yet
-			if (strpos($line, '{') !== FALSE) continue;
+			if (strpos($line, '{') !== FALSE)
+			{
+				//isolate expression, parse it, fill in variables from msq, give back result (true,false,42?)
+				//These are used in the ReferenceTables, Menus, and output/logging sections
+				
+				//For the menu, this is whether the menu item is visible or enabled.
+				INI::parseExpression($line);
+				
+				//if (DEBUG) echo "<div class=\"debug\">Skipping expression in line: $line</div>";
+				continue;
+			}
 			
 			//Pretty much anything left has an equals sign I think.
 			//Key-value pair around equals sign
@@ -299,7 +309,7 @@ class INI
 				case NULL:
 					//Should be global values (don't think any ini's have them)
 					assert($currentSection === NULL);
-					$globals[$key] = defaultSectionHandler($value);
+					$globals[$key] = INI::defaultSectionHandler($value);
 					continue; //Skip the section values assignment below
 				break;
 			}
@@ -324,8 +334,10 @@ class INI
 			return trim($value);
 	}
 	
-	public static function curveSectionHandler($value)
+	public static function parseExpression($line)
 	{
+		
+		
 		return NULL;
 	}
 }

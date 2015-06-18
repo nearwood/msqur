@@ -26,10 +26,59 @@ $(function() {
 		$('#settingsPanel').toggle();
 	});
 	
+	var accordionOptions = {
+		animate: false,
+		active: false, collapsible: true, //to avoid hooking 'create' to make the first graph render
+		heightStyle: "content",
+		activate: doChart
+	};
 	
-	$('div.group-curves').accordion();
-	$('div.group-tables').accordion();
+	$('div.group-curves').accordion(accordionOptions);
+	$('div.group-tables').accordion(accordionOptions);
 	$('div.constant').tooltip();
+	
+	Chart.defaults.global.animation = false;
+	//Chart.defaults.global.responsive = true;
+	
+	//2D charts
+	function doChart(event, ui) {
+	//$('div.curve').each(function(i) {
+		//var that = $(this); //ick
+		var that = ui.newPanel;
+		if (typeof that.find('table').get(0) === "undefined") return; //do nothing if panel is closing
+		
+		//Find data
+		var tbl = that.find('table').get(0);
+		var data = tbl2data($(tbl));
+		//var options = {};
+		
+		var ctx = that.find('canvas').get(0).getContext("2d");
+		var chart = new Chart(ctx).Line(data); //, options);
+		
+	//});
+	}
+	
+	function tbl2data(tbl)
+	{
+		var rows = tbl.find('tr');
+		var lbls = [];
+		var cells = [];
+		
+		rows.each(function(i) {
+			var that = $(this); //ick
+			
+			//.html() gets first element in set, .text() all matched elements
+			lbls.push(parseFloat(that.find('th').text()));
+			cells.push(parseFloat(that.find('td').text()));
+		});
+		
+		var data = {
+			labels: lbls,
+			datasets: [{label: "test", data: cells}]
+		};
+		
+		return data;
+	}
 	
 	function normalizeTable(table)
 	{
@@ -42,7 +91,7 @@ $(function() {
 		table.find('td').each(function(i) {
 			var v = parseFloat(this.textContent);
 			if (v < min) min = v;
-			else if (v > max) max = v;
+			if (v > max) max = v;
 		});
 		
 		//Precalculate some stuff
@@ -78,7 +127,7 @@ $(function() {
 		table.find('td').each(function(i) {
 			var v = parseFloat(this.textContent);
 			if (v < min) min = v;
-			else if (v > max) max = v;
+			if (v > max) max = v;
 		});
 		
 		if (table.attr('hot') == 'ascending')
@@ -90,6 +139,7 @@ $(function() {
 		//console.debug("Range: " + range);
 		var r = 0, g = 0, b = 0, percent = 0, intensity = 0.6;
 		
+		//MegaTune coloring scheme
 		table.find('td').each(function(i) {
 			var v = parseFloat(this.textContent);
 			percent = (v - min) / range;
