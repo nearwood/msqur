@@ -120,6 +120,25 @@ table th[scope=row] {
 	border-right: 2px solid #333;
 }
 
+div.curve {
+	float: left;
+	display: inline;
+}
+
+div.chart {
+	/* float: right; */
+	padding: 24px;
+	display: inline;
+}
+
+div.chart > canvas.curve {
+	
+}
+
+div.chart > canvas.table {
+	
+}
+
 /* Hidden features */
 span#literMargin input{
 	display: none;

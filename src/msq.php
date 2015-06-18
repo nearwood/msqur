@@ -221,19 +221,17 @@ class MSQ
 		}
 		
 		$output .= '<h3>' . $curve['desc'] . '</h3>';
-		$output .= '<div class="curve"><table class="msq tablesorter 2d" hot="' . $hot . '">';
+		$output .= '<div><div class="curve"><table class="msq tablesorter 2d" hot="' . $hot . '">';
 		//if ($helpText != null) $output .= '<caption>' . $helpText . '</caption>';
 		
 		for ($c = 0; $c < $dataCount; $c++)
 		{
-			//TODO This is not triggering tablesorter
-			$output .= '<tr><th class="{sorter: false}">';
-			$output .= $yAxis[$c];
-			$output .= "</th><td>";
-			$output .= $xAxis[$c];
-			$output .= "</td></tr>";
+			$output .= '<tr><th class="{sorter: false}">' . $xAxis[$c] . '</th>';
+			$output .= '<td>' . $yAxis[$c] . '</td></tr>';
 		}
-		$output .= "</table></div>";
+		
+		$output .= '</table></div><div class="chart"><canvas id="' . $curve['id'] . '" class="curve" width="360" height="240"></canvas></div></div>';
+		
 		return $output;
 	}
 	
@@ -262,7 +260,7 @@ class MSQ
 			return $output;
 		}
 		
-		$output .= '<h3>' . $table['desc'] . '</h3>';
+		$output .= '<h3>' . $table['desc'] . '</h3><div>';
 		//TODO Probably there's a better way to do this (like on the front end)
 		if (stripos($table['id'], "ve") === FALSE)
 		{
@@ -292,7 +290,8 @@ class MSQ
 		}
 		
 		$output .= "</tr>";
-		$output .= "</table></div>";
+		$output .= '</table></div><div class="chart"><canvas id="' . $table['id'] . '" class="table" width="360" height="240"></canvas></div></div>';
+		
 		return $output;
 	}
 	
