@@ -203,7 +203,7 @@ class MsqurDB
 	}
 	
 	/**
-	 * @brief Get MSQ HTML from metadata $id
+	 * @brief Get MSQ HTML from metadata id
 	 * @param $id The metadata id
 	 * @returns FALSE if not cached, null if not found, otherwise the HTML.
 	 */
