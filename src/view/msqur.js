@@ -61,10 +61,10 @@ $(function() {
 	//$('div.curve').each(function(i) {
 		//var that = $(this); //ick
 		var that = ui.newPanel;
-		if (typeof that.find('table').get(0) === "undefined") return; //do nothing if panel is closing
+		if (typeof that.find('tbody').get(0) === "undefined") return; //do nothing if panel is closing
 		
 		//Find data
-		var tbl = that.find('table').get(0);
+		var tbl = that.find('tbody').get(0);
 		var data = tbl2data($(tbl));
 		//var options = {};
 		
@@ -202,14 +202,14 @@ $(function() {
 	
 	$('input#colorizeData').change(function () {
 		if (this.checked)
-			$('table.msq').each(function(i) { colorTable($(this)); });
+			$('table.msq tbody').each(function(i) { colorTable($(this)); });
 		else
-			$('table.msq').each(function(i) { clearTableColor($(this)); });
+			$('table.msq tbody').each(function(i) { clearTableColor($(this)); });
 	});
 	
 	//default
 	$('input#colorizeData').prop('checked', true);
-	$('table.msq').each(function(i) { colorTable($(this)); });
+	$('table.msq tbody').each(function(i) { colorTable($(this)); });
 	
 	$('input#normalizeData').change(function () {
 		if (this.checked)
