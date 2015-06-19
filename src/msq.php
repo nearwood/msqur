@@ -317,7 +317,7 @@ class MSQ
 		}
 		
 		$output .= "</tr>";
-		$output .= '</table></div><div class="chart"><canvas id="' . $table['id'] . '" class="table" width="360" height="240"></canvas></div></div>';
+		$output .= '</table></div><!-- div class="chart"><canvas id="' . $table['id'] . '" class="table" width="360" height="240"></canvas></div --></div>';
 		
 		return $output;
 	}

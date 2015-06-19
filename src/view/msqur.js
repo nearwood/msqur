@@ -61,7 +61,7 @@ $(function() {
 	//$('div.curve').each(function(i) {
 		//var that = $(this); //ick
 		var that = ui.newPanel;
-		if (typeof that.find('tbody').get(0) === "undefined") return; //do nothing if panel is closing
+		if (that.find('tbody').length == 0 || that.find('div.table').length != 0) return; //do nothing if panel is closing, or if 3d table
 		
 		//Find data
 		var tbl = that.find('tbody').get(0);
