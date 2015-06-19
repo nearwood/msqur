@@ -3,45 +3,59 @@
 'Masker' for lack of better name.
 MegaSquirt MSQ file sharing and viewing site.
 
-Parses MSQ "XML" and displays it in a familiar format for viewing and comparison.
+Parses MSQ "XML" in tandem with an associated INI (config) file and displays it in a familiar format for viewing and comparing.
 
-MSQ XML is pretty bad XML, it doesn't take advantage of many XML features.
+### TODO ###
 
-# TODO #
+* Uploader (user)/Manager (admin)
+* 3D table charts
+* Tests and test lib.
+* Better DB update procedure.
 
-Uploader (user)/Manager (admin)
+### Installation ###
 
-### How do I get set up? ###
-
+Needed software:
 * AMP Stack
-* Arch: PHP, PHP-Apache, MariaDB/MySQL, phpMyAdmin, pdo_mysql.so in php.ini
-* Create database user and tables
-* Upload web files
-* How to run tests
+
+Recommended software:
+* phpMyAdmin
+
+Process:
+* Create database user and database itself.
+* Upload & deploy files.
+* Setup script.config with details.
+* Run db scripts.
 
 ### hgrc ##
+To display a fancy version string, modify your .hgrc to have this hook:
+
+```
+#!bash
+
 [hooks]
 post-update = hg log -r . --template "v{latesttag}-{latesttagdistance}-{node|short}\n" > VERSION
+```
 
-### Deployment instructions ###
-* Export tables (not entire DB)
-* Pull updates on host (don't overwrite DB config)
-* Import DB
+### Update & Deployment Instructions ###
+* Pull updates on host.
+* Update any configuration files (config.php, script.config) if needed.
+* Run any new DB scripts.
+* Run deploy.sh to copy web files to web server.
 
-### Contribution guidelines ###
+### License ###
 
-* Writing tests
-* Code review
-* Other guidelines
+msqur is licensed under the GPL v3.0. A copy of this license is included in the LICENSE.md file in the source tree.
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* Nicholas Earwood
+* nearwood@gmail.com
+* http://nearwood.net/
 
 ### Credits ###
 Apache, PHP, MySQL
-jQuery, jQuery UI
-jquery.tablesorter http://tablesorter.com/docs/
+jQuery, jQuery UI,
+jquery.tablesorter http://tablesorter.com/docs/,
+Chart.js,
 Tango Icon Theme
 Geany/Notepad++
