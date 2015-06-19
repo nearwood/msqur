@@ -9,8 +9,8 @@
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
 	<script src="view/lib/tablesorter/jquery.tablesorter.min.js"></script>
-	<script src="view/msqur.js"></script>
 	<script src="view/lib/Chart.js/Chart.min.js"></script>
+	<script src="view/msqur.js"></script>
 </head>
 <body>
 <div id="navigation"><span><button id="btnUpload">Upload</button></span><span><a href="browse.php">Browse</a></span><span><a>Search</a></span><span><a>Stats</a></span><span id="aboutLink">About</span></div>

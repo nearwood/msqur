@@ -224,6 +224,17 @@ class MSQ
 	{
 		$output = "";
 		$hot = 0;
+		$xLabel = "";
+		$yLabel = "";
+		
+		if (array_keys_exist($curve, 'xLabel', 'yLabel'))
+		{
+			//Get rid of quotes around the label strings.
+			$xLabel = trim($curve['xLabel'], '"');
+			$yLabel = trim($curve['yLabel'], '"');
+		}
+		
+		//var_export($curve);
 		
 		//if (DEBUG) echo '<div class="debug">Formatting curve: ' . $curve['id'] . '</div>';
 		
@@ -239,13 +250,14 @@ class MSQ
 		$output .= '<div><div class="curve"><table class="msq tablesorter 2d" hot="' . $hot . '">';
 		//if ($helpText != null) $output .= '<caption>' . $helpText . '</caption>';
 		
+		$output .= '<thead><tr><th>' . $xLabel . '</th><th>' . $yLabel . '</th></tr></thead><tbody>';
 		for ($c = 0; $c < $dataCount; $c++)
 		{
 			$output .= '<tr><th class="{sorter: false}">' . $xAxis[$c] . '</th>';
 			$output .= '<td>' . $yAxis[$c] . '</td></tr>';
 		}
 		
-		$output .= '</table></div><div class="chart"><canvas id="' . $curve['id'] . '" class="curve" width="360" height="240"></canvas></div></div>';
+		$output .= '</tbody></table></div><div class="chart"><canvas id="' . $curve['id'] . '" class="curve" width="360" height="240"></canvas></div></div>';
 		
 		return $output;
 	}
