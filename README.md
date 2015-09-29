@@ -61,5 +61,6 @@ Apache, PHP, MySQL
 jQuery, jQuery UI,
 jquery.tablesorter http://tablesorter.com/docs/,
 Chart.js,
-Tango Icon Theme
+AngularJS,
+Tango Icon Theme,
 Geany/Notepad++
