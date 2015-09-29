@@ -14,19 +14,22 @@ Parses MSQ "XML" in tandem with an associated INI (config) file and displays it 
 
 ### Installation ###
 
-Needed software:
+#### Needed software ####
+
 * AMP Stack
 
-Recommended software:
+#### Recommended software ####
+
 * phpMyAdmin
 
-Process:
+#### Process ####
+
 * Create database user and database itself.
 * Upload & deploy files.
 * Setup script.config with details.
 * Run db scripts.
 
-### hgrc ##
+#### hgrc ####
 To display a fancy version string, modify your .hgrc to have this hook:
 
 ```
@@ -37,10 +40,10 @@ post-update = hg log -r . --template "v{latesttag}-{latesttagdistance}-{node|sho
 ```
 
 ### Update & Deployment Instructions ###
-* Pull updates on host.
-* Update any configuration files (config.php, script.config) if needed.
-* Run any new DB scripts.
-* Run deploy.sh to copy web files to web server.
+ * Pull updates on host.
+ * Update any configuration files (config.php, script.config) if needed.
+ * Run any new DB scripts.
+ * Run deploy.sh to copy web files to web server.
 
 ### License ###
 

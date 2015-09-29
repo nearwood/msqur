@@ -52,11 +52,3 @@
 		</div>
 	</form>
 </div>
-<div id="settings">
-	<img id="settingsIcon" src="view/img/settings3.png"/>
-	<div id="settingsPanel" style="display:none;">
-		<label><input id="colorizeData" type="checkbox" />Colorize</label>
-		<label><input id="normalizeData" type="checkbox" title="Recalculate VE table values to a 5-250 unit scale"/>Normalize Data</label>
-		<label><input id="normalizeAxis" type="checkbox" disabled />Normalize Axis</label>
-	</div>
-</div>
