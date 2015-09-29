@@ -40,6 +40,7 @@ post-update = hg log -r . --template "v{latesttag}-{latesttagdistance}-{node|sho
 ```
 
 ### Update & Deployment Instructions ###
+
  * Pull updates on host.
  * Update any configuration files (config.php, script.config) if needed.
  * Run any new DB scripts.
