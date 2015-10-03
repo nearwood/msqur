@@ -21,15 +21,12 @@ require "ini.php";
 require "msq.php";
 
 /*
- * @brief Public API here?
+ * @brief Defines the actions taken at the user level.
  * 
- * Defines the actions taken at the user level:
  * upload
  * browse
  * view
  * etc.
- * 
- * @see http://www.aljtmedia.com/blog/creating-a-php-rest-routing-class-for-your-application/
  */
 class Msqur
 {
@@ -73,6 +70,46 @@ class Msqur
 	public function browse($page = 0)
 	{
 		return $this->db->browse($page);
+	}
+	
+	/*
+	 * @brief Clean out empty strings and fix PDO::fetch() array
+	 * @param $a an array of arrays or whatever the hell PDO:fetch(PDO:ASSOC) returns
+	 * @returns A 1
+	 *
+	private function cleanArray($a)
+	{
+		$ret = array();
+		foreach ($a as $l)
+		{
+			$fw = $l[0-?];
+			if (strlen(trim($fw)) != 0) $ret[] = $fw;
+		}
+		return $ret;
+	}*/
+	
+	public function getFirmwareList()
+	{//TODO Cache
+		$list = $this->db->getFirmwareList();
+		$ret = array();
+		foreach ($list as $l)
+		{
+			$fw = $l['firmware'];
+			if (strlen(trim($fw)) != 0) $ret[] = $fw;
+		}
+		return $ret;
+	}
+	
+	public function getFirmwareVersionList($fw)
+	{//TODO Cache
+		$list = $this->db->getFirmwareVersionList($fw);
+		$ret = array();
+		foreach ($list as $l)
+		{
+			$fw = $l['signature'];
+			if (strlen(trim($fw)) != 0) $ret[] = $fw;
+		}
+		return $ret;
 	}
 	
 	/**

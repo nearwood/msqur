@@ -3,8 +3,8 @@
 	<div>View MSQ files online. Upload your Tuner Studio .msq files to view and share them.</div>
 	<h3>How to use this site:</h3>
 	<div>
-		To add your MSQ file to share and view online:
-		Click on the upload button:
+		<h4>To add your MSQ file to share and view online:</h4>
+		<div>Click on the upload button:</div>
 		<div><img class="tutorial" id="tutorial1" src="view/img/tutorial1.png"/></div>
 	</div>
 	<div>

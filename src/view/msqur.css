@@ -159,11 +159,6 @@ div.chart > canvas.table {
 	
 }
 
-/* Hidden features */
-span#literMargin input{
-	display: none;
-}
-
 #engineForm {
 	display: table;
 }
@@ -182,7 +177,11 @@ span#literMargin input{
 }
 
 form#filter {
-	display: none;
+	/* display: none; */
+}
+
+span#literMargin input {
+	/* display: none; */
 }
 
 form#search {

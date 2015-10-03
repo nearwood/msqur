@@ -300,6 +300,51 @@ class MsqurDB
 	}
 	
 	/**
+	 * @brief Get all unique firmware names listed in DB
+	 * @returns List of strings
+	 */
+	public function getFirmwareList()
+	{
+		if (!$this->connect()) return null;
+			
+		try
+		{
+			if (DEBUG) echo "<div class=\"debug\">Getting firmware list...</div>";
+			$st = $this->db->prepare("SELECT DISTINCT firmware FROM `metadata`");
+			
+			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
+			else echo "<div class=\"error\">Error getting firmware list</div>";
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+	}
+	
+	/**
+	 * @brief Get all unique firmware versions listed in DB
+	 * @returns List of strings
+	 */
+	public function getFirmwareVersionList($firmware)
+	{
+		if (!$this->connect()) return null;
+			
+		try
+		{
+			if (DEBUG) echo "<div class=\"debug\">Getting firmware list...</div>";
+			$st = $this->db->prepare("SELECT DISTINCT signature FROM `metadata` WHERE firmware = :fw");
+			$this->tryBind($st, ":fw", $firmware);
+			
+			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
+			else echo "<div class=\"error\">Error getting firmware version list for: $firmware</div>";
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+	}
+	
+	/**
 	 * @brief Update HTML cache of MSQ by metadata id
 	 * @param $id integer The ID of the metadata.
 	 * @param $html String HTML string of the shit to update.
