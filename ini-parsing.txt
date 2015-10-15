@@ -1,0 +1,44 @@
+INI process
+
+1) find constant name
+[Constants]
+veTable1        = array ,  U08,      0,      [16x16], "%",        1.00000,   0.00000,  0.00,  255.00,      0 ; * (144 bytes)
+
+2) get description from [SettingContextHelp]
+; constantName = "Help Text"
+veTable1 = ""
+
+3) Find any tables/curves
+[CurveEditor]
+curve = crankingPW, "Cranking Pulsewidth%"
+;     topicHelp   = "http://www.megasquirt.info/xxx"
+      columnLabel = "Coolant", "Cranking PW%"
+	#if EXPANDED_CLT_TEMP
+      xAxis       = -40, 350, 9
+      xAxis       = -40, {cltmax}, 9
+	#else
+      xAxis       = -40, 220, 9
+	#endif
+      yAxis       =   0,  500, 6
+      xBins       = temp_table_p5, coolant
+      yBins       = crankPctTable
+      gauge       = cltGauge
+
+
+[TableEditor]
+;       table_id,    map3d_id,    "title",      page
+;std 16x16
+   table = veTable1Tbl, veTable1Map, "VE Table 1", 5
+      ;             constant,   variable
+      xBins       = frpm_table1, rpm
+      yBins       = fmap_table1, fuelload
+      zBins       = veTable1
+
+      upDownLabel = "RICHER", "LEANER"
+      gridHeight  = 2.0
+      gridOrient  = 250,   0, 340 ; Space 123 rotation of grid in degrees.
+
+X) Parse menu (UI overhaul)
+[Menu]
+menu = "&Basic setup"
+ subMenu = veTable1Tbl,     "Fuel VE Table &1", 0,{ (feature4_0VEtblsize==0) }

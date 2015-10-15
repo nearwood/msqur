@@ -1,0 +1,5 @@
+.*.msq
+script.config$
+config.php$
+VERSION
+doxygen/*

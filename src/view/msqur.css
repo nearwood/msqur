@@ -1,0 +1,189 @@
+/* msqur - MegaSquirt .msq file viewer web application
+Copyright (C) 2015 Nicholas Earwood nearwood@gmail.com http://nearwood.net
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>. */
+
+* {
+	font-family: "Verdana", sans-serif;
+}
+
+div.error {
+	color: red;
+}
+
+div.warn, div.warning {
+	color: orange;
+}
+
+div.info {
+	color: green;
+}
+
+div.debug {
+	font-family: monospace !important;
+	color: dark-gray;
+}
+
+div#navigation {
+	background: #333;
+	color: white;
+	padding: 8px 24px 8px 24px;
+}
+
+div#navigation span {
+	font-weight: bold;
+	padding: 0px 8px 0px 8px;
+}
+
+div#navigation a:link {
+	color: green;
+}
+div#navigation a:hover {
+	color: white;
+}
+div#navigation a:active {
+	color: white;
+}
+div#navigation a:visited {
+	color: red;
+}
+
+div#splash img.tutorial {
+	margin-bottom: 32px;
+}
+
+div.footer {
+	font-size: 0.66em;
+	text-align: right;
+	color: light-gray;
+	position: fixed;
+	bottom: 4px;
+	right: 8px;
+	z-index: -999
+}
+
+div#settings {
+	z-index: 999;
+	background: rgba(224, 224, 224, 32);
+	position: absolute;
+	margin-top: 4px;
+	right: 8px;
+}
+
+#fileDropZone {
+	border: 2px dashed #bbb;
+	border-radius: 5px;
+	padding: 25px;
+	text-align: center;
+	font: 20pt bold 'Vollkorn';
+	color: #bbb;
+}
+
+table {
+	border-collapse: collapse;
+	border: 1px solid #CCC;
+	/*width: 100%;*/
+}
+
+table caption {
+	caption-side: top;
+	font-size: 0.75em;
+	font-style: bold;
+	text-align: left;
+	padding: 0.2em;
+}
+
+div[class^="group-"] {
+	border: 4px solid #F0F0F0;
+}
+
+div.group-header {
+	font-size: 3em;
+	text-align: center;
+	font-style: bold;
+}
+
+table.msq td:hover {
+	background-color: magenta !important;
+}
+
+table th, table td {
+	padding: 4px;
+	border: 1px dotted #333;
+	font-size: smaller;
+	text-align: center;
+}
+
+/* eh, need to switch top/bottom border dep. on where the header is */
+table th[scope=col] {
+	border-top: 2px solid #333;
+	border-right: 2px solid #333;
+}
+
+/* inbetween headers but not ends */
+table th+th[scope=col] {
+	border-right: 1px dotted #666;
+}
+
+table th[scope=row] {
+	border-right: 2px solid #333;
+}
+
+div.curve {
+	float: left;
+	display: inline;
+}
+
+div.chart {
+	/* float: right; */
+	padding: 24px;
+	display: inline;
+}
+
+div.chart > canvas.curve {
+	
+}
+
+div.chart > canvas.table {
+	
+}
+
+#engineForm {
+	display: table;
+}
+
+#engineForm div.formDiv {
+	display: table-row;
+}
+
+#engineForm input, #engineForm label {
+	display: table-cell;
+	width: 100%;
+}
+
+#engineForm span {
+	font-size: small;
+}
+
+form#filter {
+	/* display: none; */
+}
+
+span#literMargin input {
+	/* display: none; */
+}
+
+form#search {
+	display: none;
+}

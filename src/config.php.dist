@@ -1,0 +1,33 @@
+<?php
+define('CONFIG_VERSION', "4");
+define('DB_HOST', "localhost");
+define('DB_USERNAME', "msqur");
+define('DB_PASSWORD', "");
+define('DB_NAME', "msqur");
+
+define('DEBUG', FALSE);
+define('DISABLE_MSQ_CACHE', FALSE);
+
+error_reporting(E_ALL);
+
+ini_set('display_errors', DEBUG ? 'On' : 'Off');
+//ini_set('log_errors', DEBUG ? 'Off' : 'On');
+
+//Default in case it's not set in php.ini
+//MSQUR-1
+date_default_timezone_set('UTC');
+
+assert_options(ASSERT_ACTIVE, DEBUG ? 1 : 0);
+assert_options(ASSERT_WARNING, 0);
+assert_options(ASSERT_QUIET_EVAL, 1);
+
+//Setup assert() callback
+function msqur_assert_handler($file, $line, $code)
+{
+    echo "<div class=\"error\">Assertion Failed:<br />
+        File '$file'<br />
+        Line '$line'<br />
+        Code '$code'<br /></div>";
+}
+assert_options(ASSERT_CALLBACK, 'msqur_assert_handler');
+?>
