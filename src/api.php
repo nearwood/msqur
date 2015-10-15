@@ -15,13 +15,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
-define('DEBUG', FALSE); //Debug output is bad for API
+define('DEBUG', FALSE); //Debug output is bad for APIhg 
 
 require "msqur.php";
 
 //TODO Check query vars, call appropriate method
 echo "API ACCESS GRANTED";
 
+/* mod_rewrite rules needed:
+
+<IfModule rewrite_module>
+RewriteEngine on
+RewriteRule /msqur/api/fw/list /msqur/api.php?fw=list
+RewriteRule ^/msqur/api/fw/([A-Za-z0-9_]+)/versions$ /msqur/api.php?fw=$1?v=list
+RewriteRule ^/msqur/api/msq/([0-9]+)$ /msqur/api.php?msq=$1
+</IfModule>
+
+ */
 
 /*
  * @brief Public API
