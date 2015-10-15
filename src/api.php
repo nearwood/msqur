@@ -15,7 +15,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
+define('DEBUG', FALSE); //Debug output is bad for API
+
 require "msqur.php";
+
+//TODO Check query vars, call appropriate method
+echo "API ACCESS GRANTED";
+
 
 /*
  * @brief Public API
@@ -29,11 +35,14 @@ require "msqur.php";
  */
 class API
 {
-	$fwList = $msqur->getFirmwareVersionList('MS2Extra');
-	var_export($msqur->getFirmwareVersionList('MS2Extra'));
-	foreach ($fwList as $fw)
+	public function fwList()
 	{
-		echo $fw;
+		$fwList = $msqur->getFirmwareVersionList('MS2Extra');
+		var_export($msqur->getFirmwareVersionList('MS2Extra'));
+		foreach ($fwList as $fw)
+		{
+			echo $fw;
+		}
 	}
 }
 

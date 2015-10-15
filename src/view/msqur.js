@@ -42,6 +42,18 @@ $(function() {
 		$('#settingsPanel').toggle();
 	});
 	
+	$('select#firmware').change(function(){
+		getFirmwareVersions($(this).children(":selected").html());
+	});
+	
+	function getFirmwareVersions(fw) {
+		$.ajax({
+			url: "api.php?req=",
+		}).done(function( html ) {
+			$( "#results" ).append( html );
+		});
+	};
+	
 	var accordionOptions = {
 		animate: false,
 		active: false, collapsible: true, //to avoid hooking 'create' to make the first graph render

@@ -14,7 +14,7 @@
 			</select>
 		</div>
 		<div>Firmware
-			<select name="firmware">
+			<select name="firmware" id="firmware">
 				<option value="any" selected>-- Any --</option>
 				<?php
 					$fwList = $msqur->getFirmwareList();
