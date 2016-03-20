@@ -15,7 +15,27 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
+//So as to not garble up the JSON response
+ini_set('display_errors', API_DEBUG ? 'On' : 'Off');
+
 require "msqur.php";
+
+function parseQueryString($s)
+{
+	$ret = null;
+	if (isset($_GET[$s]))
+	{
+		$ret = htmlspecialchars($_GET[$s]);
+		if (strlen($ret) == 0) $ret = null;
+	}
+	
+	return $ret;
+}
+
+$method = parseQueryString('method');
+$auth = parseQueryString('token') || parseQueryString('auth');
+$api = new API($msqur, $auth);
+echo $api->call($method);
 
 /*
  * @brief Public API
@@ -24,17 +44,75 @@ require "msqur.php";
  * get firmware versions (for ajax calls)
  * get tune files?
  * get individual tables?
- * 
- * @see http://www.aljtmedia.com/blog/creating-a-php-rest-routing-class-for-your-application/
  */
 class API
 {
-	$fwList = $msqur->getFirmwareVersionList('MS2Extra');
-	var_export($msqur->getFirmwareVersionList('MS2Extra'));
-	foreach ($fwList as $fw)
+	const VERSION = 1;
+	private $isAuthenticated = false;
+	private $result = "";
+	private $msqur = null;
+	
+	public function __construct($msqur, $authToken)
 	{
-		echo $fw;
+		$this->msqur = $msqur;
+		$this->authenticate($authToken);
+	}
+	
+	public function authenticate($authToken)
+	{//TODO Proper auth steps
+		$this->isAuthenticated = true;
+		return $this->isAuthenticated;
+	}
+	
+	public function call($method)
+	{
+		$result = array("version" => API::VERSION);
+		
+		if (!$this->isAuthenticated)
+		{
+			$result["error"] = "Invalid authentication";
+			return json_encode($result);
+		}
+		
+		//I'm sorry
+		switch ($method)
+		{
+			case 'firmwareList':
+				$result = array($method => $this->msqur->getFirmwareList());
+				break;
+			case 'firmwareVersions':
+				$fw = parseQueryString('firmware');
+				$result = array($method => $this->msqur->getFirmwareVersionList($fw));
+				break;
+			case 'engineMakes':
+				//$a = parseQueryString('firmware'); //TODO inverse code->make is probably not frequent enough to bother
+				$result = array($method => $this->msqur->getEngineMakeList());
+				//SELECT DISTINCT make FROM `engines` WHERE 1
+				break;
+			case 'engineCodes':
+				$make = parseQueryString('make'); //optional
+				$result = array($method => $this->msqur->getEngineCodeList($make));
+				//SELECT DISTINCT code FROM `engines` WHERE 1
+				break;
+			case 'cylinders':
+				//SELECT DISTINCT cylinders FROM `engines` WHERE 1
+				break;
+			case 'displacements':
+				//SELECT DISTINCT make FROM `engines` WHERE 1 //TODO Will need to make this into ranges...
+				break;
+			case 'compressionratios':
+				//SELECT DISTINCT make FROM `engines` WHERE 1
+				break;
+			case 'aspirations':
+				//SELECT DISTINCT make FROM `engines` WHERE 1
+				break;
+			//TODO upload date range?
+			default:
+				$result["error"] = "Invalid API call";
+				break;
+		}
+		
+		return json_encode($result);
 	}
 }
-
 ?>

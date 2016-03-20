@@ -300,6 +300,35 @@ class MsqurDB
 	}
 	
 	/**
+	 * @brief Search metadata for any hits against a search query
+	 * @param $query The string to search against
+	 * @returns A list of matching metadata, or null if unsuccessful
+	 */
+	public function search($query)
+	{
+		if (!$this->connect()) return null;
+		//tuneComment, uploadDate writeDate author firmware signature e.make e.code e.displacement e.compression e.numCylinders
+		//firmware signature e.make e.code e.displacement e.compression e.numCylinders
+		try
+		{
+			$st = $this->db->prepare("SELECT m.id as mid, make, code, numCylinders, displacement, compression, induction, firmware, signature, uploadDate, views FROM metadata m INNER JOIN engines e ON m.engine = e.id WHERE firmware LIKE :query");
+			$this->tryBind($st, ":query", "%" . $query . "%"); //TODO exact/wildcard option
+			if ($st->execute())
+			{
+				$result = $st->fetchAll(PDO::FETCH_ASSOC);
+				return $result;
+			}
+			else echo '<div class="error">There was a problem constructing the search query.</div>';
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * @brief Get all unique firmware names listed in DB
 	 * @returns List of strings
 	 */
@@ -322,21 +351,47 @@ class MsqurDB
 	}
 	
 	/**
-	 * @brief Get all unique firmware versions listed in DB
+	 * @brief Get unique firmware versions listed in DB
+	 * @param $firmware name of firmware to limit versions to
 	 * @returns List of strings
 	 */
 	public function getFirmwareVersionList($firmware)
 	{
 		if (!$this->connect()) return null;
-			
+		
 		try
 		{
-			if (DEBUG) echo "<div class=\"debug\">Getting firmware list...</div>";
-			$st = $this->db->prepare("SELECT DISTINCT signature FROM `metadata` WHERE firmware = :fw");
-			$this->tryBind($st, ":fw", $firmware);
+			if (DEBUG) echo "<div class=\"debug\">Getting firmware version list...</div>";
+			if ($firmware == null)
+			{
+				$st = $this->db->prepare("SELECT DISTINCT signature FROM `metadata`");
+			}
+			else
+			{
+				$st = $this->db->prepare("SELECT DISTINCT signature FROM `metadata` WHERE firmware = :fw");
+				$this->tryBind($st, ":fw", $firmware);
+			}
 			
 			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
 			else echo "<div class=\"error\">Error getting firmware version list for: $firmware</div>";
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+	}
+	
+	public function getEngineMakeList()
+	{
+		if (!$this->connect()) return null;
+			
+		try
+		{
+			if (DEBUG) echo "<div class=\"debug\">Getting engine make list...</div>";
+			$st = $this->db->prepare("SELECT DISTINCT make FROM `engines`");
+			
+			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
+			else echo "<div class=\"error\">Error getting engine make list</div>";
 		}
 		catch (PDOException $e)
 		{

@@ -16,18 +16,29 @@ Parses MSQ "XML" in tandem with an associated INI (config) file and displays it 
 
 #### Needed software ####
 
-* AMP Stack
+* AMP Stack: Apache, MySQL (MariaDB), PHP
+* MySQL PDO extension for PHP:
+`/etc/php/php.ini`:
+`extension=pdo_mysql.so`
+
+Arch Linux:
+# pacman -S apache mysql php php-apache
 
 #### Recommended software ####
 
-* phpMyAdmin
+* phpMyAdmin - For managing the DB
+* rsync - For the deployment script
 
-#### Process ####
+#### Development Setup ####
 
-* Create database user and database itself.
-* Upload & deploy files.
-* Setup script.config with details.
-* Run db scripts.
+# Clone repo to dev directory
+# Copy script.config.dist to script.config
+# Copy src/config.php.dist to src/config.php
+# Create database for msqur, and assign it a user
+# Setup parameters in each config file
+# Update DB with update scripts in sequential order
+# Run deploy script
+# Test
 
 #### hgrc ####
 To display a fancy version string, modify your .hgrc to have this hook:
