@@ -18,21 +18,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 require "msqur.php";
 
 if (isset($_GET['p'])) {
-	$page = $_GET['p']; //TODO processing
+	$page = htmlspecialchars($_GET['p']);
 } else $page = 0;
 
 $results = $msqur->browse($page);
 $numResults = count($results);
 
-//echo '<div class="debug">'; var_export($results); echo '</div>';
-
 $msqur->header();
 
-require "view/filter.php";
-
+//require "view/browse.php";
+?>
+<div class="browse" id="categories">
+	<div>Makes: <div class="browse" id="makes"></div></div>
+	<div>Models: <div class="browse" id="models"></div></div>
+	<div>Firmware: <div class="browse" id="firmware"></div></div>
+	<div>Versions: <div class="browse" id="versions"></div></div>
+</div>
+<script src="view/browse.js"></script>
+<?php
 echo '<div id="content"><div class="info">' . $numResults . ' results.</div>';
-echo '<table>';
-echo '<tr><th>ID</th><th>Engine Make</th><th>Engine Code</th><th>Cylinders</th><th>Liters</th><th>Compression</th><th>Aspiration</th><th>Firmware/Version</th><th>Upload Date</th><th>Views</th></th>';
+echo '<table ng-controller="BrowseController">';
+echo '<tr><th>ID</th><th>Engine Make</th><th>Engine Code</th><th>Cylinders</th><th>Liters</th><th>Compression</th><th>Aspiration</th><th>Firmware/Version</th><th>Upload Date</th><th>Views</th></tr>';
 for ($c = 0; $c < $numResults; $c++)
 {
 	$aspiration = $results[$c]['induction'] == 1 ? "Turbo" : "NA";

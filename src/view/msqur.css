@@ -123,6 +123,7 @@ table th, table td {
 	border: 1px dotted #333;
 	font-size: smaller;
 	text-align: center;
+	white-space: nowrap;
 }
 
 /* eh, need to switch top/bottom border dep. on where the header is */
@@ -176,14 +177,34 @@ div.chart > canvas.table {
 	font-size: small;
 }
 
-form#filter {
-	/* display: none; */
+form#search #btnSearch {
+	float: right;
+}
+
+input:invalid {
+	outline: 2px solid red;
+}
+
+input:focus:invalid {
+  color: red;
 }
 
 span#literMargin input {
 	/* display: none; */
 }
 
-form#search {
-	display: none;
+#faq .q {
+	font-weight: bold;
+}
+
+#faq li.q:before {
+	content: "Q: ";
+}
+
+#faq li.a:before {
+	content: "A: ";
+}
+
+#faq li.a {
+	margin-bottom: 1em;
 }
