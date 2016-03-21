@@ -1,10 +1,10 @@
 "use strict"
 
 $(function() {
-	var $makes = $('.browse#makes');
-	var $models = $('.browse#models');
-	var $firmware = $('.browse#firmware');
-	var $versions = $('.browse#versions');
+	var $makes = $('.browse #makes');
+	var $models = $('.browse #models');
+	var $firmware = $('.browse #firmware');
+	var $versions = $('.browse #versions');
 	
 	apiGet('engineMakes', $makes);
 	apiGet('engineModels', $models);
@@ -16,7 +16,7 @@ $(function() {
 		$.get("api.php?method=" + method, function(data) {
 			if (method in data) {
 				data[method].forEach(function(a) {
-					$target.append('<span>' + a + '</span>');
+					$target.append('<div><a href="">' + a + '</a></div>');
 				});
 			}
 		}, "json");

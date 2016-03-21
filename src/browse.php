@@ -29,10 +29,10 @@ $msqur->header();
 //require "view/browse.php";
 ?>
 <div class="browse" id="categories">
-	<div>Makes: <div class="browse" id="makes"></div></div>
-	<div>Models: <div class="browse" id="models"></div></div>
-	<div>Firmware: <div class="browse" id="firmware"></div></div>
-	<div>Versions: <div class="browse" id="versions"></div></div>
+	<div>Makes: <div class="category" id="makes"></div></div>
+	<div>Models: <div class="category" id="models"></div></div>
+	<div>Firmware: <div class="category" id="firmware"></div></div>
+	<div>Versions: <div class="category" id="versions"></div></div>
 </div>
 <script src="view/browse.js"></script>
 <?php

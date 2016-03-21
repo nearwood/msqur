@@ -129,7 +129,7 @@ class Msqur
 	public function view($id)
 	{
 		$this->header();
-		if (DEBUG) error_log('<div class="debug">Load MSQ: ' . $id . '</div>');
+		if (DEBUG) debug('<div class="debug">Load MSQ: ' . $id . '</div>');
 		//Get cached HTML and display it, or reparse and display (in order)
 		$html = $this->getMSQ($id);
 		if ($html !== null)

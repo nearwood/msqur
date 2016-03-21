@@ -208,3 +208,8 @@ span#literMargin input {
 #faq li.a {
 	margin-bottom: 1em;
 }
+
+.browse .category > div {
+	padding: 6px;
+	display: inline-block;
+}
