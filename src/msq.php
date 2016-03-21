@@ -48,7 +48,7 @@ class MSQ
 	public function parseMSQ($xml, &$engine, &$metadata)
 	{
 		$html = array();
-		if (DEBUG) echo '<div class="debug">Parsing MSQ...</div>';
+		if (DEBUG) error_log('<div class="debug">Parsing MSQ...</div>');
 		$errorCount = 0; //Keep track of how many things go wrong.
 		
 		$msq = simplexml_load_string($xml);
@@ -98,10 +98,10 @@ class MSQ
 			{
 				if (in_array($curve['id'], $this->msq_curve_blacklist))
 				{
-					if (DEBUG) echo '<div class="debug">Skipping curve: ' . $curve['id'] . '</div>';
+					if (DEBUG) error_log('<div class="debug">Skipping curve: ' . $curve['id'] . '</div>');
 					continue;
 				}
-				else if (DEBUG) echo '<div class="debug">Curve: ' . $curve['id'] . '</div>';
+				else if (DEBUG) error_log('<div class="debug">Curve: ' . $curve['id'] . '</div>');
 				
 				//id is just for menu (and our reference)
 				//need to find xBin (index 0, 1 is the live meatball variable)
@@ -122,14 +122,14 @@ class MSQ
 					$yAxis = preg_split("/\s+/", trim($yBins));
 					$html["curves"] .= $this->msqTable2D($curve, $curve['xMin'], $curve['xMax'], $xAxis, $curve['yMin'], $curve['yMax'], $yAxis, $help);
 				}
-				else if (DEBUG) echo '<div class="debug">Missing/unsupported curve information: ' . $curve['id'] . '</div>';
+				else if (DEBUG) error_log('<div class="debug">Missing/unsupported curve information: ' . $curve['id'] . '</div>');
 			}
 			
 			$html["pretables"] = '<div class="group-header">3D Tables</div>';;
 			$html["tables"] = "";
 			foreach ($tables as $table)
 			{
-				if (DEBUG) echo '<div class="debug">Table: ' . $table['id'] . '</div>';
+				if (DEBUG) error_log('<div class="debug">Table: ' . $table['id'] . '</div>');
 				
 				$help = NULL;
 				if (array_key_exists('topicHelp', $table))
@@ -147,7 +147,7 @@ class MSQ
 					$zData = preg_split("/\s+/", trim($zBins));//, PREG_SPLIT_NO_EMPTY); //, $limit);
 					$html["tables"] .= $this->msqTable3D($table, $xAxis, $yAxis, $zData, $help);
 				}
-				else if (DEBUG) echo '<div class="debug">Missing/unsupported table information: ' . $table['id'] . '</div>';
+				else if (DEBUG) error_log('<div class="debug">Missing/unsupported table information: ' . $table['id'] . '</div>');
 			}
 			
 			$html["preconstants"] = '<div class="group-header">Constants</div>';
@@ -236,7 +236,7 @@ class MSQ
 		
 		//var_export($curve);
 		
-		//if (DEBUG) echo '<div class="debug">Formatting curve: ' . $curve['id'] . '</div>';
+		//if (DEBUG) error_log('<div class="debug">Formatting curve: ' . $curve['id'] . '</div>');
 		
 		$dataCount = count($xAxis);
 		if ($dataCount !== count($yAxis))
@@ -278,7 +278,7 @@ class MSQ
 		$rows = count($yAxis);
 		$cols = count($xAxis);
 		
-		//if (DEBUG) echo '<div class="debug">Formatting table: ' . $table['id'] . '</div>';
+		//if (DEBUG) error_log('<div class="debug">Formatting table: ' . $table['id'] . '</div>');
 		
 		$dataCount = count($zBins);
 		if ($dataCount !== $rows * $cols)

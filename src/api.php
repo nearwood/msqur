@@ -15,9 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
-//So as to not garble up the JSON response
-ini_set('display_errors', API_DEBUG ? 'On' : 'Off');
-
 require "msqur.php";
 
 function parseQueryString($s)
