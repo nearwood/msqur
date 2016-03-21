@@ -25,7 +25,7 @@ $msqur->header();
 	<p>Created out of a need to share .MSQ files.
 	I was tired of downloading files and having to open them in <strike>MegaTune</strike> Tuner Studio.
 	So, I created this site. It's open source, so <a href="https://bitbucket.org/nearwood/msqur">feel free to contribute</a>.
-	Since going "live" I only add things here and there whenever I have time or the urge to work in PHP (ha!).</p>
+	Since going "live" I only add things here and there whenever I have time or the urge to add features/fixes.</p>
 </div>
 <div>
 	<h2>FAQ</h2>
