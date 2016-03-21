@@ -125,7 +125,7 @@ class MsqurDB
 			
 			try
 			{
-				if (DEBUG) echo "<div class=\"debug\">Add engine: \"$make\", \"$code\", $displacement, $compression, $turbo</div>";
+				if (DEBUG) error_log("<div class=\"debug\">Add engine: \"$make\", \"$code\", $displacement, $compression, $turbo</div>");
 				//TODO use any existing one before creating
 				$st = $this->db->prepare("INSERT INTO engines (make, code, displacement, compression, induction) VALUES (:make, :code, :displacement, :compression, :induction)");
 				
@@ -149,7 +149,7 @@ class MsqurDB
 			}
 		}
 		
-		if (DEBUG) echo "<div class=\"debug\">Add engine returns: $id</div>";
+		if (DEBUG) error_log("<div class=\"debug\">Add engine returns: $id</div>");
 		return $id;
 	}
 	
@@ -175,7 +175,7 @@ class MsqurDB
 			}
 			else
 			{
-				if (DEBUG) echo "<div class=\"debug\">No result for $id</div>";
+				if (DEBUG) error_log("<div class=\"debug\">No result for $id</div>");
 				echo '<div class="error">Invalid MSQ</div>';
 			}
 		}
@@ -259,7 +259,7 @@ class MsqurDB
 			}
 			else
 			{
-				if (DEBUG) echo "<div class=\"debug\">No result for $id</div>";
+				if (DEBUG) error_log("<div class=\"debug\">No result for $id</div>");
 				echo '<div class="error">Invalid MSQ</div>';
 				return null;
 			}
@@ -338,7 +338,7 @@ class MsqurDB
 			
 		try
 		{
-			if (DEBUG) echo "<div class=\"debug\">Getting firmware list...</div>";
+			if (DEBUG) error_log("<div class=\"debug\">Getting firmware list...</div>");
 			$st = $this->db->prepare("SELECT DISTINCT firmware FROM `metadata`");
 			
 			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
@@ -361,7 +361,7 @@ class MsqurDB
 		
 		try
 		{
-			if (DEBUG) echo "<div class=\"debug\">Getting firmware version list...</div>";
+			if (DEBUG) error_log("<div class=\"debug\">Getting firmware version list...</div>");
 			if ($firmware == null)
 			{
 				$st = $this->db->prepare("SELECT DISTINCT signature FROM `metadata`");
@@ -387,7 +387,7 @@ class MsqurDB
 			
 		try
 		{
-			if (DEBUG) echo "<div class=\"debug\">Getting engine make list...</div>";
+			if (DEBUG) error_log("<div class=\"debug\">Getting engine make list...</div>");
 			$st = $this->db->prepare("SELECT DISTINCT make FROM `engines`");
 			
 			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
