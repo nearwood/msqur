@@ -21,9 +21,6 @@ Parses MSQ "XML" in tandem with an associated INI (config) file and displays it 
 `/etc/php/php.ini`:
 `extension=pdo_mysql.so`
 
-Arch Linux:
-# pacman -S apache mysql php php-apache
-
 #### Recommended software ####
 
 * phpMyAdmin - For managing the DB
