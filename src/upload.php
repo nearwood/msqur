@@ -95,7 +95,7 @@ if (isset($_POST['upload']) && isset($_FILES))
 			echo '<div class="info">' . count($files) . ' files were uploaded.</div>';
 		//$motor = $validate($_POST['cylinders'])
 		
-		if (DEBUG) echo '<div class="debug">Adding engine: ' . $_POST['make'] . ', ' . $_POST['code'] . ', ' . $_POST['displacement'] . ', ' . $_POST['compression'] . ', ' . $_POST['aspiration'] . '</div>';
+		if (DEBUG) error_log('<div class="debug">Adding engine: ' . $_POST['make'] . ', ' . $_POST['code'] . ', ' . $_POST['displacement'] . ', ' . $_POST['compression'] . ', ' . $_POST['aspiration'] . '</div>');
 		
 		$engineid = $msqur->addEngine($_POST['make'], $_POST['code'], $_POST['displacement'], $_POST['compression'], $_POST['aspiration']);
 		$fileList = $msqur->addMSQs($files, $engineid);

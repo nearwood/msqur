@@ -27,13 +27,13 @@ class MsqurDB
 	{
 		if (isset($this->db) && $this->db instanceof PDO)
 		{
-			if (DEBUG) echo '<div class="debug">Reusing DB connection.</div>';
+			if (DEBUG) error_log("DEBUG: Reusing DB connection.");
 		}
 		else
 		{
 			try
 			{
-				if (DEBUG) echo '<div class="debug">Connecting to DB: ' . "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . ", [****]" . '</div>';
+				if (DEBUG) error_log('<div class="debug">Connecting to DB: ' . "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . ", [****]" . '</div>');
 				$this->db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD);
 				//Persistent connection:
 				//$this->db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD, array(PDO::ATTR_PERSISTENT => true);
@@ -46,7 +46,7 @@ class MsqurDB
 			}
 		}
 		
-		if (DEBUG) echo '<div class="debug">Connecting to DB: ' . (($this->db != null) ? 'Connected.' : 'Connection FAILED') . '</div>';
+		if (DEBUG) error_log('<div class="debug">Connecting to DB: ' . (($this->db != null) ? 'Connected.' : 'Connection FAILED') . '</div>');
 		return ($this->db != null);
 	}
 	
@@ -198,16 +198,16 @@ class MsqurDB
 		
 		try
 		{
-			if (DEBUG) echo '<div class="debug">Updating HTML cache...</div>';
+			if (DEBUG) error_log('<div class="debug">Updating HTML cache...</div>');
 			$st = $this->db->prepare("UPDATE metadata m SET m.reingest=FALSE WHERE m.id = :id");
 			$this->tryBind($st, ":id", $id);
 			if ($st->execute())
 			{
-				if (DEBUG) echo '<div class="debug">Reingest reset.</div>';
+				if (DEBUG) error_log('<div class="debug">Reingest reset.</div>');
 				return true;
 			}
 			else
-				if (DEBUG) echo '<div class="warn">Unable to update cache.</div>';
+				if (DEBUG) error_log('<div class="warn">Unable to update cache.</div>');
 		}
 		catch (PDOException $e)
 		{
@@ -226,13 +226,13 @@ class MsqurDB
 	{
 		if (DISABLE_MSQ_CACHE)
 		{
-			if (DEBUG) echo '<div class="debug warn">Cache disabled.</div>';
+			if (DEBUG) error_log('<div class="debug warn">Cache disabled.</div>');
 			return FALSE;
 		}
 		
 		if ($this->needReingest($id))
 		{
-			if (DEBUG) echo '<div class="debug info">Flagged for reingest.</div>';
+			if (DEBUG) error_log('<div class="debug info">Flagged for reingest.</div>');
 			$this->resetReingest($id);
 			return FALSE;
 		}
@@ -252,10 +252,10 @@ class MsqurDB
 				$html = $result['html'];
 				if ($html === NULL)
 				{
-					if (DEBUG) echo '<div class="debug">No HTML cache found.</div>';
+					if (DEBUG) error_log('<div class="debug">No HTML cache found.</div>');
 					return FALSE;
 				}
-				else if (DEBUG) echo '<div class="debug">Cached, returning HTML.</div>';
+				else if (DEBUG) error_log('<div class="debug">Cached, returning HTML.</div>');
 			}
 			else
 			{
@@ -411,18 +411,18 @@ class MsqurDB
 		
 		try
 		{
-			if (DEBUG) echo '<div class="debug">Updating HTML cache...</div>';
+			if (DEBUG) error_log('<div class="debug">Updating HTML cache...</div>');
 			$st = $this->db->prepare("UPDATE msqs ms, metadata m SET ms.html=:html WHERE m.msq = ms.id AND m.id = :id");
 			//$xml = mb_convert_encoding($html, "UTF-8");
 			$this->tryBind($st, ":id", $id);
 			$this->tryBind($st, ":html", $html);
 			if ($st->execute())
 			{
-				if (DEBUG) echo '<div class="debug">Cache updated.</div>';
+				if (DEBUG) error_log('<div class="debug">Cache updated.</div>');
 				return true;
 			}
 			else
-				if (DEBUG) echo '<div class="warn">Unable to update cache.</div>';
+				if (DEBUG) error_log('<div class="warn">Unable to update cache.</div>');
 		}
 		catch (PDOException $e)
 		{
@@ -452,7 +452,7 @@ class MsqurDB
 		
 		try
 		{
-			if (DEBUG) echo '<div class="debug">Updating engine information...</div>';
+			if (DEBUG) error_log('<div class="debug">Updating engine information...</div>');
 			$st = $this->db->prepare("UPDATE engines e, metadata m SET e.numCylinders = :nCylinders, twoStroke = :twoStroke, injType = :injType, nInjectors = :nInjectors, engineType = :engineType WHERE e.id = m.engine AND m.id = :id");
 			$this->tryBind($st, ":id", $id);
 			$this->tryBind($st, ":nCylinders", $engine['nCylinders']);
@@ -467,11 +467,11 @@ class MsqurDB
 			$this->tryBind($st, ":engineType", $engine['engineType']);
 			if ($st->execute())
 			{
-				if (DEBUG) echo '<div class="debug">Engine updated.</div>';
+				if (DEBUG) error_log('<div class="debug">Engine updated.</div>');
 				return true;
 			}
 			else
-				if (DEBUG) echo '<div class="warn">Unable to update engine metadata.</div>';
+				if (DEBUG) error_log('<div class="warn">Unable to update engine metadata.</div>');
 		}
 		catch (PDOException $e)
 		{
@@ -500,7 +500,7 @@ class MsqurDB
 		
 		try
 		{
-			if (DEBUG) echo '<div class="debug">Updating HTML cache...</div>';
+			if (DEBUG) error_log('<div class="debug">Updating HTML cache...</div>');
 			$st = $this->db->prepare("UPDATE metadata md SET md.fileFormat = :fileFormat, md.signature = :signature, md.firmware = :firmware, md.author = :author WHERE md.id = :id");
 			//$xml = mb_convert_encoding($html, "UTF-8");
 			$this->tryBind($st, ":id", $id);
@@ -510,11 +510,11 @@ class MsqurDB
 			$this->tryBind($st, ":author", $metadata['author']);
 			if ($st->execute())
 			{
-				if (DEBUG) echo '<div class="debug">Metadata updated.</div>';
+				if (DEBUG) error_log('<div class="debug">Metadata updated.</div>');
 				return true;
 			}
 			else
-				if (DEBUG) echo '<div class="warn">Unable to update metadata.</div>';
+				if (DEBUG) error_log('<div class="warn">Unable to update metadata.</div>');
 		}
 		catch (PDOException $e)
 		{
@@ -585,7 +585,7 @@ class MsqurDB
 	 */
 	public function getXML($id)
 	{
-		if (DEBUG) echo '<div class="debug">Getting XML for id: ' . $id . '</div>';
+		if (DEBUG) error_log('<div class="debug">Getting XML for id: ' . $id . '</div>');
 		
 		if (!$this->connect()) return null;
 		
@@ -597,7 +597,7 @@ class MsqurDB
 			$this->tryBind($st, ":id", $id);
 			if ($st->execute())
 			{
-				if (DEBUG) echo '<div class="debug">XML Found...</div>';
+				if (DEBUG) error_log('<div class="debug">XML Found...</div>');
 				$result = $st->fetch(PDO::FETCH_ASSOC);
 				$xml = $result['xml'];
 			}
