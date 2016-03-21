@@ -31,14 +31,14 @@ Arch Linux:
 
 #### Development Setup ####
 
-# Clone repo to dev directory
-# Copy script.config.dist to script.config
-# Copy src/config.php.dist to src/config.php
-# Create database for msqur, and assign it a user
-# Setup parameters in each config file
-# Update DB with update scripts in sequential order
-# Run deploy script
-# Test
+1. Clone repo to dev directory
+1. Copy script.config.dist to script.config
+1. Copy src/config.php.dist to src/config.php
+1. Create database for msqur, and assign it a user
+1. Setup parameters in each config file
+1. Update DB with update scripts in sequential order
+1. Run deploy script
+1. Hit webserver to start using it.
 
 #### hgrc ####
 To display a fancy version string, modify your .hgrc to have this hook:
@@ -47,7 +47,7 @@ To display a fancy version string, modify your .hgrc to have this hook:
 #!bash
 
 [hooks]
-post-update = hg log -r . --template "v{latesttag}-{latesttagdistance}-{node|short}\n" > VERSION
+post-update = hg log -r . --template "v{latesttag}-{latesttagdistance}-{node|short}\n" > src/VERSION
 ```
 
 ### Update & Deployment Instructions ###
