@@ -72,6 +72,11 @@ class Msqur
 		return $this->db->browse($page);
 	}
 	
+	public function search($query = "")
+	{
+		return $this->db->search($query);
+	}
+	
 	/*
 	 * @brief Clean out empty strings and fix PDO::fetch() array
 	 * @param $a an array of arrays or whatever the hell PDO:fetch(PDO:ASSOC) returns
@@ -88,29 +93,32 @@ class Msqur
 		return $ret;
 	}*/
 	
-	public function getFirmwareList()
-	{//TODO Cache
-		$list = $this->db->getFirmwareList();
+	private static function parseArray($dbResult, $key)
+	{
 		$ret = array();
-		foreach ($list as $l)
+		foreach ($dbResult as $l)
 		{
-			$fw = $l['firmware'];
-			if (strlen(trim($fw)) != 0) $ret[] = $fw;
+			$a = $l[$key];
+			if (strlen(trim($a)) != 0) $ret[] = $a;
 		}
 		return $ret;
 	}
 	
+	public function getFirmwareList()
+	{//TODO Cache
+		return MSQUR::parseArray($this->db->getFirmwareList(), 'firmware');
+	}
+	
 	public function getFirmwareVersionList($fw)
 	{//TODO Cache
-		$list = $this->db->getFirmwareVersionList($fw);
-		$ret = array();
-		foreach ($list as $l)
-		{
-			$fw = $l['signature'];
-			if (strlen(trim($fw)) != 0) $ret[] = $fw;
-		}
-		return $ret;
+		return MSQUR::parseArray($this->db->getFirmwareVersionList($fw), 'signature');
 	}
+	
+	public function getEngineMakeList()
+	{
+		return MSQUR::parseArray($this->db->getEngineMakeList(), 'make');
+	}
+	
 	
 	/**
 	 * get html from md id
@@ -121,7 +129,7 @@ class Msqur
 	public function view($id)
 	{
 		$this->header();
-		if (DEBUG) echo '<div class="debug">Load MSQ: ' . $id . '</div>';
+		if (DEBUG) debug('<div class="debug">Load MSQ: ' . $id . '</div>');
 		//Get cached HTML and display it, or reparse and display (in order)
 		$html = $this->getMSQ($id);
 		if ($html !== null)

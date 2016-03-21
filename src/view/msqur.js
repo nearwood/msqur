@@ -16,6 +16,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 "use strict";
 
+var msqur = angular.module('msqur', []);
+
+msqur.controller('BrowseController', function ($scope) {
+	return true;
+});
+
+msqur.controller('SearchController', function ($scope) {
+	
+});
+
 $(function() {
 	$('div#upload').dialog({
 		modal: true,
@@ -23,7 +33,7 @@ $(function() {
 		title: "Upload Tune Files",
 		width: "512px",
 		buttons: {
-			Upload: upload,
+			Upload: uploadClick,
 			Cancel: function() { $(this).dialog('close'); }
 		}
 	});
@@ -255,10 +265,36 @@ $(function() {
 		e.dataTransfer.dropEffect = 'copy';
 	}
 	
-	function upload()
+	function simpleValidation(s)
 	{
-		//TODO Check files
-		$('div#upload form').submit();
+		if (typeof s === 'string' && s.length > 0)
+			return true;
+		else
+			return false;
+	}
+	
+	function uploadClick()
+	{
+		//var files = $('input#fileSelect').val();
+		var make = $('input[name="make"]').val();
+		var model = $('input[name="code"]').val();
+		var disp = $('input[name="displacement"]').val();
+		var comp = $('input[name="compression"]').val();
+		
+		//put in array and map/reduce?
+		if (simpleValidation(make) && simpleValidation(model) && simpleValidation(disp) && simpleValidation(comp))
+		{
+			$('div#upload form').submit();
+		}
+		else
+		{
+			//TODO some error msg
+		}
+	}
+	
+	function searchClick()
+	{
+		$('form#search').submit();
 	}
 	
 	$('input#fileSelect').change(uploadAdd);
