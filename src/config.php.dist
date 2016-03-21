@@ -1,12 +1,12 @@
 <?php
-define('CONFIG_VERSION', "5");
+define('CONFIG_VERSION', "6");
+define('LOG_FILE', "/tmp/msqur.log"); //Ew
 define('DB_HOST', "localhost");
 define('DB_USERNAME', "msqur");
 define('DB_PASSWORD', "");
 define('DB_NAME', "msqur");
 
 define('DEBUG', FALSE);
-define('API_DEBUG', FALSE);
 define('DISABLE_MSQ_CACHE', FALSE);
 
 error_reporting(E_ALL);
@@ -22,13 +22,32 @@ assert_options(ASSERT_ACTIVE, DEBUG ? 1 : 0);
 assert_options(ASSERT_WARNING, 0);
 assert_options(ASSERT_QUIET_EVAL, 1);
 
+//Could move these to msqur class, but php
+function debuglog($type, $message)
+{
+	if (!error_log("$type: $message\n", 3, LOG_FILE))
+		error_log("Error writing to logfile: " . LOG_FILE);
+}
+
+function debug($message)
+{
+	debuglog("DEBUG", $message);
+}
+
+function warn($message)
+{
+	debuglog("WARN", $message);
+}
+
+function error($message)
+{
+	debuglog("ERROR", $message);
+}
+
 //Setup assert() callback
 function msqur_assert_handler($file, $line, $code)
 {
-    echo "<div class=\"error\">Assertion Failed:<br />
-        File '$file'<br />
-        Line '$line'<br />
-        Code '$code'<br /></div>";
+    error("Assertion Failed: '$code'\nFile '$file', line '$line'");
 }
 assert_options(ASSERT_CALLBACK, 'msqur_assert_handler');
 ?>
