@@ -17,18 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 require "msqur.php";
 
-function parseQueryString($s)
-{
-	$ret = null;
-	if (isset($_GET[$s]))
-	{
-		$ret = htmlspecialchars($_GET[$s]);
-		if (strlen($ret) == 0) $ret = null;
-	}
-	
-	return $ret;
-}
-
 $method = parseQueryString('method');
 $auth = parseQueryString('token') || parseQueryString('auth');
 $api = new API($msqur, $auth);
@@ -41,6 +29,8 @@ echo $api->call($method);
  * get firmware versions (for ajax calls)
  * get tune files?
  * get individual tables?
+ * 
+ * Returns JSON encoded results of msqur calls
  */
 class API
 {

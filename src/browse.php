@@ -17,9 +17,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 require "msqur.php";
 
-if (isset($_GET['p'])) {
-	$page = htmlspecialchars($_GET['p']);
-} else $page = 0;
+$page = parseQueryString('p') || 0;
+$make = parseQueryString('engineMake'); //TODO Define these API method/strings in one place
+$code = parseQueryString('engineCode');
+$fw = parseQueryString('firmware');
+$fwVersion = parseQueryString('fwVersion'); //TODO might make dependant on firmware
+
+//TODO Use http_build_query and/or parse_url and/or parse_str
 
 $results = $msqur->browse($page);
 $numResults = count($results);
@@ -29,12 +33,55 @@ $msqur->header();
 //require "view/browse.php";
 ?>
 <div class="browse" id="categories">
-	<div>Makes: <div class="category" id="makes"></div></div>
-	<div>Models: <div class="category" id="models"></div></div>
-	<div>Firmware: <div class="category" id="firmware"></div></div>
-	<div>Versions: <div class="category" id="versions"></div></div>
+	<?php //TODO Make a categories function to reduce these
+	if ($make === null) {
+		echo '<div>Makes: <div class="category" id="makes">';
+		foreach ($msqur->getEngineMakeList() as $m) { ?>
+			<div>
+				<?php echo "<a href=\"?engineMake=$m\">$m</a>"; ?>
+			</div>
+		<?php
+		}
+		echo '</div>';
+	}
+	
+	if ($code === null)
+	{
+		echo '<div>Engine Codes: <div class="category" id="codes">';
+		foreach ($msqur->getEngineCodeList() as $m) { ?>
+			<div>
+				<?php echo "<a href=\"?engineCode=$m\">$m</a>"; ?>
+			</div>
+		<?php
+		}
+		echo '</div>';
+	}
+	
+	if ($fw === null)
+	{
+		echo '<div>Firmware: <div class="category" id="firmware">';
+		foreach ($msqur->getFirmwareList() as $m) { ?>
+			<div>
+				<?php echo "<a href=\"?firmware=$m\">$m</a>"; ?>
+			</div>
+		<?php
+		}
+		echo '</div>';
+	}
+	
+	if ($fwVersion === null)
+	{
+		echo '<div>Versions: <div class="category" id="versions">';
+		foreach ($msqur->getFirmwareVersionList() as $m) { ?>
+			<div>
+				<?php echo "<a href=\"?fwVersion=$m\">$m</a>"; ?>
+			</div>
+		<?php
+		}
+		echo '</div>';
+	} ?>
 </div>
-<script src="view/browse.js"></script>
+<!-- script src="view/browse.js"></script -->
 <?php
 echo '<div id="content"><div class="info">' . $numResults . ' results.</div>';
 echo '<table ng-controller="BrowseController">';

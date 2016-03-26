@@ -33,4 +33,21 @@ function array_keys_exist(array &$array, ...$keys)
 	return TRUE;
 }
 
+/**
+ * @brief Parse query string in a safe way.
+ * @param $s The parameter requested
+ * @returns An output safe string(?) or null
+ */
+function parseQueryString($s)
+{
+	$ret = null;
+	if (isset($_GET[$s]))
+	{
+		$ret = htmlspecialchars($_GET[$s]);
+		if (strlen($ret) == 0) $ret = null;
+	}
+	
+	return $ret;
+}
+
 ?>

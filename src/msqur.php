@@ -109,7 +109,7 @@ class Msqur
 		return MSQUR::parseArray($this->db->getFirmwareList(), 'firmware');
 	}
 	
-	public function getFirmwareVersionList($fw)
+	public function getFirmwareVersionList($fw = null)
 	{//TODO Cache
 		return MSQUR::parseArray($this->db->getFirmwareVersionList($fw), 'signature');
 	}
@@ -117,6 +117,11 @@ class Msqur
 	public function getEngineMakeList()
 	{
 		return MSQUR::parseArray($this->db->getEngineMakeList(), 'make');
+	}
+	
+	public function getEngineCodeList($make = null)
+	{
+		return MSQUR::parseArray($this->db->getEngineCodeList($make), 'code');
 	}
 	
 	

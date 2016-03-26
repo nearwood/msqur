@@ -355,7 +355,7 @@ class MsqurDB
 	 * @param $firmware name of firmware to limit versions to
 	 * @returns List of strings
 	 */
-	public function getFirmwareVersionList($firmware)
+	public function getFirmwareVersionList($firmware = null)
 	{
 		if (!$this->connect()) return null;
 		
@@ -392,6 +392,33 @@ class MsqurDB
 			
 			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
 			else echo "<div class=\"error\">Error getting engine make list</div>";
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+	}
+	
+	public function getEngineCodeList($make = null)
+	{
+		if (!$this->connect()) return null;
+			
+		try
+		{
+			if (DEBUG) debug("<div class=\"debug\">Getting engine code list...</div>");
+			
+			if ($make !== null && gettype($make) == "string")
+			{
+				$st = $this->db->prepare("SELECT DISTINCT code FROM `engines` WHERE make = :make");
+				$this->tryBind($st, ":make", $make);
+			}
+			else
+			{
+				$st = $this->db->prepare("SELECT DISTINCT code FROM `engines`");
+			}
+			
+			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
+			else echo "<div class=\"error\">Error getting engine code list</div>";
 		}
 		catch (PDOException $e)
 		{
