@@ -5,6 +5,8 @@ MegaSquirt MSQ file sharing and viewing site.
 
 Parses MSQ "XML" in tandem with an associated INI (config) file and displays it in a familiar format for viewing and comparing.
 
+Try it now at: http://msqur.com/
+
 ### TODO ###
 
 * Uploader (user)/Manager (admin)
