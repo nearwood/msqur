@@ -24,7 +24,7 @@ $msqur->header();
 	<h2>About</h2>
 	<p>Created out of a need to share .MSQ files.
 	I was tired of downloading files and having to open them in <strike>MegaTune</strike> Tuner Studio.
-	So, I created this site. It's open source, so <a href="https://bitbucket.org/nearwood/msqur">feel free to contribute</a>.
+	So, I created this site. It's open source, so <a href="https://github.com/nearwood/msqur">feel free to contribute</a>.
 	Since going "live" I only add things here and there whenever I have time or the urge to add features/fixes.</p>
 </div>
 <div>
@@ -33,7 +33,7 @@ $msqur->header();
 		<li class="q">Why is this site so ugly?</li>
 		<li class="a">My Ballmer peak doesn't last all day.</li>
 		<li class="q">Can you add X feature?</li>
-		<li class="a">File a request for it <a href="https://bitbucket.org/nearwood/msqur/issues">here</a>.</li>
+		<li class="a">File a request for it <a href="https://github.com/nearwood/msqur/issues">here</a>.</li>
 	</ul>
 </div>
 <?php

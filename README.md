@@ -1,6 +1,6 @@
 # MSQur #
 
-'Masker' for lack of better name.
+'Masker' I guess? Supposed to be a play on imgur.
 MegaSquirt MSQ file sharing and viewing site.
 
 Parses MSQ "XML" in tandem with an associated INI (config) file and displays it in a familiar format for viewing and comparing.

@@ -32,6 +32,6 @@
 	</div>
 	<h3>Developers</h3>
 	<div>
-	Interested in contributing? Check out msqur's <a href="https://bitbucket.org/nearwood/msqur">repository</a>. Msqur's source is licensed under the GPL.
+	Interested in contributing? Check out msqur's <a href="https://github.com/nearwood/msqur">repository</a>. Msqur's source is licensed under the GPL.
 	</div>
 </div>
