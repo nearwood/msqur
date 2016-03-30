@@ -118,5 +118,4 @@ if (isset($_POST['upload']) && isset($_FILES))
 	
 	$msqur->footer();
 }
-else include "index.php";
 ?>

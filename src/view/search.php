@@ -17,8 +17,8 @@
 				<td><input name="make" type="text" placeholder="Nissan" maxlength="32" style="width:5em;"/></td>
 				<td><input name="ecode" type="text" placeholder="VG30" maxlength="32" style="width:5em;"/></td>
 				<td><input name="cylinders" type="number" min="0" max="99" style="width:4em;"/></td>
-				<td><input name="liters"      type="number" min="0" step="0.01" style="width:4em;"/> +/- <input name="literTol"       type="number" min="0" max="50" step="5" value="10" style="width:4em;">%</td>
-				<td><input name="compression" type="number" min="0" step="0.1"  style="width:4em;"/> +/- <input name="compressionTol" type="number" min="0" max="50" step="5" value="10" style="width:4em;">%</td>
+				<td><input name="liters"      type="number" min="0" step="0.01" style="width:4em;"/><!-- +/- <input name="literTol"       type="number" min="0" max="50" step="5" value="10" style="width:4em;">% --></td>
+				<td><input name="compression" type="number" min="0" step="0.1"  style="width:4em;"/><!-- +/- <input name="compressionTol" type="number" min="0" max="50" step="5" value="10" style="width:4em;">% --></td>
 				<td>
 					<select>
 						<option value="any" title="Any">-- Any --</option>
