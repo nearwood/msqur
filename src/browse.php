@@ -16,17 +16,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 require "msqur.php";
+require "BrowseQuery.php";
 
 $page = parseQueryString('p') || 0;
-$make = parseQueryString('engineMake'); //TODO Define these API method/strings in one place
-$code = parseQueryString('engineCode');
-$fw = parseQueryString('firmware');
-$fwVersion = parseQueryString('fwVersion'); //TODO might make dependant on firmware
+$bq = array();
+$bq['make'] = parseQueryString('engineMake'); //TODO Define these API method/strings in one place
+$bq['code'] = parseQueryString('engineCode');
+$bq['firmware'] = parseQueryString('firmware');
+$bq['signature'] = parseQueryString('fwVersion'); //TODO might make dependant on firmware
+//TODO Move column magic strings to some define/static class somewhere
 
 //TODO Use http_build_query and/or parse_url and/or parse_str
-
-$results = $msqur->browse($page);
-$numResults = count($results);
 
 $msqur->header();
 
@@ -34,7 +34,7 @@ $msqur->header();
 ?>
 <div class="browse" id="categories">
 	<?php //TODO Make a categories function to reduce these
-	if ($make === null) {
+	if ($bq['make'] === null) {
 		echo '<div>Makes: <div class="category" id="makes">';
 		foreach ($msqur->getEngineMakeList() as $m) { ?>
 			<div>
@@ -45,7 +45,7 @@ $msqur->header();
 		echo '</div>';
 	}
 	
-	if ($code === null)
+	if ($bq['code'] === null)
 	{
 		echo '<div>Engine Codes: <div class="category" id="codes">';
 		foreach ($msqur->getEngineCodeList() as $m) { ?>
@@ -57,7 +57,7 @@ $msqur->header();
 		echo '</div>';
 	}
 	
-	if ($fw === null)
+	if ($bq['firmware'] === null)
 	{
 		echo '<div>Firmware: <div class="category" id="firmware">';
 		foreach ($msqur->getFirmwareList() as $m) { ?>
@@ -69,7 +69,7 @@ $msqur->header();
 		echo '</div>';
 	}
 	
-	if ($fwVersion === null)
+	if ($bq['signature']=== null)
 	{
 		echo '<div>Versions: <div class="category" id="versions">';
 		foreach ($msqur->getFirmwareVersionList() as $m) { ?>
@@ -83,6 +83,10 @@ $msqur->header();
 </div>
 <!-- script src="view/browse.js"></script -->
 <?php
+
+$results = $msqur->browse($bq, $page);
+$numResults = count($results);
+
 echo '<div id="content"><div class="info">' . $numResults . ' results.</div>';
 echo '<table ng-controller="BrowseController">';
 echo '<tr><th>ID</th><th>Engine Make</th><th>Engine Code</th><th>Cylinders</th><th>Liters</th><th>Compression</th><th>Aspiration</th><th>Firmware/Version</th><th>Upload Date</th><th>Views</th></tr>';

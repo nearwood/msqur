@@ -67,9 +67,9 @@ class Msqur
 		$this->footer();
 	}
 	
-	public function browse($page = 0)
+	public function browse($bq)
 	{
-		return $this->db->browse($page);
+		return $this->db->browse($bq);
 	}
 	
 	public function search($query = "")

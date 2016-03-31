@@ -74,21 +74,22 @@ class MsqurDB
 			$xml = mb_convert_encoding($xml, "UTF-8");
 			//Strip out invalid xmlns
 			$xml = preg_replace('/xmlns=".*?"/', '', $xml);
-			$this->tryBind($st, ":xml", $xml);
+			DB::tryBind($st, ":xml", $xml);
 			if ($st->execute())
 			{
 				$id = $this->db->lastInsertId();
 				$st = $this->db->prepare("INSERT INTO metadata (url,msq,engine,fileFormat,signature,uploadDate) VALUES (:url, :id, :engine, '4.0', 'unknown', :uploaded)");
-				$this->tryBind($st, ":url", $id); //could do hash but for now, just the id
-				$this->tryBind($st, ":id", $id);
+				DB::tryBind($st, ":url", $id); //could do hash but for now, just the id
+				DB::tryBind($st, ":id", $id);
 				if (!is_numeric($engineid)) $engineid = null;
-				$this->tryBind($st, ":engine", $engineid);
+				DB::tryBind($st, ":engine", $engineid);
 				//TODO Make sure it's an int
 				$dt = new DateTime();
 				$dt = $dt->format('Y-m-d H:i:s');
-				$this->tryBind($st, ":uploaded", $dt);
+				DB::tryBind($st, ":uploaded", $dt);
 				if ($st->execute()) $id = $this->db->lastInsertId();
 				else $id = -1;
+				$st->closeCursor();
 			}
 			else $id = -1;
 		}
@@ -129,19 +130,20 @@ class MsqurDB
 				//TODO use any existing one before creating
 				$st = $this->db->prepare("INSERT INTO engines (make, code, displacement, compression, induction) VALUES (:make, :code, :displacement, :compression, :induction)");
 				
-				$this->tryBind($st, ":make", $make);
-				$this->tryBind($st, ":code", $code);
-				$this->tryBind($st, ":displacement", $displacement);
-				$this->tryBind($st, ":compression", $compression);
+				DB::tryBind($st, ":make", $make);
+				DB::tryBind($st, ":code", $code);
+				DB::tryBind($st, ":displacement", $displacement);
+				DB::tryBind($st, ":compression", $compression);
 				
 				if ($turbo == "na")
 					$t = 0;
 				else
 					$t = 1;
-				$this->tryBind($st, ":induction", $t);
+				DB::tryBind($st, ":induction", $t);
 				
 				if ($st->execute()) $id = $this->db->lastInsertId();
 				else echo "<div class=\"error\">Error adding engine: \"$make\", \"$code\"</div>";
+				$st->closeCursor();
 			}
 			catch (PDOException $e)
 			{
@@ -165,18 +167,20 @@ class MsqurDB
 		try
 		{
 			$st = $this->db->prepare("SELECT reingest FROM metadata WHERE metadata.id = :id LIMIT 1");
-			$this->tryBind($st, ":id", $id);
+			DB::tryBind($st, ":id", $id);
 			$st->execute();
 			if ($st->rowCount() > 0)
 			{
 				$result = $st->fetch(PDO::FETCH_ASSOC);
 				$reingest = $result['reingest'];
+				$st->closeCursor();
 				return $reingest;
 			}
 			else
 			{
 				if (DEBUG) debug("<div class=\"debug\">No result for $id</div>");
 				echo '<div class="error">Invalid MSQ</div>';
+				$st->closeCursor();
 			}
 		}
 		catch (PDOException $e)
@@ -200,14 +204,17 @@ class MsqurDB
 		{
 			if (DEBUG) debug('<div class="debug">Updating HTML cache...</div>');
 			$st = $this->db->prepare("UPDATE metadata m SET m.reingest=FALSE WHERE m.id = :id");
-			$this->tryBind($st, ":id", $id);
+			DB::tryBind($st, ":id", $id);
 			if ($st->execute())
 			{
 				if (DEBUG) debug('<div class="debug">Reingest reset.</div>');
+				$st->closeCursor();
 				return true;
 			}
 			else
 				if (DEBUG) debug('<div class="warn">Unable to update cache.</div>');
+				
+			$st->closeCursor();
 		}
 		catch (PDOException $e)
 		{
@@ -244,11 +251,12 @@ class MsqurDB
 		try
 		{
 			$st = $this->db->prepare("SELECT html FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
-			$this->tryBind($st, ":id", $id);
+			DB::tryBind($st, ":id", $id);
 			$st->execute();
 			if ($st->rowCount() > 0)
 			{
 				$result = $st->fetch(PDO::FETCH_ASSOC);
+				$st->closeCursor();
 				$html = $result['html'];
 				if ($html === NULL)
 				{
@@ -274,22 +282,50 @@ class MsqurDB
 	
 	/**
 	 * @brief Get a list of MSQs
-	 * @param $page The page of results (NI)
+	 * @param $bq The BrowseQuery to filter results
 	 * @returns A list of metadata, or null if unsuccessful
 	 */
-	public function browse($page)
+	public function browse($bq)
 	{
 		if (!$this->connect()) return null;
 		
 		try
 		{
-			$st = $this->db->prepare("SELECT m.id as mid, make, code, numCylinders, displacement, compression, induction, firmware, signature, uploadDate, views FROM metadata m INNER JOIN engines e ON m.engine = e.id");
+			$statement = "SELECT m.id as mid, make, code, numCylinders, displacement, compression, induction, firmware, signature, uploadDate, views FROM metadata m INNER JOIN engines e ON m.engine = e.id WHERE ";
+			$where = array();
+			foreach ($bq as $col => $v)
+			{
+				//if ($v !== null) $statement .= "$col = :$col ";
+				if ($v !== null) $where[] = "$col = :$col ";
+			}
+			
+			if (count($where) === 0) $statement .= "1";
+			else
+			{
+				foreach ($where as $i => $w)
+				{
+					$statement .= $w;
+				}
+			}
+			
+			//echo $statement;
+			
+			$st = $this->db->prepare($statement);
+			
+			foreach ($bq as $col => $v)
+			{
+				if ($v !== null) $this->tryBind($st, ":$col", $v);
+			}
+			
 			if ($st->execute())
 			{
 				$result = $st->fetchAll(PDO::FETCH_ASSOC);
+				$st->closeCursor();
 				return $result;
 			}
-			else echo '<div class="error">There was a problem constructing the browse query.</div>';
+			else echo '<div class="error">There was a problem constructing the browse query: </div>'; //var_export($st->errorInfo())
+			
+			$st->closeCursor();
 		}
 		catch (PDOException $e)
 		{
@@ -312,10 +348,11 @@ class MsqurDB
 		try
 		{
 			$st = $this->db->prepare("SELECT m.id as mid, make, code, numCylinders, displacement, compression, induction, firmware, signature, uploadDate, views FROM metadata m INNER JOIN engines e ON m.engine = e.id WHERE firmware LIKE :query");
-			$this->tryBind($st, ":query", "%" . $query . "%"); //TODO exact/wildcard option
+			DB::tryBind($st, ":query", "%" . $query . "%"); //TODO exact/wildcard option
 			if ($st->execute())
 			{
 				$result = $st->fetchAll(PDO::FETCH_ASSOC);
+				$st->closeCursor();
 				return $result;
 			}
 			else echo '<div class="error">There was a problem constructing the search query.</div>';
@@ -341,8 +378,15 @@ class MsqurDB
 			if (DEBUG) debug("<div class=\"debug\">Getting firmware list...</div>");
 			$st = $this->db->prepare("SELECT DISTINCT firmware FROM `metadata`");
 			
-			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
+			if ($st->execute())
+			{
+				$ret = $st->fetchAll(PDO::FETCH_ASSOC);
+				$st->closeCursor();
+				return $ret;
+			}
 			else echo "<div class=\"error\">Error getting firmware list</div>";
+			
+			$st->closeCursor();
 		}
 		catch (PDOException $e)
 		{
@@ -369,11 +413,18 @@ class MsqurDB
 			else
 			{
 				$st = $this->db->prepare("SELECT DISTINCT signature FROM `metadata` WHERE firmware = :fw");
-				$this->tryBind($st, ":fw", $firmware);
+				DB::tryBind($st, ":fw", $firmware);
 			}
 			
-			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
+			if ($st->execute())
+			{
+				$ret = $st->fetchAll(PDO::FETCH_ASSOC);
+				$st->closeCursor();
+				return $ret;
+			}
 			else echo "<div class=\"error\">Error getting firmware version list for: $firmware</div>";
+			
+			$st->closeCursor();
 		}
 		catch (PDOException $e)
 		{
@@ -390,8 +441,15 @@ class MsqurDB
 			if (DEBUG) debug("<div class=\"debug\">Getting engine make list...</div>");
 			$st = $this->db->prepare("SELECT DISTINCT make FROM `engines`");
 			
-			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
+			if ($st->execute())
+			{
+				$ret = $st->fetchAll(PDO::FETCH_ASSOC);
+				$st->closeCursor();
+				return $ret;
+			}
 			else echo "<div class=\"error\">Error getting engine make list</div>";
+			
+			$st->closeCursor();
 		}
 		catch (PDOException $e)
 		{
@@ -410,15 +468,22 @@ class MsqurDB
 			if ($make !== null && gettype($make) == "string")
 			{
 				$st = $this->db->prepare("SELECT DISTINCT code FROM `engines` WHERE make = :make");
-				$this->tryBind($st, ":make", $make);
+				DB::tryBind($st, ":make", $make);
 			}
 			else
 			{
 				$st = $this->db->prepare("SELECT DISTINCT code FROM `engines`");
 			}
 			
-			if ($st->execute()) return $st->fetchAll(PDO::FETCH_ASSOC);
+			if ($st->execute())
+			{
+				$ret = $st->fetchAll(PDO::FETCH_ASSOC);
+				$st->closeCursor();
+				return $ret;
+			}
 			else echo "<div class=\"error\">Error getting engine code list</div>";
+			
+			$st->closeCursor();
 		}
 		catch (PDOException $e)
 		{
@@ -441,15 +506,18 @@ class MsqurDB
 			if (DEBUG) debug('<div class="debug">Updating HTML cache...</div>');
 			$st = $this->db->prepare("UPDATE msqs ms, metadata m SET ms.html=:html WHERE m.msq = ms.id AND m.id = :id");
 			//$xml = mb_convert_encoding($html, "UTF-8");
-			$this->tryBind($st, ":id", $id);
-			$this->tryBind($st, ":html", $html);
+			DB::tryBind($st, ":id", $id);
+			DB::tryBind($st, ":html", $html);
 			if ($st->execute())
 			{
 				if (DEBUG) debug('<div class="debug">Cache updated.</div>');
+				$st->closeCursor();
 				return true;
 			}
 			else
 				if (DEBUG) debug('<div class="warn">Unable to update cache.</div>');
+				
+			$st->closeCursor();
 		}
 		catch (PDOException $e)
 		{
@@ -481,24 +549,27 @@ class MsqurDB
 		{
 			if (DEBUG) debug('<div class="debug">Updating engine information...</div>');
 			$st = $this->db->prepare("UPDATE engines e, metadata m SET e.numCylinders = :nCylinders, twoStroke = :twoStroke, injType = :injType, nInjectors = :nInjectors, engineType = :engineType WHERE e.id = m.engine AND m.id = :id");
-			$this->tryBind($st, ":id", $id);
-			$this->tryBind($st, ":nCylinders", $engine['nCylinders']);
-			$this->tryBind($st, ":twoStroke", $engine['twoStroke']);
+			DB::tryBind($st, ":id", $id);
+			DB::tryBind($st, ":nCylinders", $engine['nCylinders']);
+			DB::tryBind($st, ":twoStroke", $engine['twoStroke']);
 			
 			if (array_key_exists('injType', $engine))
-				$this->tryBind($st, ":injType", $engine['injType']);
+				DB::tryBind($st, ":injType", $engine['injType']);
 			else
-				$this->tryBind($st, ":injType", "Port Injection");
+				DB::tryBind($st, ":injType", "Port Injection");
 			
-			$this->tryBind($st, ":nInjectors", $engine['nInjectors']);
-			$this->tryBind($st, ":engineType", $engine['engineType']);
+			DB::tryBind($st, ":nInjectors", $engine['nInjectors']);
+			DB::tryBind($st, ":engineType", $engine['engineType']);
 			if ($st->execute())
 			{
 				if (DEBUG) debug('<div class="debug">Engine updated.</div>');
+				$st->closeCursor();
 				return true;
 			}
 			else
 				if (DEBUG) debug('<div class="warn">Unable to update engine metadata.</div>');
+				
+			$st->closeCursor();
 		}
 		catch (PDOException $e)
 		{
@@ -530,18 +601,21 @@ class MsqurDB
 			if (DEBUG) debug('<div class="debug">Updating HTML cache...</div>');
 			$st = $this->db->prepare("UPDATE metadata md SET md.fileFormat = :fileFormat, md.signature = :signature, md.firmware = :firmware, md.author = :author WHERE md.id = :id");
 			//$xml = mb_convert_encoding($html, "UTF-8");
-			$this->tryBind($st, ":id", $id);
-			$this->tryBind($st, ":fileFormat", $metadata['fileFormat']);
-			$this->tryBind($st, ":signature", $metadata['signature']);
-			$this->tryBind($st, ":firmware", $metadata['firmware']);
-			$this->tryBind($st, ":author", $metadata['author']);
+			DB::tryBind($st, ":id", $id);
+			DB::tryBind($st, ":fileFormat", $metadata['fileFormat']);
+			DB::tryBind($st, ":signature", $metadata['signature']);
+			DB::tryBind($st, ":firmware", $metadata['firmware']);
+			DB::tryBind($st, ":author", $metadata['author']);
 			if ($st->execute())
 			{
 				if (DEBUG) debug('<div class="debug">Metadata updated.</div>');
+				$st->closeCursor();
 				return true;
 			}
 			else
 				if (DEBUG) debug('<div class="warn">Unable to update metadata.</div>');
+				
+			$st->closeCursor();
 		}
 		catch (PDOException $e)
 		{
@@ -563,8 +637,10 @@ class MsqurDB
 		try
 		{
 			$st = $this->db->prepare("UPDATE metadata SET views = views + 1 WHERE id = :id LIMIT 1");
-			$this->tryBind($st, ":id", $id);
-			return $st->execute();
+			DB::tryBind($st, ":id", $id);
+			$ret = $st->execute();
+			$st->closeCursor();
+			return ret;
 		}
 		catch (PDOException $e)
 		{
@@ -574,7 +650,7 @@ class MsqurDB
 		return false;
 	}
 	
-	private function bindError($e)
+	private static function bindError($e)
 	{
 		if (DEBUG)
 		{
@@ -585,12 +661,12 @@ class MsqurDB
 		else echo '<div class="error">Error preparing database query.</div>';
 	}
 	
-	private function tryBind($statement, $placeholder, $value)
+	private static function tryBind($statement, $placeholder, $value)
 	{
 		//TODO arg check
 		if (!$statement->bindParam($placeholder, $value))
 		{
-			$this->bindError("Error binding: $value to $placeholder");
+			DB::bindError("Error binding: $value to $placeholder");
 		}
 	}
 	
@@ -621,11 +697,12 @@ class MsqurDB
 		try
 		{
 			$st = $this->db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
-			$this->tryBind($st, ":id", $id);
+			DB::tryBind($st, ":id", $id);
 			if ($st->execute())
 			{
 				if (DEBUG) debug('<div class="debug">XML Found...</div>');
 				$result = $st->fetch(PDO::FETCH_ASSOC);
+				$st->closeCursor();
 				$xml = $result['xml'];
 			}
 			else echo '<div class="error">XML not found.</div>';
