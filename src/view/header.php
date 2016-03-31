@@ -5,10 +5,18 @@
 	<meta name="description" content="Megasquirt tune file sharing site">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="view/msqur.css" />
+<?php
+if (LOCAL) { ?>
+	<script src="view/lib/jquery.min.js"></script>
+	<link rel="stylesheet" href="view/lib/jquery-ui.css" />
+	<script src="view/lib/jquery-ui.min.js"></script>
+	<script src="view/lib/angular.min.js"></script>
+<?php } else { ?>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+<?php } ?>
 	<script src="view/lib/tablesorter/jquery.tablesorter.min.js"></script>
 	<script src="view/lib/Chart.js/Chart.min.js"></script>
 	<script src="view/msqur.js"></script>

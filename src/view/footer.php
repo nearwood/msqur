@@ -2,7 +2,7 @@
 	<?php if (@readfile("VERSION") === FALSE) echo "DEV"; ?> <a href="http://httpd.apache.org/">Apache</a> <a href="http://php.net/">PHP</a> <a href="https://angularjs.org/">AngularJS</a> <a href="http://jquery.com/">jQuery</a>
 </div>
 <?php
-IF (!DEBUG)
+if (!LOCAL)
 {
 	?>
 	<script>
