@@ -1,6 +1,6 @@
 <?php
-define('CONFIG_VERSION', "6");
-define('LOG_FILE', "msqur.log"); //Ew
+define('CONFIG_VERSION', "7");
+define('LOG_FILE', "/tmp/msqur.log"); //Ew
 define('DB_HOST', "localhost");
 define('DB_USERNAME', "msqur");
 define('DB_PASSWORD', "");
