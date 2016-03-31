@@ -51,7 +51,9 @@ class Msqur
 		{
 			//echo 'Adding ' . $file['tmp_name'];
 			//TODO if -1 failed
-			$fileList[] = $this->db->addMSQ($file, $engineid);
+			var_export($file);
+			$id = $this->db->addMSQ($file, $engineid);
+			$fileList[$id] = htmlspecialchars($file['name']);
 		}
 		
 		return $fileList;

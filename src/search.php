@@ -24,6 +24,7 @@ require "view/search.php";
 if (isset($_GET['query']))
 {
 	$query = htmlspecialchars($_GET['query']);
+	//TODO Just use browse code
 	$results = $msqur->search($query);
 	$numResults = count($results);
 	

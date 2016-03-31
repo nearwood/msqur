@@ -56,6 +56,7 @@ if (LOCAL) { ?>
 						<option value="fi" title="Fast">Forced Induction</option>
 					</select>
 				</div>
+				<input type="hidden" name="upload" value="upload" style="display:none;">
 			</fieldset>
 		</div>
 	</form>

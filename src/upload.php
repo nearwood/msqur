@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 require "msqur.php";
 
+$msqur->header();
+
 /**
  * @brief Restructure file upload array
  *
@@ -29,7 +31,7 @@ function fixFileArray(&$file_post)
 	$file_count = count($file_post['name']);
 	$file_keys = array_keys($file_post);
 	
-	for ($i=0; $i<$file_count; $i++)
+	for ($i = 0; $i < $file_count; $i++)
 	{
 		foreach ($file_keys as $key)
 		{
@@ -75,12 +77,11 @@ function checkUploads($files)
 	return $files;
 }
 
+//var_export($_POST);
+//var_export($_FILES);
+
 if (isset($_POST['upload']) && isset($_FILES))
 {
-	$msqur->header();
-	//var_dump($_POST);
-	//var_dump($_FILES);
-	
 	$files = checkUploads(fixFileArray($_FILES['files']));
 	if (count($files) == 0)
 	{
@@ -93,20 +94,22 @@ if (isset($_POST['upload']) && isset($_FILES))
 			echo '<div class="info">' . count($files) . ' file was uploaded.</div>';
 		else
 			echo '<div class="info">' . count($files) . ' files were uploaded.</div>';
-		//$motor = $validate($_POST['cylinders'])
 		
 		if (DEBUG) debug('<div class="debug">Adding engine: ' . $_POST['make'] . ', ' . $_POST['code'] . ', ' . $_POST['displacement'] . ', ' . $_POST['compression'] . ', ' . $_POST['aspiration'] . '</div>');
 		
 		$engineid = $msqur->addEngine($_POST['make'], $_POST['code'], $_POST['displacement'], $_POST['compression'], $_POST['aspiration']);
 		$fileList = $msqur->addMSQs($files, $engineid);
 		
+		$safeMake = htmlspecialchars($_POST['make']);
+		$safeCode = htmlspecialchars($_POST['code']);
+		
 		if ($fileList != null)
 		{
-			echo '<div class="info">Upload successful.</div>';
+			//echo '<div class="info">Successful saved MSQ to database.</div>';
 			echo '<div class="info"><ul id="fileList">';
-			foreach ($fileList as $f)
+			foreach ($fileList as $id => $name)
 			{
-				echo '<li><a href="view.php?msq=' . $f . '">' . $f . '</a></li>';
+				echo '<li><a href="view.php?msq=' . $id . '">' . "$safeMake $safeCode - $name" . '</a></li>';
 			}
 			echo '</div></ul>';
 		}
@@ -115,7 +118,7 @@ if (isset($_POST['upload']) && isset($_FILES))
 			echo '<div class="error">Unable to store uploaded file.</div>';
 		}
 	}
-	
-	$msqur->footer();
 }
+
+$msqur->footer();
 ?>
