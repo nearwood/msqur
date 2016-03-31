@@ -3,3 +3,10 @@ php:
   - '5.6'
   - '7.0'
   - nightly
+
+branches:
+  only:
+    - master
+    - msqur.com
+
+script: phpunit tests

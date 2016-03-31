@@ -1,0 +1,2 @@
+DEBUG: <div class="debug">Connecting to DB: mysql:dbname=msqur;host=localhost,msqur, [****]</div>
+DEBUG: <div class="debug">Connecting to DB: Connected.</div>
