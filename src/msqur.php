@@ -34,7 +34,7 @@ class Msqur
 	
 	function __construct()
 	{
-		$this->db = new MsqurDB(); //TODO check reuse
+		$this->db = new DB(); //TODO check reuse
 	}
 	
 	public function getMSQ($id)

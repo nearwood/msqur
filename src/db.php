@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
  * @brief DB handling stuff.
  * 
  */
-class MsqurDB
+class DB
 {
 	private $db;
 	
@@ -640,7 +640,7 @@ class MsqurDB
 			DB::tryBind($st, ":id", $id);
 			$ret = $st->execute();
 			$st->closeCursor();
-			return ret;
+			return $ret;
 		}
 		catch (PDOException $e)
 		{
