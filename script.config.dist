@@ -1,5 +1,6 @@
 DEPLOY_DIR=/srv/http/msqur
+BACKUP_DIR=~/
 DB_HOST=localhost
 DB_USER=msqur
 DB_PASS=
-DB_TABLE=msqur
+DB_NAME=msqur
