@@ -276,10 +276,10 @@ $(function() {
 	function uploadClick()
 	{
 		//var files = $('input#fileSelect').val();
-		var make = $('input[name="make"]').val();
-		var model = $('input[name="code"]').val();
-		var disp = $('input[name="displacement"]').val();
-		var comp = $('input[name="compression"]').val();
+		var make = $('input#make').val();
+		var model = $('input#code').val();
+		var disp = $('input#displacement').val();
+		var comp = $('input#compression').val();
 		
 		//put in array and map/reduce?
 		if (simpleValidation(make) && simpleValidation(model) && simpleValidation(disp) && simpleValidation(comp))
