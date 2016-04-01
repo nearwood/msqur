@@ -71,10 +71,12 @@ msqur is licensed under the GPL v3.0. A copy of this license is included in the 
 * http://nearwood.net/
 
 ### Credits ###
-Apache, PHP, MySQL
-jQuery, jQuery UI,
-jquery.tablesorter http://tablesorter.com/docs/,
-Chart.js,
-AngularJS,
-Tango Icon Theme,
-Geany/Notepad++
+* Apache
+* PHP
+* MariaDB
+* jQuery, jQuery UI
+* jquery.tablesorter http://tablesorter.com/docs/
+* Chart.js
+* AngularJS
+* Tango Icon Theme
+* Geany/Notepad++
