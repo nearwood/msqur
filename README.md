@@ -41,16 +41,6 @@ Try it now at: http://msqur.com/
 1. Run deploy script
 1. Hit webserver to start using it.
 
-#### hgrc ####
-To display a fancy version string, modify your .hgrc to have this hook:
-
-```
-#!bash
-
-[hooks]
-post-update = hg log -r . --template "v{latesttag}-{latesttagdistance}-{node|short}\n" > src/VERSION
-```
-
 ### Update & Deployment Instructions ###
 
  * Pull updates on host.
