@@ -3,3 +3,4 @@ script.config
 src/config.php
 VERSION
 doxygen/*
+.travis/deploy_key.pem
