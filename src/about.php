@@ -36,6 +36,9 @@ $msqur->header();
 		<li class="a">File a request for it <a href="https://github.com/nearwood/msqur/issues">here</a>.</li>
 	</ul>
 </div>
+<div>
+	<?php if (@readfile("VERSION") === FALSE) echo "DEV"; ?> <a href="http://httpd.apache.org/">Apache</a> <a href="http://php.net/">PHP</a> <a href="https://angularjs.org/">AngularJS</a> <a href="http://jquery.com/">jQuery</a>
+</div>
 <?php
 $msqur->footer();
 ?>

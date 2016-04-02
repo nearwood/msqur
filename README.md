@@ -23,9 +23,7 @@ Try it now at: http://msqur.com/
 #### Needed software ####
 
 * AMP Stack: Apache, MySQL (MariaDB), PHP
-* MySQL PDO extension for PHP:
-`/etc/php/php.ini`:
-`extension=pdo_mysql.so`
+* PDO extension for PHP.
 
 #### Recommended software ####
 
