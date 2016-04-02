@@ -11,13 +11,6 @@ Try it now at: http://msqur.com/
 * msqur.com [![Build Status](https://travis-ci.org/nearwood/msqur.svg?branch=msqur.com)](https://travis-ci.org/nearwood/msqur)
 * master [![Build Status](https://travis-ci.org/nearwood/msqur.svg?branch=master)](https://travis-ci.org/nearwood/msqur)
 
-### TODO ###
-
-* Uploader (user)/Manager (admin)
-* 3D table charts
-* Tests and test lib.
-* Better DB update procedure.
-
 ### Installation ###
 
 #### Needed software ####
