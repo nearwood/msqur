@@ -29,3 +29,4 @@ ratings:
 exclude_paths:
 - db/
 - tests/
+- src/view/lib/
