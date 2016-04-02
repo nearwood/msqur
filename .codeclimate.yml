@@ -30,3 +30,4 @@ exclude_paths:
 - db/
 - tests/
 - src/view/lib/
+- doxygen/
