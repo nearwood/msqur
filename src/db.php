@@ -280,6 +280,45 @@ class DB
 		return $html;
 	}
 	
+	public function getMSQForDownload($id)
+	{
+
+		if (!$this->connect()) return null;
+		
+		$xml = FALSE;
+		
+		try
+		{
+			$st = $this->db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
+			DB::tryBind($st, ":id", $id);
+			$st->execute();
+			if ($st->rowCount() > 0)
+			{
+				$result = $st->fetch(PDO::FETCH_ASSOC);
+				$st->closeCursor();
+				$xml = $result['xml'];
+				if ($xml === NULL)
+				{
+					if (DEBUG) debug('<div class="debug">No HTML cache found.</div>');
+					return FALSE;
+				}
+				else if (DEBUG) debug('<div class="debug">Cached, returning HTML.</div>');
+			}
+			else
+			{
+				echo "<div class=\"debug\">No result for $id</div>";
+				echo '<div class="error">Invalid MSQ err 2</div>';
+				return null;
+			}
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return $xml;
+	}
+	
 	/**
 	 * @brief Get a list of MSQs
 	 * @param $bq The BrowseQuery to filter results

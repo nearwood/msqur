@@ -22,7 +22,7 @@ Try it now at: http://msqur.com/
 
 #### Needed software ####
 
-* AMP Stack: Apache, MySQL (MariaDB), PHP
+* MariaDB, PHP
 * PDO extension for PHP.
 
 #### Recommended software ####
@@ -36,10 +36,10 @@ Try it now at: http://msqur.com/
 1. Copy script.config.dist to script.config
 1. Copy src/config.php.dist to src/config.php
 1. Create database for msqur, and assign it a user
-1. Setup parameters in each config file
-1. Update DB with update scripts in sequential order
-1. Run deploy script
-1. Hit webserver to start using it.
+1. Setup parameters in each config file (meaning db connection info)
+1. Update DB with update scripts in sequential order (just paste everything in to mysqlworkbench)
+1. Run deploy script (???)
+1. Hit webserver to start using it. (php -S)
 
 #### hgrc ####
 To display a fancy version string, modify your .hgrc to have this hook:
