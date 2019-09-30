@@ -1,6 +1,6 @@
 DEPLOY_DIR=/srv/http/msqur
 BACKUP_DIR=~/
 DB_HOST=127.0.0.1
-DB_USER=root
-DB_PASS=my-secret-pw
+DB_USER=
+DB_PASS=
 DB_NAME=msqur
