@@ -1,10 +1,10 @@
 <?php
 
-require_once 'PHPUnit/Autoload.php';
+use PHPUnit\Framework\TestCase;
 
 //require "../src/msqur.php";
 
-class MsqurTest extends PHPUnit_Framework_TestCase
+class MsqurTest extends TestCase {
 {
     // ...
 
