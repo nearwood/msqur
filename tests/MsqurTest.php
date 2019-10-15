@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 //require "../src/msqur.php";
 
-class MsqurTest extends TestCase {
+class MsqurTest extends TestCase
 {
     // ...
 
