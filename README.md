@@ -11,13 +11,6 @@ Try it now at: http://msqur.com/
 * msqur.com [![Build Status](https://travis-ci.org/nearwood/msqur.svg?branch=msqur.com)](https://travis-ci.org/nearwood/msqur)
 * master [![Build Status](https://travis-ci.org/nearwood/msqur.svg?branch=master)](https://travis-ci.org/nearwood/msqur)
 
-### TODO ###
-
-* Uploader (user)/Manager (admin)
-* 3D table charts
-* Tests and test lib.
-* Better DB update procedure.
-
 ### Installation ###
 
 #### Needed software ####
@@ -40,16 +33,6 @@ Try it now at: http://msqur.com/
 1. Update DB with update scripts in sequential order
 1. Run deploy script
 1. Hit webserver to start using it.
-
-#### hgrc ####
-To display a fancy version string, modify your .hgrc to have this hook:
-
-```
-#!bash
-
-[hooks]
-post-update = hg log -r . --template "v{latesttag}-{latesttagdistance}-{node|short}\n" > src/VERSION
-```
 
 ### Update & Deployment Instructions ###
 
