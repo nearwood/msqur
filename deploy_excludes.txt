@@ -1,0 +1,3 @@
+.well-known
+.git
+config.php
