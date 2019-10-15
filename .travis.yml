@@ -9,7 +9,7 @@ php:
 stages:
   - Test
   - name: Deploy
-    if branch = msqur.com
+    if: branch = msqur.com
 
 branches:
   only:
