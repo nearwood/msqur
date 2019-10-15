@@ -7,7 +7,7 @@ php:
 #- nightly
 
 stages:
-  - test
+  - Test
   - name: Deploy
     if branch = msqur.com
 
