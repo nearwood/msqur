@@ -4,7 +4,7 @@ env:
 language: php
 php:
 - '7.2'
-- nightly
+#- nightly
 
 branches:
   only:
