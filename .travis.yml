@@ -21,7 +21,7 @@ jobs:
     - stage: test
       script: phpunit tests
     - stage: deploy
-      script: deploy.sh
+      script: bash deploy.sh
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_63cff28d8c75_key -iv $encrypted_63cff28d8c75_iv -in .travis/deploy_key.pem.enc -out .travis/deploy_key.pem -d
