@@ -2,14 +2,14 @@ env:
   secure: EIJjaXkacpB8gLRsJSUMlLLZcbNqwgjyItjPqeQ4UXgLyph+yU3R1YyJkFhq8WAjOWB7DqESclp/nOfXRV+3kMOAIIRc+uAg8m3znhSOSSJYzRjh6UL+WrX7BjxgnblxC7or5IFWJR+OBOOrScwmHvKCfd4Z14WZBRj/kMNPjlSNb881lFo30Z6bkhfMQZlMMw0ctpaPUbjuj9p7MTBw7qqbIX76HIVznkxlnV98R+78PSdma+10Yx2Rp+ft+JNecR1I5taQ3hCPPRz7ZS620rCBu6IdLhoKNyqYGWMr31xzp40TqvSDvTAOQLPKYe1p/IDHFUJ2GnTb/MNP56uWRzi2+qfS/d9aYaa64jM0Vv2ZEb0ISvNzqyNlKYGBxTeDjwf+HxH4CSesKw5IZj8pskcsrAa8EtHNECGGYS6T/UYco/O56LQWg6ihya8JP9/ID1U0qGa0LGmM0MFlTj8qPhLOLihZZsZqaKx6HhhhxHKjTEGzzLxCIy0FFpJzQzJlH1nHqr9fLtI5uUh2e6PWqNNzDguV91nQRGB+7sTdfFh8qLNmta5yfpTZCFiJe8V0mzBUe4jvTjSLDfDZTzF3647TXTVUj1BRGH44vAZLE/AWXYqBQsiYDvv/1RBkD3FnckOLDaiyGqIsuDC/24WyfiQJWe5ZxVRNLNL2uPiN4JY=
 
 language: php
+
 php:
 - '7.2'
-#- nightly
 
 stages:
-  - test
-  - name: deploy
-    if: branch = msqur.com
+- test
+- name: deploy
+  if: branch = msqur.com
 
 branches:
   only:
@@ -18,10 +18,10 @@ branches:
 
 jobs:
   include:
-    - stage: test
-      script: phpunit tests
-    - stage: deploy
-      script: bash deploy.sh
+  - stage: test
+    script: phpunit tests
+  - stage: deploy
+    script: bash deploy.sh
 
 before_install:
-- openssl aes-256-cbc -K $encrypted_63cff28d8c75_key -iv $encrypted_63cff28d8c75_iv -in .travis/deploy_key.pem.enc -out .travis/deploy_key.pem -d
+- openssl aes-256-cbc -K $encrypted_571de2096706_key -iv $encrypted_571de2096706_iv -in .travis/travis_ci.enc -out ~\/.ssh/id_rsa -d
