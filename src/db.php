@@ -297,12 +297,7 @@ class DB
 				$result = $st->fetch(PDO::FETCH_ASSOC);
 				$st->closeCursor();
 				$xml = $result['xml'];
-				if ($xml === NULL)
-				{
-					if (DEBUG) debug('<div class="debug">No HTML cache found.</div>');
-					return FALSE;
-				}
-				else if (DEBUG) debug('<div class="debug">Cached, returning HTML.</div>');
+				if (DEBUG) debug('<div class="debug">Cached, returning HTML.</div>');
 			}
 			else
 			{

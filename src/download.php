@@ -19,7 +19,7 @@ require "msqur.php";
 
 if (isset($_GET['msq'])) {
 
-  header('Content-Type: application/msq');
+  header('Content-Type: application/xml');
   header('Content-Disposition: attachment; filename=' . $_GET['msq'] . '.msq');
   header('Pragma: no-cache');
 
