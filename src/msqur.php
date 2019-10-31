@@ -43,6 +43,12 @@ class Msqur
 		return $this->db->getMSQ($id);
 	}
 	
+	public function getMSQForDownload($id)
+	{
+
+		return $this->db->getMSQForDownload($id);
+	}
+	
 	public function addMSQs($files, $engineid)
 	{
 		$fileList = array();
