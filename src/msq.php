@@ -60,6 +60,7 @@ class MSQ
 			$msqHeader .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
 			$msqHeader .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
 			$msqHeader .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
+			$msqHeader .= "<div><a href='download.php?msq=" . $_GET['msq'] . "'>💾</a></div>";
 			$msqHeader .= '</div>';
 			
 			$sig = $msq->versionInfo['signature'];

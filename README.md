@@ -15,7 +15,7 @@ Try it now at: https://msqur.com/
 
 #### Needed software
 
-* AMP Stack: Apache, MySQL (MariaDB), PHP
+* MariaDB, PHP
 * PDO extension for PHP.
 
 #### Recommended software
@@ -27,12 +27,11 @@ Try it now at: https://msqur.com/
 > These steps could be improved
 
 1. Clone repo to dev directory
-1. Copy script.config.dist to script.config
-1. Copy src/config.php.dist to src/config.php
 1. Create database for msqur, and assign it a user
-1. Setup parameters in each config file
-1. Update DB with update scripts in sequential order
-1. Hit webserver to start using it.
+1. Copy script.config.dist to script.config and modify for use (setup DB connection information)
+1. Copy src/config.php.dist to src/config.php (setup DB information again)
+1. Update DB with update scripts in sequential order (patse into phpMyAdmin or piped to `sqlcmd`, etc.)
+1. Hit webserver to start using it (eg. `php -S`, etc.)
 
 ### Update & Deployment Instructions
 
@@ -55,7 +54,7 @@ msqur is licensed under the GPL v3.0. A copy of this license is included in the 
 
 ### Credits
 
-
+[CamHenlin](https://github.com/CamHenlin)
 
 > This section needs to be updated
 
