@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="view/msqur.css" />
 <?php
-if (LOCAL) { ?>
+if (DEBUG) { ?>
 	<script src="view/lib/jquery.min.js"></script>
 	<link rel="stylesheet" href="view/lib/jquery-ui.css" />
 	<script src="view/lib/jquery-ui.min.js"></script>

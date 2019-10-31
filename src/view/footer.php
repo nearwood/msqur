@@ -2,7 +2,7 @@
 	
 </div>
 <?php
-if (!LOCAL)
+if (!DEBUG)
 {
 	?>
 	<script>

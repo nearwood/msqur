@@ -310,7 +310,6 @@ class INI
 					//Should be global values (don't think any ini's have them)
 					assert($currentSection === NULL);
 					$globals[$key] = INI::defaultSectionHandler($value);
-					continue; //Skip the section values assignment below
 				break;
 			}
 		}
