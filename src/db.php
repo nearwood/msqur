@@ -27,26 +27,27 @@ class DB
 	{
 		if (isset($this->db) && $this->db instanceof PDO)
 		{
-			if (DEBUG) debug("DEBUG: Reusing DB connection.");
+			//if (DEBUG) debug("Reusing DB connection.");
 		}
 		else
 		{
 			try
 			{
-				if (DEBUG) debug('<div class="debug">Connecting to DB: ' . "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . ", [****]" . '</div>');
+				//if (DEBUG) debug('Connecting to DB: ' . "mysql:dbname=" . DB_NAME . ";host=" . DB_HOST . "," . DB_USERNAME . ", [****]");
 				$this->db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD);
 				//Persistent connection:
 				//$this->db = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USERNAME, DB_PASSWORD, array(PDO::ATTR_PERSISTENT => true);
 			}
 			catch (PDOException $e)
 			{
+				error("Could not connect to database");
 				echo '<div class="error">Error connecting to database.</div>';
 				$this->dbError($e);
 				$this->db = null; //Redundant.
 			}
 		}
 		
-		if (DEBUG) debug('<div class="debug">Connecting to DB: ' . (($this->db != null) ? 'Connected.' : 'Connection FAILED') . '</div>');
+		//if (DEBUG) debug('Connecting to DB: ' . (($this->db != null) ? 'Connected.' : 'Connection FAILED'));
 		return ($this->db != null);
 	}
 	
@@ -68,6 +69,8 @@ class DB
 		try
 		{
 			//TODO Compress?
+
+			//TODO transaction so we can rollback (`$db->beginTransaction()`)
 			$st = $this->db->prepare("INSERT INTO msqs (xml) VALUES (:xml)");
 			$xml = file_get_contents($file['tmp_name']);
 			//Convert encoding to UTF-8
@@ -87,11 +90,23 @@ class DB
 				$dt = new DateTime();
 				$dt = $dt->format('Y-m-d H:i:s');
 				DB::tryBind($st, ":uploaded", $dt);
-				if ($st->execute()) $id = $this->db->lastInsertId();
-				else $id = -1;
+				if ($st->execute()) {
+					$id = $this->db->lastInsertId();
+				} else {
+					error("Error inserting metadata");
+					if (DEBUG) {
+						print_r($st->errorInfo());
+					}
+					$id = -1;
+				}
 				$st->closeCursor();
+			} else {
+				error("Error inserting XML data");
+				if (DEBUG) {
+					print_r($st->errorInfo());
+				}
+				$id = -1;
 			}
-			else $id = -1;
 		}
 		catch (PDOException $e)
 		{
@@ -626,6 +641,7 @@ class DB
 		
 		if (!array_keys_exist($metadata, 'fileFormat', 'signature', 'firmware', 'author'))
 		{
+			if (DEBUG) debug('Invalid MSQ metadata: ' . $metadata);
 			echo '<div class="warn">Incomplete MSQ metadata.</div>';
 			return false;
 		}
@@ -708,6 +724,7 @@ class DB
 	{
 		if (DEBUG)
 		{
+			error("DB Error: " . $e->getMessage());
 			echo '<div class="error">Error executing database query:<br/>';
 			echo $e->getMessage();
 			echo '</div>';
@@ -722,7 +739,7 @@ class DB
 	 */
 	public function getXML($id)
 	{
-		if (DEBUG) debug('<div class="debug">Getting XML for id: ' . $id . '</div>');
+		if (DEBUG) debug('Getting XML for id: ' . $id);
 		
 		if (!$this->connect()) return null;
 		
@@ -732,14 +749,16 @@ class DB
 		{
 			$st = $this->db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
 			DB::tryBind($st, ":id", $id);
-			if ($st->execute())
+			if ($st->execute() && $st->rowCount() === 1)
 			{
-				if (DEBUG) debug('<div class="debug">XML Found...</div>');
+				if (DEBUG) debug('XML Found.');
 				$result = $st->fetch(PDO::FETCH_ASSOC);
 				$st->closeCursor();
 				$xml = $result['xml'];
+			} else {
+				//TODO Send real 404
+				echo '<div class="error">404 MSQ not found.</div>';
 			}
-			else echo '<div class="error">XML not found.</div>';
 		}
 		catch (PDOException $e)
 		{

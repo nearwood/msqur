@@ -48,13 +48,20 @@ class MSQ
 	public function parseMSQ($xml, &$engine, &$metadata)
 	{
 		$html = array();
-		if (DEBUG) debug('<div class="debug">Parsing MSQ...</div>');
+		if (DEBUG) debug('Parsing XML...');
 		$errorCount = 0; //Keep track of how many things go wrong.
 		
+		libxml_use_internal_errors(true);
 		$msq = simplexml_load_string($xml);
-		
-		if ($msq)
-		{
+
+		if ($msq === false) {
+			error("Failed to parse XML.");
+			foreach(libxml_get_errors() as $error) {
+					error($error->message);
+			}
+
+			$html['header'] = '<div class="error">Unable to parse MSQ.</div>';
+		} else if ($msq) {
 			$msqHeader = '<div class="info">';
 			$msqHeader .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
 			$msqHeader .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
@@ -175,10 +182,6 @@ class MSQ
 					$html["constants"] .= $this->msqConstant($key, $value, $help);
 				}
 			}
-		}
-		else
-		{
-			$html['header'] = '<div class="error">Unable to parse tune.</div>';
 		}
 		
 		return $html;
