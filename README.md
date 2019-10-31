@@ -1,29 +1,30 @@
-# MSQur #
+# MSQur
 
 'Masker' I guess? Supposed to be a play on imgur.
 MegaSquirt MSQ file sharing and viewing site.
 
 Parses MSQ "XML" in tandem with an associated INI (config) file and displays it in a familiar format for viewing and comparing.
 
-Try it now at: http://msqur.com/
+Try it now at: https://msqur.com/
 
 ### Build Status:
 * msqur.com [![Build Status](https://travis-ci.org/nearwood/msqur.svg?branch=msqur.com)](https://travis-ci.org/nearwood/msqur)
 * master [![Build Status](https://travis-ci.org/nearwood/msqur.svg?branch=master)](https://travis-ci.org/nearwood/msqur)
 
-### Installation ###
+### Installation
 
-#### Needed software ####
+#### Needed software
 
 * AMP Stack: Apache, MySQL (MariaDB), PHP
 * PDO extension for PHP.
 
-#### Recommended software ####
+#### Recommended software
 
 * phpMyAdmin - For managing the DB
-* rsync - For the deployment script
 
-#### Development Setup ####
+#### Development Setup
+
+> These steps could be improved
 
 1. Clone repo to dev directory
 1. Copy script.config.dist to script.config
@@ -31,27 +32,33 @@ Try it now at: http://msqur.com/
 1. Create database for msqur, and assign it a user
 1. Setup parameters in each config file
 1. Update DB with update scripts in sequential order
-1. Run deploy script
 1. Hit webserver to start using it.
 
-### Update & Deployment Instructions ###
+### Update & Deployment Instructions
+
+> These steps are outdated
 
  * Pull updates on host.
  * Update any configuration files (config.php, script.config) if needed.
  * Run any new DB scripts.
  * Run deploy.sh to copy web files to web server.
 
-### License ###
+### License
 
 msqur is licensed under the GPL v3.0. A copy of this license is included in the LICENSE.md file in the source tree.
 
-### Who do I talk to? ###
+### Who do I talk to?
 
 * Nicholas Earwood
 * nearwood@gmail.com
-* http://nearwood.net/
+* https://nearwood.dev/
 
-### Credits ###
+### Credits
+
+
+
+> This section needs to be updated
+
 * Apache
 * PHP
 * MariaDB
