@@ -19,7 +19,3 @@ jobs:
     script: phpunit tests
   - stage: deploy
     script: bash deploy.sh
-
-before_install:
-- mkdir -p ~\/.ssh
-- openssl aes-256-cbc -K $encrypted_571de2096706_key -iv $encrypted_571de2096706_iv -in .travis/travis_ci.enc -out .travis/id_rsa -d
