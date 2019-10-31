@@ -1,6 +1,6 @@
 #. script.config
 
-mkdir -p ~\/.ssh
+# mkdir -p ~/.ssh
 openssl aes-256-cbc -K $encrypted_571de2096706_key -iv $encrypted_571de2096706_iv -in .travis/travis_ci.enc -out .travis/id_rsa -d
 
 eval "$(ssh-agent -s)"
