@@ -67,8 +67,10 @@ function checkUploads($files)
 		
 		//Get and check mime types (ignoring provided ones)
 		$finfo = new finfo(FILEINFO_MIME_TYPE);
-		if ($finfo->file($file['tmp_name']) != "application/xml")
+		$mimeType = $finfo->file($file['tmp_name']);
+		if ($mimeType != "application/xml" && $mimeType != "text/xml")
 		{
+			if (DEBUG) warn('File: ' . $file['tmp_name'] . ': Invalid MIME type ' . $mimeType);
 			unset($files[$index]);
 			continue;
 		}
@@ -95,7 +97,7 @@ if (isset($_POST['upload']) && isset($_FILES))
 		else
 			echo '<div class="info">' . count($files) . ' files were uploaded.</div>';
 		
-		if (DEBUG) debug('<div class="debug">Adding engine: ' . $_POST['make'] . ', ' . $_POST['code'] . ', ' . $_POST['displacement'] . ', ' . $_POST['compression'] . ', ' . $_POST['aspiration'] . '</div>');
+		if (DEBUG) debug('Adding engine: ' . $_POST['make'] . ', ' . $_POST['code'] . ', ' . $_POST['displacement'] . ', ' . $_POST['compression'] . ', ' . $_POST['aspiration']);
 		
 		$engineid = $msqur->addEngine($_POST['make'], $_POST['code'], $_POST['displacement'], $_POST['compression'], $_POST['aspiration']);
 		$fileList = $msqur->addMSQs($files, $engineid);
