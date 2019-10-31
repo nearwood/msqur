@@ -17,12 +17,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 require "msqur.php";
 
-//Msq $msq = msqur.upload("blah");
-$msqur->splash();
+if (isset($_GET['msq'])) {
 
-//browse
-//list<Msq> msqs = browse()//browse(START_NUMBER)
-//have to check with angular how data pagination/ordering can work best
+  header('Content-Type: application/xml');
+  header('Content-Disposition: attachment; filename=' . $_GET['msq'] . '.msq');
+  header('Pragma: no-cache');
 
-//search
+  echo $msqur->getMSQForDownload($_GET['msq']);
+} else {
+
+  include "index.php";
+}
 ?>

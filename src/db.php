@@ -1,6 +1,6 @@
 <?php
 /* msqur - MegaSquirt .msq file viewer web application
-Copyright (C) 2016 Nicholas Earwood nearwood@gmail.com http://nearwood.net
+Copyright 2014-2019 Nicholas Earwood nearwood@gmail.com https://nearwood.dev
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -278,6 +278,40 @@ class DB
 		}
 		
 		return $html;
+	}
+	
+	public function getMSQForDownload($id)
+	{
+
+		if (!$this->connect()) return null;
+		
+		$xml = FALSE;
+		
+		try
+		{
+			$st = $this->db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
+			DB::tryBind($st, ":id", $id);
+			$st->execute();
+			if ($st->rowCount() > 0)
+			{
+				$result = $st->fetch(PDO::FETCH_ASSOC);
+				$st->closeCursor();
+				$xml = $result['xml'];
+				if (DEBUG) debug('<div class="debug">Cached, returning HTML.</div>');
+			}
+			else
+			{
+				echo "<div class=\"debug\">No result for $id</div>";
+				echo '<div class="error">Invalid MSQ err 2</div>';
+				return null;
+			}
+		}
+		catch (PDOException $e)
+		{
+			$this->dbError($e);
+		}
+		
+		return $xml;
 	}
 	
 	/**

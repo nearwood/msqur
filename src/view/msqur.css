@@ -1,5 +1,5 @@
 /* msqur - MegaSquirt .msq file viewer web application
-Copyright (C) 2015 Nicholas Earwood nearwood@gmail.com http://nearwood.net
+Copyright 2014-2019 Nicholas Earwood nearwood@gmail.com https://nearwood.dev
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

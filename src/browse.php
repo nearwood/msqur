@@ -1,6 +1,6 @@
 <?php
 /* msqur - MegaSquirt .msq file viewer web application
-Copyright (C) 2016 Nicholas Earwood nearwood@gmail.com http://nearwood.net
+Copyright 2014-2019 Nicholas Earwood nearwood@gmail.com https://nearwood.dev
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -88,11 +88,11 @@ $numResults = count($results);
 
 echo '<div id="content"><div class="info">' . $numResults . ' results.</div>';
 echo '<table ng-controller="BrowseController">';
-echo '<tr><th>ID</th><th>Engine Make</th><th>Engine Code</th><th>Cylinders</th><th>Liters</th><th>Compression</th><th>Aspiration</th><th>Firmware/Version</th><th>Upload Date</th><th>Views</th></tr>';
+echo '<tr><th>ID</th><th>Download</th><th>Engine Make</th><th>Engine Code</th><th>Cylinders</th><th>Liters</th><th>Compression</th><th>Aspiration</th><th>Firmware/Version</th><th>Upload Date</th><th>Views</th></tr>';
 for ($c = 0; $c < $numResults; $c++)
 {
 	$aspiration = $results[$c]['induction'] == 1 ? "Turbo" : "NA";
-	echo '<tr><td><a href="view.php?msq=' . $results[$c]['mid'] . '">' . $results[$c]['mid'] . '</a></td><td>' . $results[$c]['make'] . '</td><td>' . $results[$c]['code'] . '</td><td>' . $results[$c]['numCylinders'] . '</td><td>' . $results[$c]['displacement'] . '</td><td>' . $results[$c]['compression'] . ':1</td><td>' . $aspiration . '</td><td>' . $results[$c]['firmware'] . '/' . $results[$c]['signature'] . '</td><td>' . $results[$c]['uploadDate'] . '</td><td>' . $results[$c]['views'] . '</td></tr>';
+	echo '<tr><td><a href="view.php?msq=' . $results[$c]['mid'] . '">' . $results[$c]['mid'] . '</a></td><td><a href="download.php?msq=' . $results[$c]['mid'] . '">💾</a></td><td>' . $results[$c]['make'] . '</td><td>' . $results[$c]['code'] . '</td><td>' . $results[$c]['numCylinders'] . '</td><td>' . $results[$c]['displacement'] . '</td><td>' . $results[$c]['compression'] . ':1</td><td>' . $aspiration . '</td><td>' . $results[$c]['firmware'] . '/' . $results[$c]['signature'] . '</td><td>' . $results[$c]['uploadDate'] . '</td><td>' . $results[$c]['views'] . '</td></tr>';
 }
 echo '</table></div>';
 
