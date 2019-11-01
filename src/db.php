@@ -217,17 +217,17 @@ class DB
 		
 		try
 		{
-			if (DEBUG) debug('<div class="debug">Updating HTML cache...</div>');
+			if (DEBUG) debug('Updating HTML cache...');
 			$st = $this->db->prepare("UPDATE metadata m SET m.reingest=FALSE WHERE m.id = :id");
 			DB::tryBind($st, ":id", $id);
 			if ($st->execute())
 			{
-				if (DEBUG) debug('<div class="debug">Reingest reset.</div>');
+				if (DEBUG) debug('Reingest reset.');
 				$st->closeCursor();
 				return true;
 			}
 			else
-				if (DEBUG) debug('<div class="warn">Unable to update cache.</div>');
+				if (DEBUG) debug('Unable to update cache.');
 				
 			$st->closeCursor();
 		}
@@ -248,13 +248,13 @@ class DB
 	{
 		if (DISABLE_MSQ_CACHE)
 		{
-			if (DEBUG) debug('<div class="debug warn">Cache disabled.</div>');
+			if (DEBUG) debug('Cache disabled.');
 			return FALSE;
 		}
 		
 		if ($this->needReingest($id))
 		{
-			if (DEBUG) debug('<div class="debug info">Flagged for reingest.</div>');
+			if (DEBUG) debug('Flagged for reingest.');
 			$this->resetReingest($id);
 			return FALSE;
 		}
@@ -275,10 +275,10 @@ class DB
 				$html = $result['html'];
 				if ($html === NULL)
 				{
-					if (DEBUG) debug('<div class="debug">No HTML cache found.</div>');
+					if (DEBUG) debug('No HTML cache found.');
 					return FALSE;
 				}
-				else if (DEBUG) debug('<div class="debug">Cached, returning HTML.</div>');
+				else if (DEBUG) debug('Cached, returning HTML.');
 			}
 			else
 			{
@@ -312,7 +312,7 @@ class DB
 				$result = $st->fetch(PDO::FETCH_ASSOC);
 				$st->closeCursor();
 				$xml = $result['xml'];
-				if (DEBUG) debug('<div class="debug">Cached, returning HTML.</div>');
+				if (DEBUG) debug('Cached, returning HTML.');
 			}
 			else
 			{
@@ -552,19 +552,19 @@ class DB
 		
 		try
 		{
-			if (DEBUG) debug('<div class="debug">Updating HTML cache...</div>');
+			if (DEBUG) debug('Updating HTML cache...');
 			$st = $this->db->prepare("UPDATE msqs ms, metadata m SET ms.html=:html WHERE m.msq = ms.id AND m.id = :id");
 			//$xml = mb_convert_encoding($html, "UTF-8");
 			DB::tryBind($st, ":id", $id);
 			DB::tryBind($st, ":html", $html);
 			if ($st->execute())
 			{
-				if (DEBUG) debug('<div class="debug">Cache updated.</div>');
+				if (DEBUG) debug('Cache updated.');
 				$st->closeCursor();
 				return true;
 			}
 			else
-				if (DEBUG) debug('<div class="warn">Unable to update cache.</div>');
+				if (DEBUG) debug('Unable to update cache.');
 				
 			$st->closeCursor();
 		}
@@ -596,7 +596,7 @@ class DB
 		
 		try
 		{
-			if (DEBUG) debug('<div class="debug">Updating engine information...</div>');
+			if (DEBUG) debug('Updating engine information...');
 			$st = $this->db->prepare("UPDATE engines e, metadata m SET e.numCylinders = :nCylinders, twoStroke = :twoStroke, injType = :injType, nInjectors = :nInjectors, engineType = :engineType WHERE e.id = m.engine AND m.id = :id");
 			DB::tryBind($st, ":id", $id);
 			DB::tryBind($st, ":nCylinders", $engine['nCylinders']);
@@ -611,12 +611,12 @@ class DB
 			DB::tryBind($st, ":engineType", $engine['engineType']);
 			if ($st->execute())
 			{
-				if (DEBUG) debug('<div class="debug">Engine updated.</div>');
+				if (DEBUG) debug('Engine updated.');
 				$st->closeCursor();
 				return true;
 			}
 			else
-				if (DEBUG) debug('<div class="warn">Unable to update engine metadata.</div>');
+				if (DEBUG) debug('Unable to update engine metadata.');
 				
 			$st->closeCursor();
 		}
@@ -648,7 +648,7 @@ class DB
 		
 		try
 		{
-			if (DEBUG) debug('<div class="debug">Updating HTML cache...</div>');
+			if (DEBUG) debug('Updating HTML cache...');
 			$st = $this->db->prepare("UPDATE metadata md SET md.fileFormat = :fileFormat, md.signature = :signature, md.firmware = :firmware, md.author = :author WHERE md.id = :id");
 			//$xml = mb_convert_encoding($html, "UTF-8");
 			DB::tryBind($st, ":id", $id);
@@ -658,12 +658,12 @@ class DB
 			DB::tryBind($st, ":author", $metadata['author']);
 			if ($st->execute())
 			{
-				if (DEBUG) debug('<div class="debug">Metadata updated.</div>');
+				if (DEBUG) debug('Metadata updated.');
 				$st->closeCursor();
 				return true;
 			}
 			else
-				if (DEBUG) debug('<div class="warn">Unable to update metadata.</div>');
+				if (DEBUG) debug('Unable to update metadata.');
 				
 			$st->closeCursor();
 		}

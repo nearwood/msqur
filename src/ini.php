@@ -161,7 +161,7 @@ class INI
 						case "curve": //start of new curve
 							if (!empty($curve))
 							{//save the last one, if any
-								if (DEBUG) debug('<div class="debug">Parsed curve: ' . $curve['id'] . '</div>');
+								if (DEBUG) debug('Parsed curve: ' . $curve['id'] . '');
 								//var_export($curve);
 								$values[$currentSection][$curve['id']] = $curve;
 							}
@@ -239,7 +239,7 @@ class INI
 						case "table": //start of new curve
 							if (!empty($table))
 							{//save the last one, if any
-								if (DEBUG) debug('<div class="debug">Parsed table: ' . $table['id'] . '</div>');
+								if (DEBUG) debug('Parsed table: ' . $table['id'] . '');
 								//var_export($curve);
 								$values[$currentSection][$table['id']] = $table;
 							}
