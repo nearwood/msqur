@@ -71,13 +71,15 @@ class MSQ
 			$msqHeader .= '</div>';
 			
 			$sig = $msq->versionInfo['signature'];
+			$sigString = $sig;
 			$msqMap = INI::getConfig($sig);
 			
 			if ($msqMap == null)
 			{
-				$msqHeader .= "<div class=\"error\">Unable to load the corresponding configuration file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1]</div>";
+				$issueTitle = urlencode("INI Request: $sigString");
+				$msqHeader .= '<div class="error">Unable to load the corresponding configuration file for that MSQ. Please <a href="https://github.com/nearwood/msqur/issues/new?title=' . $issueTitle . '">file a bug!</a></div>';
 				$html['msqHeader'] = $msqHeader;
-				return $html;
+				return $html; //TODO Signal caller to skip engine/metadata updates
 			}
 			
 			$html['msqHeader'] = $msqHeader;
