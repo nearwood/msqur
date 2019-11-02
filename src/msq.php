@@ -168,13 +168,13 @@ class MSQ
 				
 				$value = $this->findConstant($msq, $key);
 				
-				//if (DEBUG) debug("<div class=\"debug\">Trying $key for engine data</div>");
+				//if (DEBUG) debug("Trying $key for engine data");
 				if ($value !== NULL)
 				{
 					$value = trim($value, '"');
 					if (array_key_exists($key, $engineSchema))
 					{
-						if (DEBUG) debug("<div class=\"debug\">Found engine data: $key => $value</div>");
+						if (DEBUG) debug(" $value");
 						$engine[$key] = $value;
 					}
 					

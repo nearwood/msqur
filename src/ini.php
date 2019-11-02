@@ -28,7 +28,7 @@ class INI
 		if ($msVersion == "MS2Extra") $fwVersion = $sig[1];
 		else $fwVersion = $sig[2];
 		
-		if (DEBUG) debug("<div class=\"debug\">$msVersion/$fwVersion</div>");
+		if (DEBUG) debug("$msVersion/$fwVersion");
 		
 		//Parse msVersion
 		switch ($msVersion)
@@ -88,7 +88,7 @@ class INI
 			echo "<div class=\"error\">Error opening file: $file</div>";
 			return null;
 		}
-		else if (DEBUG) debug("<div class=\"debug\">Opened: $file</div>");
+		else if (DEBUG) debug("Opened: $file");
 		
 		$globals = array();
 		$curve = array();
@@ -110,7 +110,7 @@ class INI
 			{
 				$currentSection = substr($line, 1, -1);
 				$values[$currentSection] = array();
-				if (DEBUG) debug("<div class=\"debug\">Reading section: $currentSection</div>");
+				if (DEBUG) debug("Reading section: $currentSection");
 				continue;
 			}
 			
@@ -123,7 +123,7 @@ class INI
 				//For the menu, this is whether the menu item is visible or enabled.
 				INI::parseExpression($line);
 				
-				//if (DEBUG) debug("<div class=\"debug\">Skipping expression in line: $line</div>");
+				//if (DEBUG) debug("Skipping expression in line: $line");
 				continue;
 			}
 			
@@ -173,7 +173,7 @@ class INI
 								$curve['id'] = $value[0];
 								$curve['desc'] = trim($value[1], '"');
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid curve: $key</div>");
+							else if (DEBUG) debug("Invalid curve: $key");
 							break;
 						case "topicHelp":
 							if (is_array($curve))
@@ -188,7 +188,7 @@ class INI
 								$curve['xLabel'] = $value[0];
 								$curve['yLabel'] = $value[1];
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid curve column label: $key</div>");
+							else if (DEBUG) debug("Invalid curve column label: $key");
 							break;
 						case "xAxis":
 							$value = array_map('trim', explode(',', $value));
@@ -198,7 +198,7 @@ class INI
 								$curve['xMax'] = $value[1];
 								$curve['xSomething'] = $value[2];
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid curve X axis: $key</div>");
+							else if (DEBUG) debug("Invalid curve X axis: $key");
 							break;
 						case "yAxis":
 							$value = array_map('trim', explode(',', $value));
@@ -208,7 +208,7 @@ class INI
 								$curve['yMax'] = $value[1];
 								$curve['ySomething'] = $value[2];
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid curve Y axis: $key</div>");
+							else if (DEBUG) debug("Invalid curve Y axis: $key");
 							break;
 						case "xBins":
 							$value = array_map('trim', explode(',', $value));
@@ -218,7 +218,7 @@ class INI
 								//$curve['xBinVar'] = $value[1]; //The value read from the ECU
 								//Think they all have index 1 except bogus curves
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid curve X bins: $key</div>");
+							else if (DEBUG) debug("Invalid curve X bins: $key");
 							break;
 						case "yBins":
 							$value = array_map('trim', explode(',', $value));
@@ -226,7 +226,7 @@ class INI
 							{
 								$curve['yBinConstant'] = $value[0];
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid curve Y bins: $key</div>");
+							else if (DEBUG) debug("Invalid curve Y bins: $key");
 							break;
 						case "gauge": //not all have this
 							break;
@@ -253,7 +253,7 @@ class INI
 								$table['desc'] = trim($value[2], '"');
 								//$table['page'] = $value[3]; //Don't care for this one AFAIK.
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid table: $key</div>");
+							else if (DEBUG) debug("Invalid table: $key");
 							break;
 						case "topicHelp":
 							if (is_array($table))
@@ -269,7 +269,7 @@ class INI
 								//$table['xBinVar'] = $value[1]; //The value read from the ECU
 								//Think they all have index 1 except bogus tables
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid table X bins: $key</div>");
+							else if (DEBUG) debug("Invalid table X bins: $key");
 							break;
 						case "yBins":
 							$value = array_map('trim', explode(',', $value));
@@ -277,7 +277,7 @@ class INI
 							{
 								$table['yBinConstant'] = $value[0];
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid table Y bins: $key</div>");
+							else if (DEBUG) debug("Invalid table Y bins: $key");
 							break;
 						case "zBins": //not all have this
 							$value = array_map('trim', explode(',', $value));
@@ -285,7 +285,7 @@ class INI
 							{
 								$table['zBinConstant'] = $value[0];
 							}
-							else if (DEBUG) debug("<div class=\"warn\">Invalid table Z bins: $key</div>");
+							else if (DEBUG) debug("Invalid table Z bins: $key");
 							break;
 					}
 				break;

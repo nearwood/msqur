@@ -141,7 +141,7 @@ class DB
 			
 			try
 			{
-				if (DEBUG) debug("<div class=\"debug\">Add engine: \"$make\", \"$code\", $displacement, $compression, $turbo</div>");
+				if (DEBUG) debug("Add engine: \"$make\", \"$code\", $displacement, $compression, $turbo");
 				//TODO use any existing one before creating
 				$st = $this->db->prepare("INSERT INTO engines (make, code, displacement, compression, induction) VALUES (:make, :code, :displacement, :compression, :induction)");
 				
@@ -166,7 +166,7 @@ class DB
 			}
 		}
 		
-		if (DEBUG) debug("<div class=\"debug\">Add engine returns: $id</div>");
+		if (DEBUG) debug("Add engine returns: $id");
 		return $id;
 	}
 	
@@ -193,7 +193,7 @@ class DB
 			}
 			else
 			{
-				if (DEBUG) debug("<div class=\"debug\">No result for $id</div>");
+				if (DEBUG) debug("No result for $id");
 				echo '<div class="error">Invalid MSQ</div>';
 				$st->closeCursor();
 			}
@@ -282,7 +282,7 @@ class DB
 			}
 			else
 			{
-				if (DEBUG) debug("<div class=\"debug\">No result for $id</div>");
+				if (DEBUG) debug("No result for $id");
 				echo '<div class="error">Invalid MSQ</div>';
 				return null;
 			}
@@ -424,7 +424,7 @@ class DB
 			
 		try
 		{
-			if (DEBUG) debug("<div class=\"debug\">Getting firmware list...</div>");
+			if (DEBUG) debug("Getting firmware list...");
 			$st = $this->db->prepare("SELECT DISTINCT firmware FROM `metadata`");
 			
 			if ($st->execute())
@@ -454,7 +454,7 @@ class DB
 		
 		try
 		{
-			if (DEBUG) debug("<div class=\"debug\">Getting firmware version list...</div>");
+			if (DEBUG) debug("Getting firmware version list...");
 			if ($firmware == null)
 			{
 				$st = $this->db->prepare("SELECT DISTINCT signature FROM `metadata`");
@@ -487,7 +487,7 @@ class DB
 			
 		try
 		{
-			if (DEBUG) debug("<div class=\"debug\">Getting engine make list...</div>");
+			if (DEBUG) debug("Getting engine make list...");
 			$st = $this->db->prepare("SELECT DISTINCT make FROM `engines`");
 			
 			if ($st->execute())
@@ -512,7 +512,7 @@ class DB
 			
 		try
 		{
-			if (DEBUG) debug("<div class=\"debug\">Getting engine code list...</div>");
+			if (DEBUG) debug("Getting engine code list...");
 			
 			if ($make !== null && gettype($make) == "string")
 			{
