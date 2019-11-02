@@ -21,14 +21,18 @@ class INI
 		//"MS2Extra Serial321 "
 		//"MS2Extra Serial310 "
 		//"MSII Rev 3.83000   "
+		//"MSnS-extra format 024s *********"
+		//"MSnS-extra format 024y3 ********"
 		
 		//Get the signature from the MSQ
 		$sig = explode(' ', $signature); //, 3); limit 3 buckets
 		$msVersion = $sig[0];
+
+		//Handle MS2 strings that don't have 'format' in them
 		if ($msVersion == "MS2Extra") $fwVersion = $sig[1];
 		else $fwVersion = $sig[2];
 		
-		if (DEBUG) debug("$msVersion/$fwVersion");
+		debug("Firmware version: $msVersion/$fwVersion");
 		
 		//Parse msVersion
 		switch ($msVersion)
@@ -36,15 +40,25 @@ class INI
 			case "MS1":
 				$msDir = "ms1/";
 				break;
+
+			case "MSnS-extra":
+				$msDir = "msns-extra/";
+				break;
+
 			case "MSII":
 				$msDir = "ms2/";
 				break;
+
 			case "MS2Extra":
 				$msDir = "ms2extra/";
 				break;
+
 			case "MS3":
 				$msDir = "ms3/";
 				break;
+
+			default:
+				$msDir = "unknown";
 		}
 		
 		//Setup firmware version for matching.
@@ -57,6 +71,9 @@ class INI
 		$signature = array($msVersion, $fwVersion);
 		
 		$iniFile = "ini/" . $msDir . $fwVersion . ".ini";
+
+		debug("INI File: $iniFile");
+
 		$msqMap = INI::parse($iniFile, TRUE);
 		
 		return $msqMap;
@@ -79,13 +96,17 @@ class INI
 		}
 		catch (Exception $e)
 		{
+			//TODO I'm not sure `file` throws
 			echo "<div class=\"error\">Error opening file: $file</div>";
+			error("Exception opening: $file");
+			error($e->getMessage());
 			return null;
 		}
 		
 		if ($ini == FALSE || count($ini) == 0)
 		{
 			echo "<div class=\"error\">Error opening file: $file</div>";
+			error("Error or empty file: $file");
 			return null;
 		}
 		else if (DEBUG) debug("Opened: $file");
