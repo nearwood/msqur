@@ -14,6 +14,7 @@ class INI
 	public static function getConfig(&$signature)
 	{
 		//sig is 19 bytes + \0
+		//"MS1/Extra format 029y3 *********"
 		//"MS3 Format 0262.09 "
 		//"MS3 Format 0435.14P"
 		//"MS2Extra comms332m2"
@@ -41,6 +42,7 @@ class INI
 				$msDir = "ms1/";
 				break;
 
+			case "MS1/Extra":
 			case "MSnS-extra":
 				$msDir = "msns-extra/";
 				break;
