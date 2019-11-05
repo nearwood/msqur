@@ -155,20 +155,24 @@ class Msqur
 				$metadata = array();
 				$xml = $this->db->getXML($id);
 				if ($xml !== null) {
-					$groupedHtml = $msq->parseMSQ($xml, $engine, $metadata);
-					$this->db->updateMetadata($id, $metadata);
-					$this->db->updateEngine($id, $engine);
-					
-					$html = "";
-					foreach($groupedHtml as $group => $v)
-					{
-						//TODO Group name as fieldset legend or sth
-						$html .= "<div class=\"group-$group\">";
-						$html .= $v;
-						$html .= '</div>';
+					try {
+						$groupedHtml = $msq->parseMSQ($xml, $engine, $metadata);
+						$this->db->updateMetadata($id, $metadata);
+						$this->db->updateEngine($id, $engine);
+						
+						$html = "";
+						foreach($groupedHtml as $group => $v)
+						{
+							//TODO Group name as fieldset legend or sth
+							$html .= "<div class=\"group-$group\">";
+							$html .= $v;
+							$html .= '</div>';
+						}
+						
+						$this->db->updateCache($id, $html);
+					} catch (MSQ_ParseException $e) {
+						$html = $e->getHTMLMessage();
 					}
-					
-					$this->db->updateCache($id, $html);
 				}
 			}
 		}
