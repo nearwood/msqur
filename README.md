@@ -56,6 +56,18 @@ If you'd like to run a copy to develop yourself, read the [Installation](#Instal
 1. Update DB with update scripts in sequential order (patse into phpMyAdmin or piped to `sqlcmd`, etc.)
 1. Hit webserver to start using it (eg. `php -S`, etc.)
 
+### Source tree description
+
+* `db` - Database scripts
+* `doxygen` - Doxygen configuration and generated code documentation
+* `src` - PHP source
+  * `ini` - Megasquirt configuration files
+  * `view` - PHP/JS frontend source
+    * `lib` - JS 3rd party libraries
+    * `img` - Static images
+  * `tests` - PHP Unit Tests (TODO)
+
+
 ### Update & Deployment Instructions
 
 > These steps are outdated
