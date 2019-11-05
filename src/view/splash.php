@@ -1,8 +1,25 @@
 <div class="info" id="splash">
 	<h3>Overview</h3>
 	<p>View MSQ files online. Upload your Tuner Studio .msq files to view and share them.</p>
-	<h3>How to use this site:</h3>
+	<aside>
+		<h3>MSQ File Support</h3>
+		<p>Since I don't have all configuration (INI) files for all possible Megasquirt combinations, some files won't work.
+			I've gathered all the INI files I could find but some people have very old or obscure ones.
+			If you send me a missing INI file, I can add it.
+		</p>
+		<p>These are the following MSQ formats that are currently supported:</p>
+		<ul class="supportList">
+			<li>MS1</li>
+			<li class="supported">MSnS-extra (partial)</li>
+			<li class="supported">MS2</li>
+			<li class="supported">MS2Extra</li>
+			<li class="supported">MS3 (partial)</li>
+			<li>Speeduino</li>
+		</ul>
+		<p>You can upload a non-supported MSQ, but you won't be able to view it until support is added.</p>
+	</aside>
 	<section>
+		<h3>How to use this site:</h3>
 		<h4>To add your MSQ file to share and view online:</h4>
 		<p>Click on the upload button:</p>
 		<img class="tutorial" id="tutorial1" src="view/img/tutorial1.png"/>

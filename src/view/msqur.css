@@ -183,6 +183,32 @@ span#literMargin input {
 	/* display: none; */
 }
 
+ul.supportList {
+	list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+aside {
+	width: 40%;
+	float: right;
+	border: 2px solid black;
+	padding: 10px;
+	box-shadow: 5px 5px 5px rgb(100, 100, 100);
+}
+
+.supportList li {
+	text-indent: 1rem;
+}
+
+.supportList li::before {
+	content: "❌ ";
+}
+
+.supportList li.supported::before {
+	content: "✅ ";
+}
+
 #faq .q {
 	font-weight: bold;
 }
