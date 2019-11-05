@@ -14,25 +14,25 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
-* {
+body, button {
 	font-family: "Verdana", sans-serif;
 }
 
 div.error {
-	color: red;
+	color: darkred;
 }
 
 div.warn, div.warning {
-	color: orange;
+	color: darkorange;
 }
 
 div.info {
-	color: green;
+	color: #111;
 }
 
 div.debug {
 	font-family: monospace !important;
-	color: dark-gray;
+	color: black;
 }
 
 div#navigation {

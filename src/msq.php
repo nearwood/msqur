@@ -48,29 +48,38 @@ class MSQ
 	public function parseMSQ($xml, &$engine, &$metadata)
 	{
 		$html = array();
-		if (DEBUG) debug('<div class="debug">Parsing MSQ...</div>');
+		if (DEBUG) debug('Parsing XML...');
 		$errorCount = 0; //Keep track of how many things go wrong.
 		
+		libxml_use_internal_errors(true);
 		$msq = simplexml_load_string($xml);
-		
-		if ($msq)
-		{
+
+		if ($msq === false) {
+			error("Failed to parse XML.");
+			foreach(libxml_get_errors() as $error) {
+					error($error->message);
+			}
+
+			$html['header'] = '<div class="error">Unable to parse MSQ.</div>';
+		} else if ($msq) {
 			$msqHeader = '<div class="info">';
+			$msqHeader .= '<div style="float: right;"><a title="Download MSQ File" href="download.php?msq=' . $_GET['msq'] . '">💾</a></div>';
 			$msqHeader .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
 			$msqHeader .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
 			$msqHeader .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
 			$msqHeader .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
-			$msqHeader .= "<div><a href='download.php?msq=" . $_GET['msq'] . "'>💾</a></div>";
 			$msqHeader .= '</div>';
 			
 			$sig = $msq->versionInfo['signature'];
+			$sigString = $sig;
 			$msqMap = INI::getConfig($sig);
 			
 			if ($msqMap == null)
 			{
-				$msqHeader .= "<div class=\"error\">Unable to load the corresponding configuration file for that MSQ. Please file a bug requesting: $sig[0]/$sig[1]</div>";
+				$issueTitle = urlencode("INI Request: $sigString");
+				$msqHeader .= '<div class="error">Unable to load the corresponding configuration file for that MSQ. Please <a href="https://github.com/nearwood/msqur/issues/new?title=' . $issueTitle . '">file a bug!</a></div>';
 				$html['msqHeader'] = $msqHeader;
-				return $html;
+				return $html; //TODO Signal caller to skip engine/metadata updates
 			}
 			
 			$html['msqHeader'] = $msqHeader;
@@ -99,10 +108,10 @@ class MSQ
 			{
 				if (in_array($curve['id'], $this->msq_curve_blacklist))
 				{
-					if (DEBUG) debug('<div class="debug">Skipping curve: ' . $curve['id'] . '</div>');
+					if (DEBUG) debug('Skipping curve: ' . $curve['id']);
 					continue;
 				}
-				else if (DEBUG) debug('<div class="debug">Curve: ' . $curve['id'] . '</div>');
+				else if (DEBUG) debug('Curve: ' . $curve['id']);
 				
 				//id is just for menu (and our reference)
 				//need to find xBin (index 0, 1 is the live meatball variable)
@@ -123,14 +132,14 @@ class MSQ
 					$yAxis = preg_split("/\s+/", trim($yBins));
 					$html["curves"] .= $this->msqTable2D($curve, $curve['xMin'], $curve['xMax'], $xAxis, $curve['yMin'], $curve['yMax'], $yAxis, $help);
 				}
-				else if (DEBUG) debug('<div class="debug">Missing/unsupported curve information: ' . $curve['id'] . '</div>');
+				else if (DEBUG) debug('Missing/unsupported curve information: ' . $curve['id']);
 			}
 			
 			$html["pretables"] = '<div class="group-header">3D Tables</div>';;
 			$html["tables"] = "";
 			foreach ($tables as $table)
 			{
-				if (DEBUG) debug('<div class="debug">Table: ' . $table['id'] . '</div>');
+				if (DEBUG) debug('Table: ' . $table['id']);
 				
 				$help = NULL;
 				if (array_key_exists('topicHelp', $table))
@@ -148,7 +157,7 @@ class MSQ
 					$zData = preg_split("/\s+/", trim($zBins));//, PREG_SPLIT_NO_EMPTY); //, $limit);
 					$html["tables"] .= $this->msqTable3D($table, $xAxis, $yAxis, $zData, $help);
 				}
-				else if (DEBUG) debug('<div class="debug">Missing/unsupported table information: ' . $table['id'] . '</div>');
+				else if (DEBUG) debug('Missing/unsupported table information: ' . $table['id']);
 			}
 			
 			$html["preconstants"] = '<div class="group-header">Constants</div>';
@@ -159,13 +168,13 @@ class MSQ
 				
 				$value = $this->findConstant($msq, $key);
 				
-				//if (DEBUG) debug("<div class=\"debug\">Trying $key for engine data</div>");
+				//if (DEBUG) debug("Trying $key for engine data");
 				if ($value !== NULL)
 				{
 					$value = trim($value, '"');
 					if (array_key_exists($key, $engineSchema))
 					{
-						if (DEBUG) debug("<div class=\"debug\">Found engine data: $key => $value</div>");
+						if (DEBUG) debug(" $value");
 						$engine[$key] = $value;
 					}
 					
@@ -175,10 +184,6 @@ class MSQ
 					$html["constants"] .= $this->msqConstant($key, $value, $help);
 				}
 			}
-		}
-		else
-		{
-			$html['header'] = '<div class="error">Unable to parse tune.</div>';
 		}
 		
 		return $html;
@@ -237,7 +242,7 @@ class MSQ
 		
 		//var_export($curve);
 		
-		//if (DEBUG) debug('<div class="debug">Formatting curve: ' . $curve['id'] . '</div>');
+		//if (DEBUG) debug('Formatting curve: ' . $curve['id']);
 		
 		$dataCount = count($xAxis);
 		if ($dataCount !== count($yAxis))
@@ -279,7 +284,7 @@ class MSQ
 		$rows = count($yAxis);
 		$cols = count($xAxis);
 		
-		//if (DEBUG) debug('<div class="debug">Formatting table: ' . $table['id'] . '</div>');
+		//if (DEBUG) debug('Formatting table: ' . $table['id']);
 		
 		$dataCount = count($zBins);
 		if ($dataCount !== $rows * $cols)
