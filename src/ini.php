@@ -1,4 +1,22 @@
 <?php
+
+/* @brief Custom MSQ Parse Exceptions
+ */
+class MSQ_ParseException extends Exception {
+	protected $htmlMessage;
+
+	public function __construct($message = null, $html = '', $code = 0, Exception $previous = null) {
+		parent::__construct($message, $code, $previous);
+		$this->htmlMessage = $html;
+	}
+
+	public function getHTMLMessage() {
+		return $this->htmlMessage;
+	}
+}
+
+class MSQ_ConfigException extends MSQ_ParseException { }
+
 /*
  * @brief INI parsing
  * 
@@ -6,7 +24,7 @@
 class INI
 {
 	/**
-	 * @brief Given a signature string, finds and parses the respective INI file.
+	 * @brief Given a signature string, calculates the respective INI file.
 	 * 
 	 * Returns an array of the config file contents.
 	 * @param $signature The signature string which will be modified into a firmware/version array.
@@ -60,7 +78,7 @@ class INI
 				break;
 
 			default:
-				$msDir = "unknown";
+				throw new MSQ_ConfigException("Unknown/Invalid MSQ signature: $msVersion/$fwVersion");
 		}
 		
 		//Setup firmware version for matching.
@@ -76,9 +94,7 @@ class INI
 
 		debug("INI File: $iniFile");
 
-		$msqMap = INI::parse($iniFile, TRUE);
-		
-		return $msqMap;
+		return $iniFile;
 	}
 	
 	/**
@@ -87,10 +103,9 @@ class INI
 	 * Based on code from: goulven.ch@gmail.com (php.net comments) http://php.net/manual/en/function.parse-ini-file.php#78815
 	 * 
 	 * @param $file The path to the INI file that will be loaded and parsed.
-	 * @param $something Unused
 	 * @returns A huge array of arrays, starting with sections.
 	 */
-	public static function parse($file, $something)
+	public static function parse($file)
 	{
 		try
 		{
@@ -107,9 +122,8 @@ class INI
 		
 		if ($ini == FALSE || count($ini) == 0)
 		{
-			echo "<div class=\"error\">Error opening file: $file</div>";
 			error("Error or empty file: $file");
-			return null;
+			throw new MSQ_ConfigException("Could not open MSQ config file: $file");
 		}
 		else if (DEBUG) debug("Opened: $file");
 		

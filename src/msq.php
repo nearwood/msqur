@@ -69,20 +69,19 @@ class MSQ
 			$msqHeader .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
 			$msqHeader .= "<div>Date: " . $msq->bibliography['writeDate'] . "</div>";
 			$msqHeader .= '</div>';
+			$html['msqHeader'] = $msqHeader;
 			
 			$sig = $msq->versionInfo['signature'];
 			$sigString = $sig;
-			$msqMap = INI::getConfig($sig);
-			
-			if ($msqMap == null)
-			{
+			try {
+				$iniFile = INI::getConfig($sig);
+				$msqMap = INI::parse($iniFile);
+			} catch (MSQ_ConfigException $e) {
+				error('Error parsing config file: ' . $e->getMessage());
 				$issueTitle = urlencode("INI Request: $sigString");
-				$msqHeader .= '<div class="error">Unable to load the corresponding configuration file for that MSQ. Please <a href="https://github.com/nearwood/msqur/issues/new?title=' . $issueTitle . '">file a bug!</a></div>';
-				$html['msqHeader'] = $msqHeader;
-				return $html; //TODO Signal caller to skip engine/metadata updates
+				$htmlMessage = $msqHeader . '<div class="error">Unable to load the corresponding configuration file for that MSQ. Please <a href="https://github.com/nearwood/msqur/issues/new?title=' . $issueTitle . '">file a bug!</a></div>';
+				throw new MSQ_ParseException("Could not load configuration file for MSQ: " . $e->getMessage(), $htmlMessage, 100, $e);
 			}
-			
-			$html['msqHeader'] = $msqHeader;
 			
 			//Calling function will update
 			$metadata['fileFormat'] = $msq->versionInfo['fileFormat'];
