@@ -3,6 +3,12 @@ language: php
 php:
 - '7.2'
 
+branches:
+  only:
+  - master
+  - msqur.com
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+
 stages:
 - test
 
