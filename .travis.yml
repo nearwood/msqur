@@ -21,4 +21,4 @@ deploy:
   script: bash deploy.sh
   on:
     branch: msqur.com
-    tags: true
+    condition: $TRAVIS_TAG =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/
