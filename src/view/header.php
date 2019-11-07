@@ -52,8 +52,8 @@ if (DEBUG) { ?>
 				</div>
 				<div class="formDiv">
 					<label for="aspiration">Aspiration:</label>
-					<select id="aspiration" required name="aspiration">
-						<option value="na" title="Slow">Naturally Aspirated</option>
+					<select id="aspiration" required name="aspiration" size="2">
+						<option value="na" title="Slow" selected>Naturally Aspirated</option>
 						<option value="fi" title="Fast">Forced Induction</option>
 					</select>
 				</div>
