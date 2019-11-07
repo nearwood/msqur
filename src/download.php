@@ -18,14 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 require "msqur.php";
 
 if (isset($_GET['msq'])) {
-
   header('Content-Type: application/xml');
-  header('Content-Disposition: attachment; filename=' . $_GET['msq'] . '.msq');
+  header('Content-Disposition: attachment; filename="' . $_GET['msq'] . '.msq"');
   header('Pragma: no-cache');
 
   echo $msqur->getMSQForDownload($_GET['msq']);
 } else {
-
   include "index.php";
 }
 ?>

@@ -92,7 +92,7 @@ echo '<tr><th>Uploaded</th><th>Engine Make</th><th>Engine Code</th><th>Cylinders
 for ($c = 0; $c < $numResults; $c++)
 {
 	$aspiration = $results[$c]['induction'] == 1 ? "Turbo" : "NA";
-	echo '<tr><td><a href="view.php?msq=' . $results[$c]['mid'] . '">' . $results[$c]['uploadDate'] . '</a></td><td>' . $results[$c]['make'] . '</td><td>' . $results[$c]['code'] . '</td><td>' . $results[$c]['numCylinders'] . '</td><td>' . $results[$c]['displacement'] . '</td><td>' . $results[$c]['compression'] . ':1</td><td>' . $aspiration . '</td><td>' . $results[$c]['firmware'] . '/' . $results[$c]['signature'] . '</td><td>' . $results[$c]['views'] . '</td><td><a title="Download MSQ" href="download.php?msq=' . $results[$c]['mid'] . '">💾</a></td></tr>';
+	echo '<tr><td><a href="view.php?msq=' . $results[$c]['mid'] . '">' . $results[$c]['uploadDate'] . '</a></td><td>' . $results[$c]['make'] . '</td><td>' . $results[$c]['code'] . '</td><td>' . $results[$c]['numCylinders'] . '</td><td>' . $results[$c]['displacement'] . '</td><td>' . $results[$c]['compression'] . ':1</td><td>' . $aspiration . '</td><td>' . $results[$c]['firmware'] . '/' . $results[$c]['signature'] . '</td><td>' . $results[$c]['views'] . '</td><td><a title="Download MSQ" download href="download.php?msq=' . $results[$c]['mid'] . '">💾</a></td></tr>';
 }
 echo '</table></div>';
 
