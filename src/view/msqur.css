@@ -132,7 +132,6 @@ table th[scope=row] {
 }
 
 div.curve {
-	float: left;
 	display: inline;
 }
 
@@ -140,14 +139,6 @@ div.chart {
 	/* float: right; */
 	padding: 24px;
 	display: inline;
-}
-
-div.chart > canvas.curve {
-	
-}
-
-div.chart > canvas.table {
-	
 }
 
 #engineForm {
@@ -177,10 +168,6 @@ input:invalid {
 
 input:focus:invalid {
   color: red;
-}
-
-span#literMargin input {
-	/* display: none; */
 }
 
 ul.supportList {
