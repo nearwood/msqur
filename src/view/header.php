@@ -40,7 +40,7 @@ if (DEBUG) { ?>
 				</div>
 				<div class="formDiv">
 					<label for="code">Engine Code:</label>
-					<input id="code"required name="code" type="text" placeholder="LS3" maxlength="32" style="width:4em;"/>
+					<input id="code" required name="code" type="text" placeholder="LS3" maxlength="32" style="width:4em;"/>
 				</div>
 				<div class="formDiv">
 					<label for="displacement">Displacement (liters):</label>
