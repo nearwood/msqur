@@ -64,6 +64,7 @@ class Msqur
 		return $fileList;
 	}
 	
+	//TODO pass through meta tags via argument to header
 	public function header() { include "view/header.php"; }
 	public function footer() { include "view/footer.php"; }
 	
