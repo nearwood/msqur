@@ -12,6 +12,9 @@ branches:
 stages:
 - test
 
+stages:
+- test
+
 jobs:
   include:
   - stage: test
