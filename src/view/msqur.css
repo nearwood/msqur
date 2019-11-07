@@ -82,9 +82,17 @@ div#splash img.tutorial {
 div#settings {
 	z-index: 999;
 	background: rgba(224, 224, 224, 32);
-	position: absolute;
+	float: right;
 	margin-top: 4px;
-	right: 8px;
+}
+
+img#settingsIcon {
+	cursor: pointer;
+}
+
+div#downloadLink {
+	margin: 5px;
+	float: right;
 }
 
 #fileDropZone {

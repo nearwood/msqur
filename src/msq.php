@@ -60,10 +60,9 @@ class MSQ
 					error($error->message);
 			}
 
-			$html['header'] = '<div class="error">Unable to parse MSQ.</div>';
+			throw new MSQ_ParseException("Error parsing XML", '<div class="error">Unable to parse MSQ.</div>');
 		} else if ($msq) {
 			$msqHeader = '<div class="info">';
-			$msqHeader .= '<div style="float: right;"><a title="Download MSQ File" href="download.php?msq=' . $_GET['msq'] . '">💾</a></div>';
 			$msqHeader .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
 			$msqHeader .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
 			$msqHeader .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
