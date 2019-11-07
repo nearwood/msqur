@@ -297,7 +297,6 @@ class DB
 	
 	public function getMSQForDownload($id)
 	{
-
 		if (!$this->connect()) return null;
 		
 		$xml = FALSE;
@@ -312,12 +311,10 @@ class DB
 				$result = $st->fetch(PDO::FETCH_ASSOC);
 				$st->closeCursor();
 				$xml = $result['xml'];
-				if (DEBUG) debug('Cached, returning HTML.');
 			}
 			else
 			{
-				echo "<div class=\"debug\">No result for $id</div>";
-				echo '<div class="error">Invalid MSQ err 2</div>';
+				echo "404 no such MSQ";
 				return null;
 			}
 		}

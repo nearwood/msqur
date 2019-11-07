@@ -45,7 +45,6 @@ class Msqur
 	
 	public function getMSQForDownload($id)
 	{
-
 		return $this->db->getMSQForDownload($id);
 	}
 	
