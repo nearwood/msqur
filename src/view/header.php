@@ -24,7 +24,7 @@ if (DEBUG) { ?>
 	<script src="view/msqur.js"></script>
 </head>
 <body>
-<div id="navigation"><span><button id="btnUpload">Upload</button></span><span><a href="browse.php">Browse</a></span><span style="display:none;"><a href="search.php">Search</a></span><span style="display:none;"><a>Stats</a></span><span><a href="about.php">About</a></span></div>
+<div id="navigation"><span><button id="btnUpload"><img src="view/img/upload.svg" alt="Upload" width="16" height="16"><span>Upload</span></button></span><span><a href="browse.php">Browse</a></span><span style="display:none;"><a href="search.php">Search</a></span><span style="display:none;"><a>Stats</a></span><span><a href="about.php">About</a></span></div>
 <div id="upload" style="display:none;">
 	<form id="engineForm" action="upload.php" method="post" enctype="multipart/form-data">
 		<div id="fileDropZone"><label for="fileSelect">Drop files here</label>

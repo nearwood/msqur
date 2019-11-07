@@ -50,8 +50,8 @@ div.debug {
 }
 
 div#navigation {
-	background: #333;
-	color: white;
+	background: #c1d5e0;
+	color: black;
 	padding: 8px 24px 8px 24px;
 }
 
@@ -60,18 +60,20 @@ div#navigation span {
 	padding: 0px 8px 0px 8px;
 }
 
+/*
 div#navigation a:link {
-	color: green;
+	color: #ff6f00;
 }
 div#navigation a:hover {
-	color: white;
+	color: #c43e00;
 }
 div#navigation a:active {
-	color: white;
+	color: #ffa040;
 }
 div#navigation a:visited {
-	color: red;
+	color: #c43e00;
 }
+*/
 
 div#splash img.tutorial {
 	margin-bottom: 32px;
