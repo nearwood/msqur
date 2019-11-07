@@ -28,7 +28,6 @@ if (DEBUG) { ?>
 	<link rel="stylesheet" href="view/lib/jquery-ui.css" />
 	<script src="view/lib/jquery-ui.min.js"></script>
 	<script src="view/lib/angular.min.js"></script>
-	<script src="view/msqur.js"></script>
 	<script src="view/lib/tablesorter/jquery.tablesorter.min.js"></script>
 	<script src="view/lib/Chart.js/Chart.min.js"></script>
 <?php } else { ?>
@@ -36,6 +35,7 @@ if (DEBUG) { ?>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" integrity="sha384-5L1Zwk1YapN1l4l4rYc+1fr3Z0g23LbCBztpq0LQcbDCelzqgFb96BMCFtDwjq/b" crossorigin="anonymous">
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js" integrity="sha384-ovZOciNc/R4uUo2fCVS1oDT0vIBuaou1d39yqL4a9xFdZAYDswCgrJ6tF8ShkqzF" crossorigin="anonymous"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js" integrity="sha384-neqWoCEBO5KsP6TEzfMryfZUeh7+qMQEODngh2KGzau+pMU9csLE2azsvQFa8Oel" crossorigin="anonymous"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-resource.min.js" integrity="sha384-fQqYlHIz3plgWo88gnyC2Z5EKOTk53w3z102UGn+OnE17oQeCa4h+u0PPijIpklj" crossorigin="anonymous"></script>
 <?php
 }
 
@@ -45,6 +45,7 @@ if (isset($_GET['msq'])) {
 <?php
 }
 ?>
+	<script src="view/msqur.js"></script>
 </head>
 <body>
 <div id="navigation">
