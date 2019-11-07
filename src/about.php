@@ -35,7 +35,7 @@ $msqur->header();
 		<li class="q">Can you add X feature?</li>
 		<li class="a">File a request for it <a href="https://github.com/nearwood/msqur/issues">here</a>.</li>
 		<li class="q">What tech stack does this site run on?</li>
-		<li class="a">The frontend is Javascript (jQuery and a little Angular.js).<br/>The backend that does most of the work was made with PHP and data is stored in a SQL database.</li>
+		<li class="a">The frontend is Javascript (jQuery and a little Angular.js).<br/>The backend that does most of the work was made with PHP and data is stored in an SQL database.</li>
 	</ul>
 </div>
 <h6 style="float: right;">

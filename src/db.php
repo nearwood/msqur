@@ -244,7 +244,7 @@ class DB
 	 * @param $id The metadata id
 	 * @returns FALSE if not cached, null if not found, otherwise the HTML.
 	 */
-	public function getMSQ($id)
+	public function getCachedMSQ($id)
 	{
 		if (DISABLE_MSQ_CACHE)
 		{

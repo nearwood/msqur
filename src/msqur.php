@@ -37,10 +37,10 @@ class Msqur
 		$this->db = new DB(); //TODO check reuse
 	}
 	
-	public function getMSQ($id)
+	public function getCachedMSQ($id)
 	{
 		//TODO hrm
-		return $this->db->getMSQ($id);
+		return $this->db->getCachedMSQ($id);
 	}
 	
 	public function getMSQForDownload($id)
@@ -64,6 +64,7 @@ class Msqur
 		return $fileList;
 	}
 	
+	//TODO pass through meta tags via argument to header
 	public function header() { include "view/header.php"; }
 	public function footer() { include "view/footer.php"; }
 	
@@ -143,7 +144,7 @@ class Msqur
 		$this->header();
 		if (DEBUG) debug('Load MSQ: ' . $id);
 		//Get cached HTML and display it, or reparse and display (in order)
-		$html = $this->getMSQ($id);
+		$html = $this->getCachedMSQ($id);
 		if ($html !== null)
 		{
 			$this->db->updateViews($id);

@@ -14,6 +14,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
+/*
+Favicon - Contrail One
+Primary:
+#90a4ae
+#c1d5e0 light
+#62757f dark
+
+Secondary:
+#ff6f00
+#ffa040 light
+#c43e00 dark
+
+black text on all except dark
+*/
 body, button {
 	font-family: "Verdana", sans-serif;
 }
@@ -36,8 +50,8 @@ div.debug {
 }
 
 div#navigation {
-	background: #333;
-	color: white;
+	background: #90a4ae;
+	color: black;
 	padding: 8px 24px 8px 24px;
 }
 
@@ -46,18 +60,20 @@ div#navigation span {
 	padding: 0px 8px 0px 8px;
 }
 
+/*
 div#navigation a:link {
-	color: green;
+	color: #ff6f00;
 }
 div#navigation a:hover {
-	color: white;
+	color: #c43e00;
 }
 div#navigation a:active {
-	color: white;
+	color: #ffa040;
 }
 div#navigation a:visited {
-	color: red;
+	color: #c43e00;
 }
+*/
 
 div#splash img.tutorial {
 	margin-bottom: 32px;
@@ -132,7 +148,6 @@ table th[scope=row] {
 }
 
 div.curve {
-	float: left;
 	display: inline;
 }
 
@@ -140,14 +155,6 @@ div.chart {
 	/* float: right; */
 	padding: 24px;
 	display: inline;
-}
-
-div.chart > canvas.curve {
-	
-}
-
-div.chart > canvas.table {
-	
 }
 
 #engineForm {
@@ -179,8 +186,30 @@ input:focus:invalid {
   color: red;
 }
 
-span#literMargin input {
-	/* display: none; */
+ul.supportList {
+	list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+aside {
+	width: 40%;
+	float: right;
+	border: 2px solid black;
+	padding: 10px;
+	box-shadow: 5px 5px 5px rgb(100, 100, 100);
+}
+
+.supportList li {
+	text-indent: 1rem;
+}
+
+.supportList li::before {
+	content: "❌ ";
+}
+
+.supportList li.supported::before {
+	content: "✅ ";
 }
 
 #faq .q {
