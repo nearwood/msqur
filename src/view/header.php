@@ -8,11 +8,12 @@
 	<link rel="icon" type="image/x-icon" href="view/img/favicon.ico">
 	<link rel="stylesheet" href="view/msqur.css" />
 	<!-- Open Graph data -->
+	<meta property="fb:admins" content="127238424281477"/>
 	<meta property="og:title" content="msqur" />
-	<meta property="og:type" content="page" />
+	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://msqur.com/" />
 	<meta property="og:image" content="https://msqur.com/view/img/tutorial5.png" />
-	<meta property="og:description" content="Your Description Here" />
+	<meta property="og:description" content="Megasquirt tune (msq) sharing site" />
 	<meta property="og:site_name" content="msqur" />
 	<!-- Twitter Card data -->
 	<meta name="twitter:card" content="summary">
