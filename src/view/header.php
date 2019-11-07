@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="description" content="Megasquirt tune file sharing site" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="icon" type="image/x-icon" class="js-site-favicon" href="view/img/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="view/img/favicon.ico">
 	<link rel="stylesheet" href="view/msqur.css" />
 <?php
 if (DEBUG) { ?>
@@ -24,7 +24,12 @@ if (DEBUG) { ?>
 	<script src="view/msqur.js"></script>
 </head>
 <body>
-<div id="navigation"><span><button id="btnUpload"><img src="view/img/upload.svg" alt="Upload" width="16" height="16"><span>Upload</span></button></span><span><a href="browse.php">Browse</a></span><span style="display:none;"><a href="search.php">Search</a></span><span style="display:none;"><a>Stats</a></span><span><a href="about.php">About</a></span></div>
+<div id="navigation">
+	<button id="btnUpload"><img src="view/img/upload.svg" alt="Upload" width="16" height="16"><span>Upload</span></button>
+	<span><a href="browse.php" rel="preload">Browse</a></span>
+	<span style="display:none;"><a href="search.php">Search</a></span>
+	<span style="display:none;"><a>Stats</a></span>
+	<span><a href="about.php">About</a></span></div>
 <div id="upload" style="display:none;">
 	<form id="engineForm" action="upload.php" method="post" enctype="multipart/form-data">
 		<div id="fileDropZone"><label for="fileSelect">Drop files here</label>
