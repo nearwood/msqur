@@ -6,7 +6,6 @@ php:
 branches:
   only:
   - master
-  - msqur.com
   - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 stages:
@@ -21,5 +20,4 @@ deploy:
   provider: script
   script: bash deploy.sh
   on:
-    branch: msqur.com
     condition: $TRAVIS_TAG =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/
