@@ -13,14 +13,14 @@ if (DEBUG) { ?>
 	<script src="view/lib/jquery-ui.min.js"></script>
 	<script src="view/lib/angular.min.js"></script>
 <?php } else { ?>
-	<script type="text/javascript"src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
-	<script type="text/javascript"src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-	<script type="text/javascript"src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
 <?php } ?>
-	<script type="text/javascript"src="view/lib/tablesorter/jquery.tablesorter.min.js"></script>
-	<script type="text/javascript"src="view/lib/Chart.js/Chart.min.js"></script>
-	<script type="text/javascript"src="view/msqur.js"></script>
+	<script src="view/lib/tablesorter/jquery.tablesorter.min.js"></script>
+	<script src="view/lib/Chart.js/Chart.min.js"></script>
+	<script src="view/msqur.js"></script>
 </head>
 <body>
 <div id="navigation"><span><button id="btnUpload">Upload</button></span><span><a href="browse.php">Browse</a></span><span style="display:none;"><a href="search.php">Search</a></span><span style="display:none;"><a>Stats</a></span><span><a href="about.php">About</a></span></div>
@@ -62,3 +62,17 @@ if (DEBUG) { ?>
 		</div>
 	</form>
 </div>
+<?php
+if (isset($_GET['msq'])) {
+?>
+<div id="settings">
+	<img id="settingsIcon" src="view/img/settings3.png"/>
+	<div id="settingsPanel" style="display:none;">
+		<label><input id="colorizeData" type="checkbox" />Colorize</label>
+		<label><input id="normalizeData" type="checkbox" title="Recalculate VE table values to a 5-250 unit scale"/>Normalize Data</label>
+		<label><input id="normalizeAxis" type="checkbox" disabled />Normalize Axis</label>
+	</div>
+</div>
+<?php
+}
+?>
