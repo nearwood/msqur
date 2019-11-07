@@ -14,6 +14,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
+/*
+Favicon - Contrail One
+Primary:
+#90a4ae
+#c1d5e0 light
+#62757f dark
+
+Secondary:
+#ff6f00
+#ffa040 light
+#c43e00 dark
+
+black text on all except dark
+*/
 body, button {
 	font-family: "Verdana", sans-serif;
 }
