@@ -3,19 +3,22 @@ language: php
 php:
 - '7.2'
 
-stages:
-- test
-- name: deploy
-  if: branch = msqur.com
-
 branches:
   only:
   - master
   - msqur.com
 
+stages:
+- test
+
 jobs:
   include:
   - stage: test
     script: phpunit tests
-  - stage: deploy
-    script: bash deploy.sh
+
+deploy:
+  provider: script
+  script: bash deploy.sh
+  on:
+    branch: msqur.com
+    tags: true
