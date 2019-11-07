@@ -217,7 +217,7 @@ class DB
 		
 		try
 		{
-			if (DEBUG) debug('Updating HTML cache...');
+			if (DEBUG) debug('Resetting reingest flag...');
 			$st = $this->db->prepare("UPDATE metadata m SET m.reingest=FALSE WHERE m.id = :id");
 			DB::tryBind($st, ":id", $id);
 			if ($st->execute())
@@ -314,7 +314,7 @@ class DB
 			}
 			else
 			{
-				echo "404 no such MSQ";
+				error("No such XML for $id");
 				return null;
 			}
 		}
@@ -645,7 +645,7 @@ class DB
 		
 		try
 		{
-			if (DEBUG) debug('Updating HTML cache...');
+			if (DEBUG) debug('Updating MSQ metadata...');
 			$st = $this->db->prepare("UPDATE metadata md SET md.fileFormat = :fileFormat, md.signature = :signature, md.firmware = :firmware, md.author = :author WHERE md.id = :id");
 			//$xml = mb_convert_encoding($html, "UTF-8");
 			DB::tryBind($st, ":id", $id);
