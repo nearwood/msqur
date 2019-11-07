@@ -36,7 +36,6 @@ if (DEBUG) { ?>
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js" integrity="sha384-ovZOciNc/R4uUo2fCVS1oDT0vIBuaou1d39yqL4a9xFdZAYDswCgrJ6tF8ShkqzF" crossorigin="anonymous"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js" integrity="sha384-neqWoCEBO5KsP6TEzfMryfZUeh7+qMQEODngh2KGzau+pMU9csLE2azsvQFa8Oel" crossorigin="anonymous"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-resource.min.js" integrity="sha384-fQqYlHIz3plgWo88gnyC2Z5EKOTk53w3z102UGn+OnE17oQeCa4h+u0PPijIpklj" crossorigin="anonymous"></script>
-	<script src="view/msqur.js"></script>
 <?php
 }
 
@@ -46,6 +45,7 @@ if (isset($_GET['msq'])) {
 <?php
 }
 ?>
+	<script src="view/msqur.js"></script>
 </head>
 <body>
 <div id="navigation">
