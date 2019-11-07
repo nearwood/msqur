@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ng-app="msqur">
+<html xmlns:og="https://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en" ng-app="msqur">
 <head>
 	<title>MSQur</title>
 	<meta charset="UTF-8">
@@ -7,6 +7,21 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="icon" type="image/x-icon" href="view/img/favicon.ico">
 	<link rel="stylesheet" href="view/msqur.css" />
+	<!-- Open Graph data -->
+	<meta property="og:title" content="msqur" />
+	<meta property="og:type" content="page" />
+	<meta property="og:url" content="https://msqur.com/" />
+	<meta property="og:image" content="https://msqur.com/view/img/tutorial5.png" />
+	<meta property="og:description" content="Your Description Here" />
+	<meta property="og:site_name" content="msqur" />
+	<!-- Twitter Card data -->
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:site" content="@nearwood">
+	<meta name="twitter:title" content="msqur">
+	<meta name="twitter:description" content="Megasquirt tune sharing">
+	<meta name="twitter:creator" content="@nearwood">
+	<!-- Twitter Summary card images must be at least 120x120px -->
+	<meta name="twitter:image" content="https://msqur.com/view/img/tutorial5.png">
 <?php
 if (DEBUG) { ?>
 	<script src="view/lib/jquery.min.js"></script>
