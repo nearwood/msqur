@@ -155,6 +155,28 @@ div.chart {
 	display: inline;
 }
 
+/* msqur.css | http://localhost:5050/view/msqur.css */
+
+div#tab_constants {
+	display: flex;
+  flex-flow: column wrap;
+  max-height: 900px;
+  overflow: auto;
+  max-width: 100%;
+}
+
+span.constant:nth-child(even) {
+	background-color: #e4e4e4;
+}
+
+span.constant {
+	margin: 0px 10px;
+}
+
+span.constant span.value {
+	float: right;
+}
+
 #engineForm {
 	display: table;
 }

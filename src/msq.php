@@ -27,7 +27,7 @@ class MSQ
 	/**
 	 * @brief Format a constant to HTML
 	 * @param $constant The constant name
-	 * @param $value It's value
+	 * @param $value Its value
 	 * @returns String HTML \<div\>
 	 */
 	private function msqConstant($constant, $value, $help)
@@ -35,7 +35,7 @@ class MSQ
 		//var_export($constant);
 		//var_export($value);
 		//var_export($help);
-		return "<div class=\"constant\" title=\"$help\"><b>$constant</b>: $value</div>";
+		return "<span class=\"constant\" title=\"$help\"><b>$constant:</b><span class=\"value\">$value</span></span>";
 	}
 	
 	/**
