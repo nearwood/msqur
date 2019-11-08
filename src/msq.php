@@ -107,7 +107,7 @@ class MSQ
 					<li><a href="#tab_curves">2D Tables (Curves)</a></li>
 					<li><a href="#tab_constants">Constants</a></li>
 				</ul>
-			EOT;
+EOT;
 
 			$html["tabList"] .= '<div id="tab_curves">';
 			foreach ($curves as $curve)
