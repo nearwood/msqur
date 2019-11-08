@@ -39,6 +39,7 @@ if (isset($_GET['msq'])) {
 <?php
 }
 ?>
+	<script src="view/msqur.js"></script>
 </head>
 <body>
 <div id="navigation">
