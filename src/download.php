@@ -18,11 +18,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 require "msqur.php";
 
 if (isset($_GET['msq'])) {
-  header('Content-Type: application/xml');
-  header('Content-Disposition: attachment; filename="' . $_GET['msq'] . '.msq"');
-  header('Pragma: no-cache');
+  $id = $_GET['msq']; //TODO Sanitize
 
-  echo $msqur->getMSQForDownload($_GET['msq']);
+  $xml = $msqur->getMSQForDownload($id);
+
+  if ($xml) {
+    header('Content-Type: application/xml');
+    header('Content-Disposition: attachment; filename="' . $id . '.msq"');
+    header('Pragma: no-cache');
+    echo trim($xml); //`trim` is a workaround for #30
+  } else {
+    http_response_code(404);
+    unset($_GET['msq']);
+    include "view/header.php";
+    echo '<div class="error">404 MSQ file not found. </div>';
+    include "view/footer.php";
+  }
 } else {
   include "index.php";
 }

@@ -45,7 +45,7 @@ class Msqur
 	
 	public function getMSQForDownload($id)
 	{
-		return $this->db->getMSQForDownload($id);
+		return $this->db->getXML($id);
 	}
 	
 	public function addMSQs($files, $engineid)
@@ -140,16 +140,15 @@ class Msqur
 	 */
 	public function view($id)
 	{
-		$this->header();
 		if (DEBUG) debug('Load MSQ: ' . $id);
 		//Get cached HTML and display it, or reparse and display (in order)
 		$html = $this->getCachedMSQ($id);
-		if ($html !== null)
+		if ($html !== FALSE)
 		{
 			$this->db->updateViews($id);
 			$msq = new MSQ(); //ugh
 			
-			if ($html == FALSE)
+			if ($html == null)
 			{
 				$engine = array();
 				$metadata = array();
@@ -172,14 +171,14 @@ class Msqur
 						$this->db->updateCache($id, $html);
 					} catch (MSQ_ParseException $e) {
 						$html = $e->getHTMLMessage();
-					}
+					} finally {
+						return $html;
+					}					
 				}
 			}
 		}
-		//TODO else show 404
-		
-		echo $html;
-		$this->footer();
+
+		return null;
 	}
 	
 	public function addEngine($make, $code, $displacement, $compression, $turbo)

@@ -249,19 +249,19 @@ class DB
 		if (DISABLE_MSQ_CACHE)
 		{
 			if (DEBUG) debug('Cache disabled.');
-			return FALSE;
+			return null;
 		}
 		
 		if ($this->needReingest($id))
 		{
 			if (DEBUG) debug('Flagged for reingest.');
 			$this->resetReingest($id);
-			return FALSE;
+			return null;
 		}
 		
 		if (!$this->connect()) return null;
 		
-		$html = FALSE;
+		$html = null;
 		
 		try
 		{
@@ -276,15 +276,14 @@ class DB
 				if ($html === NULL)
 				{
 					if (DEBUG) debug('No HTML cache found.');
-					return FALSE;
+					return null;
 				}
 				else if (DEBUG) debug('Cached, returning HTML.');
 			}
 			else
 			{
 				if (DEBUG) debug("No result for $id");
-				echo '<div class="error">Invalid MSQ</div>';
-				return null;
+				return FALSE;
 			}
 		}
 		catch (PDOException $e)
@@ -293,37 +292,6 @@ class DB
 		}
 		
 		return $html;
-	}
-	
-	public function getMSQForDownload($id)
-	{
-		if (!$this->connect()) return null;
-		
-		$xml = FALSE;
-		
-		try
-		{
-			$st = $this->db->prepare("SELECT xml FROM msqs INNER JOIN metadata ON metadata.msq = msqs.id WHERE metadata.id = :id LIMIT 1");
-			DB::tryBind($st, ":id", $id);
-			$st->execute();
-			if ($st->rowCount() > 0)
-			{
-				$result = $st->fetch(PDO::FETCH_ASSOC);
-				$st->closeCursor();
-				$xml = $result['xml'];
-			}
-			else
-			{
-				error("No such XML for $id");
-				return null;
-			}
-		}
-		catch (PDOException $e)
-		{
-			$this->dbError($e);
-		}
-		
-		return $xml;
 	}
 	
 	/**
@@ -752,9 +720,6 @@ class DB
 				$result = $st->fetch(PDO::FETCH_ASSOC);
 				$st->closeCursor();
 				$xml = $result['xml'];
-			} else {
-				//TODO Send real 404
-				echo '<div class="error">404 MSQ not found.</div>';
 			}
 		}
 		catch (PDOException $e)
