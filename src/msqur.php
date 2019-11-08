@@ -173,8 +173,12 @@ class Msqur
 						$html = $e->getHTMLMessage();
 					} finally {
 						return $html;
-					}					
+					}
+				} else {
+					error("Null xml");
 				}
+			} else {
+				return $html;
 			}
 		}
 
