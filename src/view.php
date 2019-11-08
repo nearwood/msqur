@@ -19,7 +19,7 @@ require "msqur.php";
 
 if (isset($_GET['msq'])) {
 	$id = $_GET['msq']; //TODO Sanitize
-	$html = $msqur->view($_GET['msq']);
+	$html = $msqur->view($id);
 	if ($html !== null) {
 		include "view/header.php";
 		echo $html;
