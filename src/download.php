@@ -31,7 +31,7 @@ if (isset($_GET['msq'])) {
     http_response_code(404);
     unset($_GET['msq']);
     include "view/header.php";
-    echo '<div class="error">404 MSQ file not found. </div>';
+    echo '<div class="error">404 MSQ file not found.</div>';
     include "view/footer.php";
   }
 } else {
