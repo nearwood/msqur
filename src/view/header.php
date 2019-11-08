@@ -96,7 +96,7 @@ if (isset($_GET['msq'])) {
 		<label><input id="normalizeAxis" type="checkbox" disabled />Normalize Axis</label>
 	</div>
 </div>
-<div id="downloadLink"><a title="Download MSQ File" href="download.php?msq=' . $_GET['msq'] . '">💾 Download MSQ</a></div>
+<div id="downloadLink"><a title="Download MSQ File" href="download.php?msq=<?php echo $_GET['msq']; ?>">💾 Download MSQ</a></div>
 <?php
 }
 ?>
