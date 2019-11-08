@@ -68,7 +68,7 @@ function checkUploads($files)
 		//Get and check mime types (ignoring provided ones)
 		$finfo = new finfo(FILEINFO_MIME_TYPE);
 		$mimeType = $finfo->file($file['tmp_name']);
-		if ($mimeType != "application/xml" && $mimeType != "text/xml")
+		if (!acceptableMimeType($mimeType))
 		{
 			if (DEBUG) warn('File: ' . $file['tmp_name'] . ': Invalid MIME type ' . $mimeType);
 			unset($files[$index]);
@@ -77,6 +77,22 @@ function checkUploads($files)
 	}
 	
 	return $files;
+}
+
+/**
+ * @brief Check that a mime type matches ones we think are OK.
+ * @param $mimeType {string} MIME type
+ * @returns true or false
+ */
+function acceptableMimeType($mimeType) {
+	switch ($mimeType) {
+		case "application/xml":
+		case "text/xml":
+		case "text/plain":
+			return true;
+		default:
+			return FALSE;
+	}
 }
 
 //var_export($_POST);

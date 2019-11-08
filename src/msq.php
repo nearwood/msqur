@@ -27,7 +27,7 @@ class MSQ
 	/**
 	 * @brief Format a constant to HTML
 	 * @param $constant The constant name
-	 * @param $value It's value
+	 * @param $value Its value
 	 * @returns String HTML \<div\>
 	 */
 	private function msqConstant($constant, $value, $help)
@@ -35,7 +35,7 @@ class MSQ
 		//var_export($constant);
 		//var_export($value);
 		//var_export($help);
-		return "<div class=\"constant\" title=\"$help\"><b>$constant</b>: $value</div>";
+		return "<span class=\"constant\" title=\"$help\"><b>$constant:</b><span class=\"value\">$value</span></span>";
 	}
 	
 	/**
@@ -60,10 +60,9 @@ class MSQ
 					error($error->message);
 			}
 
-			$html['header'] = '<div class="error">Unable to parse MSQ.</div>';
+			throw new MSQ_ParseException("Error parsing XML", '<div class="error">Unable to parse MSQ.</div>');
 		} else if ($msq) {
 			$msqHeader = '<div class="info">';
-			$msqHeader .= '<div style="float: right;"><a title="Download MSQ File" href="download.php?msq=' . $_GET['msq'] . '">💾</a></div>';
 			$msqHeader .= "<div>Format Version: " . $msq->versionInfo['fileFormat'] . "</div>";
 			$msqHeader .= "<div>MS Signature: " . $msq->versionInfo['signature'] . "</div>";
 			$msqHeader .= "<div>Tuning SW: " . $msq->bibliography['author'] . "</div>";
@@ -101,8 +100,16 @@ class MSQ
 			
 			$engineSchema = getEngineSchema();
 			
-			$html["precurves"] = '<div class="group-header">2D Tables (Curves)</div>';
-			$html["curves"] = "";
+			$html["tabList"] = <<<EOT
+			<div id="tabList">
+				<ul>
+					<li><a href="#tab_tables">3D Tables</a></li>
+					<li><a href="#tab_curves">2D Tables (Curves)</a></li>
+					<li><a href="#tab_constants">Constants</a></li>
+				</ul>
+			EOT;
+
+			$html["tabList"] .= '<div id="tab_curves">';
 			foreach ($curves as $curve)
 			{
 				if (in_array($curve['id'], $this->msq_curve_blacklist))
@@ -129,13 +136,13 @@ class MSQ
 					$yBins = $this->findConstant($msq, $curve['yBinConstant']);
 					$xAxis = preg_split("/\s+/", trim($xBins));
 					$yAxis = preg_split("/\s+/", trim($yBins));
-					$html["curves"] .= $this->msqTable2D($curve, $curve['xMin'], $curve['xMax'], $xAxis, $curve['yMin'], $curve['yMax'], $yAxis, $help);
+					$html["tabList"] .= $this->msqTable2D($curve, $curve['xMin'], $curve['xMax'], $xAxis, $curve['yMin'], $curve['yMax'], $yAxis, $help);
 				}
 				else if (DEBUG) debug('Missing/unsupported curve information: ' . $curve['id']);
 			}
+			$html["tabList"] .= '</div>';
 			
-			$html["pretables"] = '<div class="group-header">3D Tables</div>';;
-			$html["tables"] = "";
+			$html["tabList"] .= '<div id="tab_tables">';
 			foreach ($tables as $table)
 			{
 				if (DEBUG) debug('Table: ' . $table['id']);
@@ -154,13 +161,13 @@ class MSQ
 					$xAxis = preg_split("/\s+/", trim($xBins));
 					$yAxis = preg_split("/\s+/", trim($yBins));
 					$zData = preg_split("/\s+/", trim($zBins));//, PREG_SPLIT_NO_EMPTY); //, $limit);
-					$html["tables"] .= $this->msqTable3D($table, $xAxis, $yAxis, $zData, $help);
+					$html["tabList"] .= $this->msqTable3D($table, $xAxis, $yAxis, $zData, $help);
 				}
 				else if (DEBUG) debug('Missing/unsupported table information: ' . $table['id']);
 			}
+			$html["tabList"] .= '</div>';
 			
-			$html["preconstants"] = '<div class="group-header">Constants</div>';
-			$html["constants"] = "";
+			$html["tabList"] .= '<div id="tab_constants">';
 			foreach ($constants as $key => $config)
 			{
 				if ($config[0] == "array") continue; //TODO Skip arrays until blacklist is done
@@ -180,9 +187,12 @@ class MSQ
 					if (array_key_exists($key, $helpTexts))
 					$help = $helpTexts[$key];
 					
-					$html["constants"] .= $this->msqConstant($key, $value, $help);
+					$html["tabList"] .= $this->msqConstant($key, $value, $help);
 				}
 			}
+			$html["tabList"] .= '</div>';
+			$html["tabList"] .= '</div>';
+
 		}
 		
 		return $html;

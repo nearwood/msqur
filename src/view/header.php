@@ -8,11 +8,12 @@
 	<link rel="icon" type="image/x-icon" href="view/img/favicon.ico">
 	<link rel="stylesheet" href="view/msqur.css" />
 	<!-- Open Graph data -->
+	<meta property="fb:admins" content="127238424281477"/>
 	<meta property="og:title" content="msqur" />
-	<meta property="og:type" content="page" />
+	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://msqur.com/" />
 	<meta property="og:image" content="https://msqur.com/view/img/tutorial5.png" />
-	<meta property="og:description" content="Your Description Here" />
+	<meta property="og:description" content="Megasquirt tune (msq) sharing site" />
 	<meta property="og:site_name" content="msqur" />
 	<!-- Twitter Card data -->
 	<meta name="twitter:card" content="summary">
@@ -27,7 +28,6 @@
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" integrity="sha384-5L1Zwk1YapN1l4l4rYc+1fr3Z0g23LbCBztpq0LQcbDCelzqgFb96BMCFtDwjq/b" crossorigin="anonymous">
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js" integrity="sha384-ovZOciNc/R4uUo2fCVS1oDT0vIBuaou1d39yqL4a9xFdZAYDswCgrJ6tF8ShkqzF" crossorigin="anonymous"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js" integrity="sha384-neqWoCEBO5KsP6TEzfMryfZUeh7+qMQEODngh2KGzau+pMU9csLE2azsvQFa8Oel" crossorigin="anonymous"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-resource.min.js" integrity="sha384-fQqYlHIz3plgWo88gnyC2Z5EKOTk53w3z102UGn+OnE17oQeCa4h+u0PPijIpklj" crossorigin="anonymous"></script>
 	<!-- Hosted scripts -->
 	<script src="view/lib/tablesorter/jquery.tablesorter.min.js"></script>
 	<script src="view/lib/Chart.js/Chart.min.js"></script>
@@ -97,6 +97,7 @@ if (isset($_GET['msq'])) {
 		<label><input id="normalizeAxis" type="checkbox" disabled />Normalize Axis</label>
 	</div>
 </div>
+<div id="downloadLink"><a title="Download MSQ File" href="download.php?msq=<?php echo $_GET['msq']; ?>">💾 Download MSQ</a></div>
 <?php
 }
 ?>

@@ -82,9 +82,17 @@ div#splash img.tutorial {
 div#settings {
 	z-index: 999;
 	background: rgba(224, 224, 224, 32);
-	position: absolute;
+	float: right;
 	margin-top: 4px;
-	right: 8px;
+}
+
+img#settingsIcon {
+	cursor: pointer;
+}
+
+div#downloadLink {
+	margin: 5px;
+	float: right;
 }
 
 #fileDropZone {
@@ -108,16 +116,6 @@ table caption {
 	font-style: bold;
 	text-align: left;
 	padding: 0.2em;
-}
-
-div[class^="group-"] {
-	border: 4px solid #F0F0F0;
-}
-
-div.group-header {
-	font-size: 3em;
-	text-align: center;
-	font-style: bold;
 }
 
 table.msq td:hover {
@@ -155,6 +153,28 @@ div.chart {
 	/* float: right; */
 	padding: 24px;
 	display: inline;
+}
+
+/* msqur.css | http://localhost:5050/view/msqur.css */
+
+div#tab_constants {
+	display: flex;
+  flex-flow: column wrap;
+  max-height: 900px;
+  overflow: auto;
+  max-width: 100%;
+}
+
+span.constant:nth-child(even) {
+	background-color: #e4e4e4;
+}
+
+span.constant {
+	margin: 0px 10px;
+}
+
+span.constant span.value {
+	float: right;
 }
 
 #engineForm {
