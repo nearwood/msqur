@@ -118,16 +118,6 @@ table caption {
 	padding: 0.2em;
 }
 
-div[class^="group-"] {
-	border: 4px solid #F0F0F0;
-}
-
-div.group-header {
-	font-size: 3em;
-	text-align: center;
-	font-style: bold;
-}
-
 table.msq td:hover {
 	background-color: magenta !important;
 }

@@ -70,10 +70,12 @@ $(function() {
 		heightStyle: "content",
 		activate: doChart
 	};
+
+	$('div#tabList').tabs();
 	
-	$('div.group-curves').accordion(accordionOptions);
-	$('div.group-tables').accordion(accordionOptions);
-	$('div.constant').tooltip();
+	$('div#tab_tables').accordion(accordionOptions);
+	$('div#tab_curves').accordion(accordionOptions);
+	$('div#tab_constants').tooltip();
 	
 	Chart.defaults.global.animation = false;
 	//Chart.defaults.global.responsive = true;

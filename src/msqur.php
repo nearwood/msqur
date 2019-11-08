@@ -164,9 +164,9 @@ class Msqur
 						foreach($groupedHtml as $group => $v)
 						{
 							//TODO Group name as fieldset legend or sth
-							$html .= "<div class=\"group-$group\">";
+							//$html .= "<div class=\"group-$group\">";
 							$html .= $v;
-							$html .= '</div>';
+							//$html .= '</div>';
 						}
 						
 						$this->db->updateCache($id, $html);
