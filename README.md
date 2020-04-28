@@ -22,6 +22,7 @@ Firmware support:
  - [x] MS2Extra
  - [x] MS3
  - [ ] Speeduino
+ - [ ] rusEFI 
 
 ## Contributing
 
